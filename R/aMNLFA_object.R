@@ -24,6 +24,7 @@ aMNLFA.object<-function(path, mrdata, indicators=NULL, catindicators=NULL, count
   charOrNull <- function(x) {
     is.character(x) || is.null(x)
   }
+
   stopifnot(charOrNull(path))
   stopifnot(charOrNull(indicators))
   stopifnot(charOrNull(catindicators))
@@ -37,7 +38,7 @@ aMNLFA.object<-function(path, mrdata, indicators=NULL, catindicators=NULL, count
   stopifnot(charOrNull(ID))
 
   object<-list(path=path, mrdata=mrdata, indicators=indicators, catindicators=catindicators, countindicators=countindicators, meanimpact=meanimpact, varimpact=varimpact, measinvar=measinvar, factors=factors, time=time, auxiliary=auxiliary, ID=ID, thresholds=thresholds)
-  
+
   class(object)<-c("list","aMNLFA.object")
   return(object)
 }

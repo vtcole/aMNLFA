@@ -1,5 +1,5 @@
 aMNLFA.simultaneous<-function(input.object){
-  
+
   path = input.object$path
   mrdata = input.object$mrdata
   myindicators = input.object$indicators
@@ -12,10 +12,10 @@ aMNLFA.simultaneous<-function(input.object){
   myauxiliary = input.object$auxiliary
   myID = input.object$ID
   thresholds = input.object$thresholds
-  
+
   varlist<-c(myauxiliary,myindicators,myMeasInvar,myMeanImpact,myVarImpact)
   varlist<-unique(varlist)
-  
+
   USEVARIABLES<-paste("USEVARIABLES=")
   semicolon<-paste(";")
   AUXILIARY<-ifelse(length(myauxiliary)>0,paste("AUXILIARY="),paste("!"))
@@ -45,7 +45,7 @@ aMNLFA.simultaneous<-function(input.object){
   varMODEL<-paste("MODEL: [ETA@0];ETA*(veta);")
   MODELCONSTRAINT<-paste("MODEL CONSTRAINT: new(")
   ####ROUND 1 USES p<.05 AS GATE TO GET TO ROUND 2 FOR MEAS INV and p<.1 for IMPACT####################
-  
+
   ##Read in mean impact script and test for impact at p<.1
   meanimpact<-readModels(paste(path,"/meanimpactscript.out",sep=""))
   meanimpact<-as.data.frame(meanimpact$parameters$unstandardized)
@@ -68,11 +68,11 @@ aMNLFA.simultaneous<-function(input.object){
   keepmeanimpact2<-match(keepmeanimpact,myMeanImpact)
   keepmeanimpact2<-keepmeanimpact2[!is.na(keepmeanimpact2)]
   keepmeanimpact<-myMeanImpact[keepmeanimpact2]
-  
+
   ##Read in var impact script and test for impact at p<.1
   varimpact<-readModels(paste(path,"/varimpactscript.out",sep=""))
   varimpact<-as.data.frame(varimpact$parameters$unstandardized)
-  
+
   varimpact<-varimpact[which(varimpact$paramHeader=="New.Additional.Parameters"&varimpact$pval<.1),]  ######alpha <.1 to trim###########
   varimpact<-noquote(substr(varimpact$param,2,3))
   myVarImpact2<-as.data.frame(myVarImpact)
@@ -81,7 +81,7 @@ aMNLFA.simultaneous<-function(input.object){
     myVarImpact3[i,1]<-myVarImpact2[varimpact[i],]
   }
   keepvarimpact<-noquote(t(myVarImpact3))
-  
+
   for (j in 1:length(keepvarimpact)){
     if(length(grep("_",keepvarimpact[j]))>0) keepvarimpact<-append(keepvarimpact,substr(keepvarimpact[j],1,3))
     if(length(grep("_",keepvarimpact[j]))>0) keepvarimpact<-append(keepvarimpact,substr(keepvarimpact[j],5,7))
@@ -98,7 +98,7 @@ aMNLFA.simultaneous<-function(input.object){
   keepvarimpact2<-match(keepvarimpact,myVarImpact)
   keepvarimpact2<-keepvarimpact2[!is.na(keepvarimpact2)]
   keepvarimpact<-myVarImpact[keepvarimpact2]
-  
+
   alllambdadf<-data.frame(matrix(c(NA),nrow=length(myindicators),ncol=1+length(myMeasInvar)))
   colnames(alllambdadf)=c("items",myMeasInvar)
   alllambdadf$items=myindicators
@@ -106,7 +106,7 @@ aMNLFA.simultaneous<-function(input.object){
     dif<-readModels(paste(path,"/measinvarscript_",myindicators[i],".out",sep=""))
     dif<-dif$parameters$unstandardized
     lambdadif<-dif[which(dif$paramHeader=="New.Additional.Parameters"),]
-    lambdadif$param<-noquote(substr(lambdadif$param,3,4))
+    lambdadif$param<-noquote(substr(lambdadif$param,4,5))
     lambdadif<-lambdadif[which(lambdadif$param!="00"),]
     lambdadif$param<-myMeasInvar[as.numeric(lambdadif$param)]
     keep<-c("param","pval")
@@ -141,9 +141,9 @@ aMNLFA.simultaneous<-function(input.object){
       }
     }
   }
-  
+
   colnames(alllambdadf)<-NULL
-  
+
   allinterceptdf<-data.frame(matrix(c(NA),nrow=length(myindicators),ncol=1+length(myMeasInvar)))
   colnames(allinterceptdf)=c("items",myMeasInvar)
   allinterceptdf$items=myindicators
@@ -192,7 +192,7 @@ aMNLFA.simultaneous<-function(input.object){
   }
   diflist<-noquote(unique(unlist(diflist)))
   diflist<-diflist[!is.na(diflist)]
-  
+
   keepmeanimpact<-unique(append(keepmeanimpact,keepvarimpact))
   ##Writing script with all parameters with p<.05
   useround2<-c(diflist,keepmeanimpact,keepvarimpact)
@@ -205,9 +205,9 @@ aMNLFA.simultaneous<-function(input.object){
   CONSTRAINT<-noquote(append(CONSTRAINT,con))
   CONSTRAINT<-append(CONSTRAINT,semicolon)
   CONSTRAINT<-capture.output(cat(CONSTRAINT))
-  
+
   header<-readLines(paste0(path,"/header.txt"))
-  
+
   round2input<-as.data.frame(NULL)
   round2input[1,1]<-paste("TITLE: Round 2 Calibration Model")
   round2input[2,1]<-header[2]
@@ -241,7 +241,7 @@ aMNLFA.simultaneous<-function(input.object){
     predlist<-capture.output(cat(predlist))
     round2input[17+l+i,1]<-ifelse(length(predlist)>0,paste(myindicators[i]," on ",predlist,";",sep=""),"!")
   }
-  
+
   vstart<-data.frame(NULL)
   if (length(keepvarimpact)>0)
     for (v in 1:length(keepvarimpact)){
@@ -267,7 +267,7 @@ aMNLFA.simultaneous<-function(input.object){
     round2input[18+2*l+i,1]<-paste(capture.output(cat(noquote(unlist(start)))),sep="")
   }
   round2input[19+3*l,1]<-paste(");")
-  
+
   veq<-as.data.frame(NULL)
   veq[1,1]<-"veta=1*exp("
   if (length(keepvarimpact)>0)
@@ -276,11 +276,11 @@ aMNLFA.simultaneous<-function(input.object){
     }
   v<-length(keepvarimpact)
   veq[v+2,1]<-paste("0)")
-  
+
   round2input[20+3*l+ind,1]<-paste(capture.output(cat(noquote(unlist(veq)))),semicolon,sep="")
   round2input[21+3*l+ind,1]<-tech1
-  
-  
+
+
   #write.table(round2input,paste(path,"/round2calibration.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
   write.inp.file(round2input,paste(path,"/round2calibration.inp",sep=""))
   message("Check '", path, "/' for Mplus inp file for round 2 calibration model (run this manually).")
