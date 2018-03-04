@@ -21,7 +21,8 @@ aMNLFA.sample<-function(input.object){
   myID = input.object$ID
 
   mrdata<-read.table(paste(path,"/mr.dat",sep=""), header=TRUE,as.is = TRUE)
-  varlist<-c(myauxiliary,myindicators,myMeasInvar,myMeanImpact,myVarImpact)
+  varlist<-c(myID,myauxiliary,myindicators,myMeasInvar,myMeanImpact,myVarImpact)
+  
   varlist<-unique(varlist)
   #Draw a calibration sample
   if (!is.null(mytime)){

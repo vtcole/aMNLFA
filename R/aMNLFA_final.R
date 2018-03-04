@@ -22,7 +22,7 @@ aMNLFA.final<-function(input.object){
   myID = input.object$ID
   thresholds = input.object$thresholds
   
-  varlist<-c(myauxiliary,myindicators,myMeasInvar,myMeanImpact,myVarImpact)
+  varlist<-c(myID,myauxiliary,myindicators,myMeasInvar,myMeanImpact,myVarImpact)
   varlist<-unique(varlist)
   
   header<-readLines(paste0(path,"/header.txt"))
@@ -46,7 +46,7 @@ aMNLFA.final<-function(input.object){
   l<-length(myindicators)
   loadings<-list()
   for (i in 1:l){
-    loadings[i]<-paste(ETA,myindicators[i],"*(l",i,");",sep="")
+    loadings[i]<-paste(ETA,myindicators[i],"*(l_",i,");",sep="")
   }
   loadings<-noquote(loadings)
   loadings<-unlist(loadings)
@@ -129,12 +129,12 @@ aMNLFA.final<-function(input.object){
   alllambdadf<-data.frame(matrix(nrow=length(myindicators),ncol=length(myMeasInvar)))
   item_i<-substr(lambdaconstraints,1,1)
   col_i<-substr(lambdaconstraints,2,2)
-  if (length(lambdaconstraints)>0)
+  if (length(lambdaconstraints)>0) {
     for (i in 1:length(lambdaconstraints)){
       for (r in 1:length(myindicators)){
         for (c in 1:length(myMeasInvar)){
           alllambdadf[r,c]<-ifelse(dim(lambdaconstraints)[1]==0,NA,ifelse(item_i[i]==r & col_i[i]==c,myMeasInvar[c],NA))
-        }}}
+        }}}}
   
   colnames(alllambdadf)<-myMeasInvar
   rownames(alllambdadf)<-myindicators
@@ -199,11 +199,12 @@ aMNLFA.final<-function(input.object){
   intnumbers<-paste(int$itemnum,int$prenum,sep="")
   item_i<-int$itemnum
   col_i<-int$prenum
+  if (length(intnumbers)>0){
   for (i in 1:length(intnumbers)){
     for (r in 1:length(myindicators)){
       for (c in 1:length(myMeasInvar)){
         if(item_i[i]==r & col_i[i]==c) allintdf[r,c]<-myMeasInvar[c]
-      }}}
+      }}}}
   
   
   for (i in 1:length(myindicators)){
@@ -279,8 +280,9 @@ aMNLFA.final<-function(input.object){
   round3input[13,1]<-ifelse(length(mycountindicators)>0,COUNT,"!")
   round3input[14,1]<-CONSTRAINT
   round3input[15,1]<-ANALYSIS
-  fixvarMODEL<-paste("MODEL: [ETA@0];ETA@1;")
-  round3input[16,1]<-ifelse(length(con)>0,varMODEL,fixvarMODEL)
+  #fixvarMODEL<-paste("MODEL: [ETA@0];ETA@1;") #commenting this out so that constraint statement gets made, even if there is no variance impact
+  #round3input[16,1]<-ifelse(length(con)>0,varMODEL,fixvarMODEL)
+  round3input[16,1]<-varMODEL
   l<-length(loadings)
   for (i in 1:l){
     round3input[16+i,1]<-loadings[i]
@@ -309,7 +311,7 @@ aMNLFA.final<-function(input.object){
     predlist2<-predlist2[!is.na(predlist2)]
     eq<-as.data.frame(NULL)
     start<-as.data.frame(NULL)
-    eq[1,1]<-ifelse(length(predlist2)>0,paste("l",i,"=l",i,"00",sep=""),"!")
+    eq[1,1]<-ifelse(length(predlist2)>0,paste("l_",i,"=l",i,"00",sep=""),"!")
     start[1,1]<-ifelse(length(predlist2)>0,paste("l",i,"00*1 ",sep=""),"!")
     if (length(predlist2)>0)
       for (w in 1:length(predlist2)){
@@ -332,7 +334,7 @@ aMNLFA.final<-function(input.object){
   
   round3input[19+2*l+2*ind,1]<-paste(capture.output(cat(noquote(unlist(veq)))),semicolon,sep="")
   round3input[20+2*l+2*ind,1]<-tech1
-  if(is.na(mytime)){round3input[21+2*l+2*ind,1]<-paste("SAVEDATA: SAVE=FSCORES; FILE=scores.dat;")}
+  if(is.null(mytime)){round3input[21+2*l+2*ind,1]<-paste("SAVEDATA: SAVE=FSCORES; FILE=scores.dat;")}
   
   #write.table(round3input,paste(path,"/round3calibration.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
   write.inp.file(round3input,paste(path,"/round3calibration.inp",sep=""))

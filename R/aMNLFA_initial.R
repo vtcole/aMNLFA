@@ -22,7 +22,7 @@ aMNLFA.initial<-function(input.object){
   myID = input.object$ID
   thresholds = input.object$thresholds
   
-  varlist<-c(myauxiliary,myindicators,myMeasInvar,myMeanImpact,myVarImpact)
+  varlist<-c(myID,myauxiliary,myindicators,myMeasInvar,myMeanImpact,myVarImpact)
   varlist<-unique(varlist)
   
   #Create input text
@@ -149,7 +149,7 @@ aMNLFA.initial<-function(input.object){
   }
   varinput[18+l+v,1]<-paste(");")
   varinput[19+l+v,1]<-paste("veta=1*exp(")
-  for (i in 2:v-1){
+  for (i in 1:v){ #This had been (i in 2:v-1) but it works now -- check why?
     varinput[19+l+v+i,1]<-paste("v",i,"*",myVarImpact[i],"+",sep="")
   }
   varinput[19+l+v+v,1]<-paste("v",v,"*",myVarImpact[v],");",sep="")

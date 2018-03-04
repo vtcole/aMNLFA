@@ -1,3 +1,12 @@
+#' aMNLFA simultaneous model fitting function
+#'
+#' This function generates the simultaneous aMNLFA model from all the initial inputs.
+#' @param input.object The aMNLFA object (created using the aMNLFA.object function) which provides instructions for the function.
+#' @keywords MNLFA
+#' @export
+#' @examples
+#' aMNLFA.simultaneous()
+
 aMNLFA.simultaneous<-function(input.object){
 
   path = input.object$path
@@ -13,7 +22,7 @@ aMNLFA.simultaneous<-function(input.object){
   myID = input.object$ID
   thresholds = input.object$thresholds
 
-  varlist<-c(myauxiliary,myindicators,myMeasInvar,myMeanImpact,myVarImpact)
+  varlist<-c(myID,myauxiliary,myindicators,myMeasInvar,myMeanImpact,myVarImpact)
   varlist<-unique(varlist)
 
   USEVARIABLES<-paste("USEVARIABLES=")
@@ -35,7 +44,7 @@ aMNLFA.simultaneous<-function(input.object){
   l<-length(myindicators)
   loadings<-list()
   for (i in 1:l){
-    loadings[i]<-paste(ETA,myindicators[i],"*(l",i,");",sep="")
+    loadings[i]<-paste(ETA,myindicators[i],"*(l_",i,");",sep="")
   }
   loadings<-noquote(loadings)
   loadings<-unlist(loadings)
@@ -88,7 +97,7 @@ aMNLFA.simultaneous<-function(input.object){
   }
   keepvarimpact<-keepvarimpact[which(keepvarimpact!=2)]
   keepvarimpact<-unique(keepvarimpact)
-  threeletterlist<-substr(myVarImpact,1,3)
+  threeletterlist<-str_sub(myVarImpact,1,3)
   test<-(keepvarimpact[match(threeletterlist,keepvarimpact)])
   pos<-match(threeletterlist,test)
   pos<-pos[!is.na(pos)]
@@ -106,26 +115,28 @@ aMNLFA.simultaneous<-function(input.object){
     dif<-readModels(paste(path,"/measinvarscript_",myindicators[i],".out",sep=""))
     dif<-dif$parameters$unstandardized
     lambdadif<-dif[which(dif$paramHeader=="New.Additional.Parameters"),]
-    lambdadif$param<-noquote(substr(lambdadif$param,4,5))
+    lambdadif$param<-noquote(str_sub(lambdadif$param,-2,-1))
     lambdadif<-lambdadif[which(lambdadif$param!="00"),]
-    lambdadif$param<-myMeasInvar[as.numeric(lambdadif$param)]
+    lambdadif$param<-myMeasInvar[(lambdadif$param)]
     keep<-c("param","pval")
     lambdadif<-noquote(t(lambdadif[keep]))
     colnames(lambdadif)=lambdadif[1,]
-    lambdadif=lambdadif[-1,]
-    alllambdadf[i,2:(length(lambdadif)+1)]<-lambdadif
+    lambdadif=t(as.matrix(lambdadif[-1,]))
+    lambda_min=apply(lambdadif,1,function(x) {as.numeric(min(x))}) #Get the minimum p. value associated with lambda or all of the thresholds. If any are under .05, we retain the covariate.
+    lambda_index<-nrow(lambdadif) #Gets the number of covariates there are, regardless of whether we're using thresholds or not.
+    alllambdadf[i,2:(lambda_index+1)]<-lambda_min
     for (j in 1:length(myMeasInvar)){
       alllambdadf[i,j+1]<-ifelse(alllambdadf[i,j+1]<.05,myMeasInvar[j],NA)
     }
-    keeplambda<-unlist(as.list(alllambdadf[i,2:length(myMeasInvar)+1]))
+    keeplambda<-unlist(as.list(alllambdadf[i,2:(lambda_index+1)]))
     keeplambda<-keeplambda[!is.na(keeplambda)]
     names(keeplambda)<-NULL
     for (j in 1:length(keeplambda)){
-      if(length(grep("_",keeplambda[j]))>0) keeplambda<-append(keeplambda,substr(keeplambda[j],1,3))
-      if(length(grep("_",keeplambda[j]))>0) keeplambda<-append(keeplambda,substr(keeplambda[j],5,7))
+      if(length(grep("_",keeplambda[j]))>0) keeplambda<-append(keeplambda,str_sub(keeplambda[j],1,3))
+      if(length(grep("_",keeplambda[j]))>0) keeplambda<-append(keeplambda,str_sub(keeplambda[j],5,7))
     }
     keeplambda<-unique(keeplambda)
-    threeletterlist<-substr(myMeasInvar,1,3)
+    threeletterlist<-str_sub(myMeasInvar,1,3)
     test<-(keeplambda[match(threeletterlist,keeplambda)])
     pos<-match(threeletterlist,test)
     pos<-pos[!is.na(pos)]
@@ -135,55 +146,60 @@ aMNLFA.simultaneous<-function(input.object){
     keeplambda2<-match(keeplambda,myMeasInvar)
     keeplambda2<-keeplambda2[!is.na(keeplambda2)]
     keeplambda<-myMeasInvar[keeplambda2]
-    for (j in 2:length(myMeasInvar)+1){
+    for (j in 2:(lambda_index+1)){
+      if (length(keeplambda)>0){
       for (k in 1:length(keeplambda)){
         if(length(grep(keeplambda[k],myMeasInvar[j-1]))>0)  alllambdadf[i,j]<-myMeasInvar[j-1]
+        }
       }
     }
   }
 
   colnames(alllambdadf)<-NULL
-
+  
   allinterceptdf<-data.frame(matrix(c(NA),nrow=length(myindicators),ncol=1+length(myMeasInvar)))
-  colnames(allinterceptdf)=c("items",myMeasInvar)
-  allinterceptdf$items=myindicators
-  for (i in 1:length(myindicators)){
-    dif<-readModels(paste(path,"/measinvarscript_",myindicators[i],".out",sep=""))
-    dif<-dif$parameters$unstandardized
-    keep<-c("param","pval")
-    intdif<-dif[grep(".ON",dif$paramHeader),]
-    intdif<-noquote(t(intdif[keep]))
-    colnames(intdif)=intdif[1,]
-    intdif=intdif[-1,]
-    allinterceptdf[i,2:(length(intdif)+1)]<-intdif
-    for (j in 1:length(myMeasInvar)){
-      allinterceptdf[i,j+1]<-ifelse(allinterceptdf[i,j+1]<.05,myMeasInvar[j],NA)
-    }
-    keepintercept<-unlist(as.list(allinterceptdf[i,2:length(myMeasInvar)+1]))
-    keepintercept<-keepintercept[!is.na(keepintercept)]
-    names(keepintercept)<-NULL
-    for (j in 1:length(keepintercept)){
-      if(length(grep("_",keepintercept[j]))>0) keepintercept<-append(keepintercept,substr(keepintercept[j],1,3))
-      if(length(grep("_",keepintercept[j]))>0) keepintercept<-append(keepintercept,substr(keepintercept[j],5,7))
-    }
-    keepintercept<-unique(keepintercept)
-    threeletterlist<-substr(myMeasInvar,1,3)
-    test<-(keepintercept[match(threeletterlist,keepintercept)])
-    pos<-match(threeletterlist,test)
-    pos<-pos[!is.na(pos)]
-    pos<-unique(pos)
-    add<-myMeasInvar[pos]
-    keepintercept<-unique(append(keepintercept,add))
-    keepintercept2<-match(keepintercept,myMeasInvar)
-    keepintercept2<-keepintercept2[!is.na(keepintercept2)]
-    keepintercept<-myMeasInvar[keepintercept2]
-    if (length(keepintercept)>0)
-      for (j in 2:length(myMeasInvar)+1){
-        for (k in 1:length(keepintercept)){
-          if(length(grep(keepintercept[k],myMeasInvar[j-1]))>0)  allinterceptdf[i,j]<-myMeasInvar[j-1]
+  
+  if (thresholds==FALSE) {
+    colnames(allinterceptdf)=c("items",myMeasInvar)
+    allinterceptdf$items=myindicators
+    for (i in 1:length(myindicators)){
+      dif<-readModels(paste(path,"/measinvarscript_",myindicators[i],".out",sep=""))
+      dif<-dif$parameters$unstandardized
+      keep<-c("param","pval")
+      intdif<-dif[grep(".ON",dif$paramHeader),]
+      intdif<-noquote(t(intdif[keep]))
+      colnames(intdif)=intdif[1,]
+      intdif=intdif[-1,]
+      allinterceptdf[i,2:(length(intdif)+1)]<-intdif
+      for (j in 1:length(myMeasInvar)){
+        allinterceptdf[i,j+1]<-ifelse(allinterceptdf[i,j+1]<.05,myMeasInvar[j],NA)
+      }
+      keepintercept<-unlist(as.list(allinterceptdf[i,2:length(myMeasInvar)+1]))
+      keepintercept<-keepintercept[!is.na(keepintercept)]
+      names(keepintercept)<-NULL
+      for (j in 1:length(keepintercept)){
+        if(length(grep("_",keepintercept[j]))>0) keepintercept<-append(keepintercept,substr(keepintercept[j],1,3))
+        if(length(grep("_",keepintercept[j]))>0) keepintercept<-append(keepintercept,substr(keepintercept[j],5,7))
+      }
+      keepintercept<-unique(keepintercept)
+      threeletterlist<-substr(myMeasInvar,1,3)
+      test<-(keepintercept[match(threeletterlist,keepintercept)])
+      pos<-match(threeletterlist,test)
+      pos<-pos[!is.na(pos)]
+      pos<-unique(pos)
+      add<-myMeasInvar[pos]
+      keepintercept<-unique(append(keepintercept,add))
+      keepintercept2<-match(keepintercept,myMeasInvar)
+      keepintercept2<-keepintercept2[!is.na(keepintercept2)]
+      keepintercept<-myMeasInvar[keepintercept2]
+      if (length(keepintercept)>0)
+        for (j in 2:length(myMeasInvar)+1){
+          for (k in 1:length(keepintercept)){
+            if(length(grep(keepintercept[k],myMeasInvar[j-1]))>0)  allinterceptdf[i,j]<-myMeasInvar[j-1]
+          }
         }
       }
-  }
+    }
   colnames(allinterceptdf)<-NULL
   allmeasdif<-cbind(alllambdadf,allinterceptdf)
   diflist<-allmeasdif[1,]
@@ -256,7 +272,7 @@ aMNLFA.simultaneous<-function(input.object){
     predlist2<-predlist2[!is.na(predlist2)]
     eq<-as.data.frame(NULL)
     start<-as.data.frame(NULL)
-    eq[1,1]<-ifelse(length(predlist2)>0,paste("l",i,"=l",i,"00",sep=""),"!")
+    eq[1,1]<-ifelse(length(predlist2)>0,paste("l_",i,"=l",i,"00",sep=""),"!")
     start[1,1]<-ifelse(length(predlist2)>0,paste("l",i,"00*1 ",sep=""),"!")
     if (length(predlist2)>0)
       for (w in 1:length(predlist2)){

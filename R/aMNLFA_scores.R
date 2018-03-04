@@ -137,7 +137,7 @@ aMNLFA.scores<-function(input.object){
   scoringinput[8,1]<-ifelse(length(header2)>7,header[8],"!")
   scoringinput[9,1]<-ifelse(length(header2)>8,header[9],"!")
   scoringinput[10,1]<-paste("USEVARIABLES= ",keepround4,semicolon,sep="")
-  clus<-ifelse(mytime=="NA","!",paste("cluster=",myID,semicolon,sep=""))
+  clus<-ifelse(is.null(mytime),"!",paste("cluster=",myID,semicolon,sep=""))
   aux<-append(myauxiliary,myID)
   aux<-unique(aux)
   aux<-ifelse(length(aux)>0,paste("AUXILIARY=",aux,semicolon,sep=""),"!")
@@ -147,7 +147,7 @@ aMNLFA.scores<-function(input.object){
   scoringinput[14,1]<-ifelse(length(mycountindicators)>0,COUNT,"!")
   scoringinput[15,1]<-CONSTRAINT
   scAN<-paste(ANALYSIS,"type=complex;",sep="")
-  scoringinput[16,1]<-ifelse(mytime=="NA",ANALYSIS,scAN)
+  scoringinput[16,1]<-ifelse(is.null(mytime),ANALYSIS,scAN)
   scoringinput[17,1]<-ifelse(length(keepvarimpact)>0,varMODEL,fixvarMODEL)
   
   
@@ -168,16 +168,21 @@ aMNLFA.scores<-function(input.object){
   
   
   intdif<-round3output[grep(".ON",round3output$paramHeader),]
-  intdif$item<-read.table(text = intdif$paramHeader, sep = ".", as.is = TRUE)$V1
-  intdif<-intdif[which(intdif$item!="ETA"),]
-  keepcols<-c("param","est","item")
-  intdif<-intdif[,keepcols]
-  
-  intcode<-paste(intdif$item," ON ",intdif$param,"@",intdif$est,semicolon,sep="")
-  
-  for (i in 1:length(intcode)){
-    scoringinput[17+l+length(ETAON3)+i,1]<-intcode[i]
+  intcode<-character(0)
+  if (nrow(intdif)>0)
+    {
+    intdif$item<-read.table(text = intdif$paramHeader, sep = ".", as.is = TRUE)$V1
+    intdif<-intdif[which(intdif$item!="ETA"),]
+    keepcols<-c("param","est","item")
+    intdif<-intdif[,keepcols]
+    intcode<-paste(intdif$item," ON ",intdif$param,"@",intdif$est,semicolon,sep="")
+    
+    for (i in 1:length(intcode)){
+      scoringinput[17+l+length(ETAON3)+i,1]<-intcode[i]
+    }
   }
+  
+    
   
   thresh<-round3output[which(round3output$paramHeader=="Thresholds"|round3output$paramHeader=="Intercepts"&round3output$param!="ETA"),]
   for (i in 1:length(myindicators)){
@@ -201,12 +206,14 @@ aMNLFA.scores<-function(input.object){
   #reorg so that all params for same item on same row
   lval$item<-substr(lval$param,2,3)
   lval$predictor<-as.numeric(substr(lval$param,3,4))
+  lval$eq<-numeric(0)
   
+  if ((dim(lval)[1])>0){
   for (i in 1:dim(lval)[1]){
     if (lval$predictor[i]==0) lval$eq[i]<-paste("l",lval$item[i],"=",lval$est[i],sep="")
     for (j in 1:length(myMeasInvar)){
       if (lval$predictor[i]==j) lval$eq[i]<-paste("+",lval$est[i],"*",myMeasInvar[j],sep="")
-    }}
+    }}}
   keep<-c("item","predictor","eq")
   lval<-lval[keep]
   wide<-reshape(lval, idvar = "item", timevar = "predictor", direction = "wide")
