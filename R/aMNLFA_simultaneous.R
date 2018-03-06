@@ -97,7 +97,7 @@ aMNLFA.simultaneous<-function(input.object){
   }
   keepvarimpact<-keepvarimpact[which(keepvarimpact!=2)]
   keepvarimpact<-unique(keepvarimpact)
-  threeletterlist<- stringr::stringr::str_sub(myVarImpact,1,3)
+  threeletterlist<- stringr::str_sub(myVarImpact,1,3)
   test<-(keepvarimpact[match(threeletterlist,keepvarimpact)])
   pos<-match(threeletterlist,test)
   pos<-pos[!is.na(pos)]

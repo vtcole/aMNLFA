@@ -16,8 +16,8 @@ names(df) <- c("ID", "AGECENT", "GENEFF", "STUDYEFF", "STUDYAGE",
                paste0("BIN_", 1:12))
 write.table(df, "mr.dat")
 
-ob <- aMNLFA::aMNLFA.object(path          = getwd(), 
-                      mrdata = df,
+ob <- aMNLFA::aMNLFA.object(path    = getwd(), 
+                      mrdata        = df,
                       indicators    = paste0("BIN_", 1:12), 
                       catindicators = paste0("BIN_", 1:12), 
                       meanimpact    = c("AGECENT", "GENEFF", "STUDYEFF"), 
