@@ -118,7 +118,11 @@ aMNLFA.final<-function(input.object){
   lambdaconstraints<-lambdaconstraints[order(lambdaconstraints$pval),]
   ###FDR correctioin: BH-crit=(m-rank+1)*.05/(2*m); m=# indicators*# predictors; rank = highest-to-lowest p-value amongst in m
   m<-length(myindicators)*length(myMeasInvar)
+  
+  # ----------------------------- seem to be having trouble here
   lambdaconstraints$sig<-NA
+  # ---------------------------------
+  
   for (l in 1:dim(lambdaconstraints)[1]){
     lambdaconstraints$rank[l]<-m+1-l
   }
