@@ -120,9 +120,10 @@ aMNLFA.final<-function(input.object){
   m<-length(myindicators)*length(myMeasInvar)
   
   # ----------------------------- seem to be having trouble here
+  if (nrow(lambdaconstraints)==0) {lambdaconstraints[1,] <- NA}
   lambdaconstraints$sig<-NA
   # ---------------------------------
-  
+
   for (l in 1:dim(lambdaconstraints)[1]){
     lambdaconstraints$rank[l]<-m+1-l
   }
