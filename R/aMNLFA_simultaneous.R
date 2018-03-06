@@ -97,7 +97,7 @@ aMNLFA.simultaneous<-function(input.object){
   }
   keepvarimpact<-keepvarimpact[which(keepvarimpact!=2)]
   keepvarimpact<-unique(keepvarimpact)
-  threeletterlist<-str_sub(myVarImpact,1,3)
+  threeletterlist<- stringr::stringr::str_sub(myVarImpact,1,3)
   test<-(keepvarimpact[match(threeletterlist,keepvarimpact)])
   pos<-match(threeletterlist,test)
   pos<-pos[!is.na(pos)]
@@ -115,7 +115,7 @@ aMNLFA.simultaneous<-function(input.object){
     dif<-readModels(paste(path,"/measinvarscript_",myindicators[i],".out",sep=""))
     dif<-dif$parameters$unstandardized
     lambdadif<-dif[which(dif$paramHeader=="New.Additional.Parameters"),]
-    lambdadif$param<-noquote(str_sub(lambdadif$param,-2,-1))
+    lambdadif$param<-noquote(stringr::str_sub(lambdadif$param,-2,-1))
     lambdadif<-lambdadif[which(lambdadif$param!="00"),]
     lambdadif$param<-myMeasInvar[(lambdadif$param)]
     keep<-c("param","pval")
@@ -132,11 +132,11 @@ aMNLFA.simultaneous<-function(input.object){
     keeplambda<-keeplambda[!is.na(keeplambda)]
     names(keeplambda)<-NULL
     for (j in 1:length(keeplambda)){
-      if(length(grep("_",keeplambda[j]))>0) keeplambda<-append(keeplambda,str_sub(keeplambda[j],1,3))
-      if(length(grep("_",keeplambda[j]))>0) keeplambda<-append(keeplambda,str_sub(keeplambda[j],5,7))
+      if(length(grep("_",keeplambda[j]))>0) keeplambda<-append(keeplambda,stringr::str_sub(keeplambda[j],1,3))
+      if(length(grep("_",keeplambda[j]))>0) keeplambda<-append(keeplambda,stringr::str_sub(keeplambda[j],5,7))
     }
     keeplambda<-unique(keeplambda)
-    threeletterlist<-str_sub(myMeasInvar,1,3)
+    threeletterlist<-stringr::str_sub(myMeasInvar,1,3)
     test<-(keeplambda[match(threeletterlist,keeplambda)])
     pos<-match(threeletterlist,test)
     pos<-pos[!is.na(pos)]
