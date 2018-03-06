@@ -3,7 +3,7 @@ library("devtools")
 # library('stringr')
 
 # pull the most up to date package from github
-install_github(repo       = "mlgiordano1/aMNLFA-1")
+install_github(repo       = "mlgiordano1/aMNLFA-1@testing")
 library("aMNLFA")
 
 # set the wd
@@ -37,6 +37,6 @@ MplusAutomation::runModels(replaceOutfile = "modifiedDate")
 aMNLFA::aMNLFA.simultaneous(ob)
 MplusAutomation::runModels(replaceOutfile = "modifiedDate")
 # make the final model
-aMNLFA::aMNLFA.final(ob)
+aMNLFA.final(ob)
 MplusAutomation::runModels(replaceOutfile = "modifiedDate")
 
