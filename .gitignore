@@ -1,3 +1,11 @@
 .Rproj.user
 .Rhistory
 .RData
+
+*.png
+*.dat
+*.inp
+*.out
+
+header.txt
+header2.txt
