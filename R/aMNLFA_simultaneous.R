@@ -299,5 +299,5 @@ aMNLFA.simultaneous<-function(input.object){
 
   #write.table(round2input,paste(path,"/round2calibration.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
   write.inp.file(round2input,paste(path,"/round2calibration.inp",sep=""))
-  message("Check '", path, "/' for Mplus inp file for round 2 calibration model (run this manually).")
+  message("Check '", path, "/' for Mplus inp file for round 2 calibration model (run this manually). \nNOTE: There is some Mplus output which is currently not able to be read in. \nIf your output contains the phrase 'BRANT WALD TEST FOR PROPORTIONAL ODDS,' please delete this section (including the heading itself) as well as everything after it. The last thing in your output should be 'LOGISTIC REGRESSION ODDS RATIO RESULTS.'")  
 }

@@ -114,7 +114,8 @@ aMNLFA.final<-function(input.object){
   keepvarimpact<-myVarImpact[keepvarimpact2]
   
   lambdaconstraints<-round2output[which(round2output$paramHeader=="New.Additional.Parameters"&substr(round2output$param,1,1)=="L"),]
-  lambdaconstraints<-lambdaconstraints[which(substr(lambdaconstraints$param,3,4)!="00"),]
+  #The following line obtains the last 2 characters of each parameter; it uses str_sub rather than stringr to handle names of different length
+  lambdaconstraints<-lambdaconstraints[which(stringr::str_sub(lambdaconstraints$param,start=-2)!="00"),]
   lambdaconstraints<-lambdaconstraints[order(lambdaconstraints$pval),]
   ###FDR correctioin: BH-crit=(m-rank+1)*.05/(2*m); m=# indicators*# predictors; rank = highest-to-lowest p-value amongst in m
   m<-length(myindicators)*length(myMeasInvar)
@@ -132,8 +133,9 @@ aMNLFA.final<-function(input.object){
   lambdaconstraints<-lambdaconstraints[which(lambdaconstraints$sig=="TRUE"),]
   lambdaconstraints<-noquote(substr(lambdaconstraints$param,2,3))
   alllambdadf<-data.frame(matrix(nrow=length(myindicators),ncol=length(myMeasInvar)))
-  item_i<-substr(lambdaconstraints,1,1)
-  col_i<-substr(lambdaconstraints,2,2)
+  #Need to figure out what to do if there are more than ten covariates
+  item_i<-stringr::str_sub(lambdaconstraints,0,1)
+  col_i<-stringr::str_sub(lambdaconstraints,start=-1)
   if (length(lambdaconstraints)>0) {
     for (i in 1:length(lambdaconstraints)){
       for (r in 1:length(myindicators)){
@@ -343,6 +345,5 @@ aMNLFA.final<-function(input.object){
   
   #write.table(round3input,paste(path,"/round3calibration.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
   write.inp.file(round3input,paste(path,"/round3calibration.inp",sep=""))
-  message("Check '", path, "/' for Mplus inp file for final (round 3) calibration model (run this manually).")
-  
+  message("Check '", path, "/' for Mplus inp file for round 2 calibration model (run this manually). \nNOTE: There is some Mplus output which is currently not able to be read in. \nIf your output contains the phrase 'BRANT WALD TEST FOR PROPORTIONAL ODDS,' please delete this section (including the heading itself) as well as everything after it. The last thing in your output should be 'LOGISTIC REGRESSION ODDS RATIO RESULTS.'")  
 }
