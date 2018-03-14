@@ -8,7 +8,7 @@
 #' \dontrun{
 #'  wd <- "./aMNLFA/data"
 #   First create aMNLFA object.
-#   ob <- aMNLFA::aMNLFA.object(path          = wd,
+#   ob <- aMNLFA::aMNLFA.object(dir          = wd,
 #                            mrdata        = xstudy,
 #                            indicators    = paste0("BIN_", 1:12), 
 #                            catindicators = paste0("BIN_", 1:12), 
@@ -23,7 +23,7 @@
 
 aMNLFA.scores<-function(input.object){
   
-  path = input.object$path
+  dir = input.object$dir
   mrdata = input.object$mrdata
   myindicators = input.object$indicators
   mycatindicators = input.object$catindicators
@@ -36,14 +36,14 @@ aMNLFA.scores<-function(input.object){
   myID = input.object$ID
   thresholds = input.object$thresholds
   
-  mrdata<-read.table(paste(path,"/mr.dat",sep=""), header=TRUE,as.is = TRUE,na.strings=".")
-  srdata<-read.table(paste(path,"/srdata.dat",sep=""),header=TRUE)
+  mrdata<-read.table(paste(dir,"/mr.dat",sep=""), header=TRUE,as.is = TRUE,na.strings=".")
+  srdata<-read.table(paste(dir,"/srdata.dat",sep=""),header=TRUE)
   
   varlist<-c(myID,myauxiliary,myindicators,myMeasInvar,myMeanImpact,myVarImpact)
   varlist<-unique(varlist)
   
-  header<-readLines(paste0(path,"/header.txt"))
-  header2<-readLines(paste0(path,"/header2.txt"))
+  header<-readLines(paste0(dir,"/header.txt"))
+  header2<-readLines(paste0(dir,"/header2.txt"))
   
   USEVARIABLES<-paste("USEVARIABLES=")
   semicolon<-paste(";")
@@ -81,7 +81,7 @@ aMNLFA.scores<-function(input.object){
   ##############Output scoring model input#####################################
   #############################################################################
   
-  round3output<-MplusAutomation::readModels(paste(path,"/round3calibration.out",sep=""))
+  round3output<-MplusAutomation::readModels(paste(dir,"/round3calibration.out",sep=""))
   round3input<-round3output$input$model.constraint
   
   keepvarimpact<-list()
@@ -243,7 +243,7 @@ aMNLFA.scores<-function(input.object){
   scoringinput[23+2*l+length(ETAON3)+length(intcode)+length(dim(wide)[1]),1]<-tech1
   scoringinput[24+2*l+length(ETAON3)+length(intcode)+length(dim(wide)[1]),1]<-paste("SAVEDATA: SAVE=FSCORES; FILE=scores.dat;")
   
-  #write.table(scoringinput,paste(path,"/scoring.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
-  write.inp.file(scoringinput,paste(path,"/scoring.inp",sep=""))
-  message("Check '", path, "/' for Mplus inp file for scoring model (run this manually).")
+  #write.table(scoringinput,paste(dir,"/scoring.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
+  write.inp.file(scoringinput,paste(dir,"/scoring.inp",sep=""))
+  message("Check '", dir, "/' for Mplus inp file for scoring model (run this manually).")
 }

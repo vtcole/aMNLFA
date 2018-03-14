@@ -1,10 +1,10 @@
 Package: aMNLFA
 Title: Automated fitting of moderated nonlinear factor analysis (MNLFA) through
     the Mplus program.
-Version: 0.0.0.9000
-Authors@R: c(person("Nisha", "Gottfredson", email = "gottfredson@email.unc.edu", role = c("aut", "cre")),
+Version: 0.1
+Authors@R: c(person("Nisha", "Gottfredson", email = "gottfredson@email.unc.edu", role = c("aut")),
   person("Michael", "Giordano", email = "mgiordano@email.unc.edu", role = c("aut")),
-  person("Veronica", "Cole", email = "vcole@email.unc.edu", role = c("aut")),
+  person("Veronica", "Cole", email = "vcole@email.unc.edu", role = c("aut","cre")),
   person("Tim", "Janssen", email = "tim_janssen@brown.edu", role = c("ctb")))
 Description: Automated generation, running, and interpretation of moderated
     nonlinear factor analysis (MNLFA) models for obtaining scores from observed

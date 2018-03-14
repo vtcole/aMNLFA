@@ -8,7 +8,7 @@
 #' \dontrun{
 #'  wd <- "./aMNLFA/data"
 #   First create aMNLFA object.
-#   ob <- aMNLFA::aMNLFA.object(path          = wd,
+#   ob <- aMNLFA::aMNLFA.object(dir          = wd,
 #                            mrdata        = xstudy,
 #                            indicators    = paste0("BIN_", 1:12), 
 #                            catindicators = paste0("BIN_", 1:12), 
@@ -23,7 +23,7 @@
 
 aMNLFA.final<-function(input.object){
   
-  path = input.object$path
+  dir = input.object$dir
   mrdata = input.object$mrdata
   myindicators = input.object$indicators
   mycatindicators = input.object$catindicators
@@ -39,7 +39,7 @@ aMNLFA.final<-function(input.object){
   varlist<-c(myID,myauxiliary,myindicators,myMeasInvar,myMeanImpact,myVarImpact)
   varlist<-unique(varlist)
   
-  header<-readLines(paste0(path,"/header.txt"))
+  header<-readLines(paste0(dir,"/header.txt"))
   
   USEVARIABLES<-paste("USEVARIABLES=")
   semicolon<-paste(";")
@@ -76,7 +76,7 @@ aMNLFA.final<-function(input.object){
   #################################################################################################
   
   ##Read in output and test for sig effects at p<.01
-  round2output<-MplusAutomation::readModels(paste(path,"/round2calibration.out",sep=""))
+  round2output<-MplusAutomation::readModels(paste(dir,"/round2calibration.out",sep=""))
   round2output<-as.data.frame(round2output$parameters$unstandardized)
   
   meanimpact<-round2output[which(round2output$paramHeader=="ETA.ON"),]
@@ -357,7 +357,7 @@ aMNLFA.final<-function(input.object){
   round3input[20+2*l+2*ind,1]<-tech1
   if(is.null(mytime)){round3input[21+2*l+2*ind,1]<-paste("SAVEDATA: SAVE=FSCORES; FILE=scores.dat;")}
   
-  #write.table(round3input,paste(path,"/round3calibration.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
-  write.inp.file(round3input,paste(path,"/round3calibration.inp",sep=""))
-  message("Check '", path, "/' for Mplus inp file for round 2 calibration model (run this manually). \nNOTE: There is some Mplus output which is currently not able to be read in. \nIf your output contains the phrase 'BRANT WALD TEST FOR PROPORTIONAL ODDS,' please delete this section (including the heading itself) as well as everything after it. The last thing in your output should be 'LOGISTIC REGRESSION ODDS RATIO RESULTS.'")  
+  #write.table(round3input,paste(dir,"/round3calibration.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
+  write.inp.file(round3input,paste(dir,"/round3calibration.inp",sep=""))
+  message("COMPLETE. Check '", dir, "/' for Mplus inp file for round 3 calibration model (run this manually). \nNOTE: After running  your round 3 calibration, there may be some output from output that cannot be read in properly as a result of recent changes within Mplus. This will lead to errors in subsequent steps. \nAs a temporary fix the problem, please delete all output that comes after the 'LOGISTIC REGRESSION ODDS RATIO RESULTS' section after running your round 3 calibration, before proceeding to the next step. \nThis message will appear after all subsequent steps.")  
 }

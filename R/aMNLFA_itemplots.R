@@ -8,7 +8,7 @@
 #' \dontrun{
 #'  wd <- "./aMNLFA/data"
 #   First create aMNLFA object.
-#   ob <- aMNLFA::aMNLFA.object(path          = wd,
+#   ob <- aMNLFA::aMNLFA.object(dir          = wd,
 #                            mrdata        = xstudy,
 #                            indicators    = paste0("BIN_", 1:12), 
 #                            catindicators = paste0("BIN_", 1:12), 
@@ -23,7 +23,7 @@
 
 aMNLFA.itemplots<-function(input.object){
 
-  path = input.object$path
+  dir = input.object$dir
   mrdata = input.object$mrdata
   myindicators = input.object$indicators
   mytime = input.object$time
@@ -69,7 +69,7 @@ aMNLFA.itemplots<-function(input.object){
     aggindlongmod$Moderator<-as.factor(aggindlongmod$Moderator)
     p<-with(aggindlongmod,ggplot2::ggplot(aggindlongmod,ggplot2::aes(x=time,y=AvgItemResponse)))+ with(aggindlongmod,ggplot2::facet_wrap(~ variable,nrow=round(sqrt(length(myfactors))))) + with(aggindlongmod,ggplot2::geom_point(ggplot2::aes(size=N,colour=Moderator)))+ with(aggindlongmod,ggplot2::stat_smooth(se=FALSE,ggplot2::aes(colour=Moderator))) + with(aggindlongmod,ggplot2::theme_bw())+ with(aggindlongmod,ggplot2::labs(title=title)) + with(aggindlongmod,ggplot2::theme(legend.position="bottom")) + with(aggindlongmod,ggplot2::guides(size=FALSE))
 
-    filename<-paste(path,"/itemplots",myfactors[i],".png",sep="")
+    filename<-paste(dir,"/itemplots",myfactors[i],".png",sep="")
     png(filename=filename,
         units="in",
         width=11,
@@ -92,7 +92,7 @@ aMNLFA.itemplots<-function(input.object){
       cc_long<-indlongmod[which(ic=="FALSE"),]
       title<-paste(myindicators[j],"Responses Distribution by ",myfactors[i],sep="")
       p<-with(cc_long,ggplot2::ggplot(cc_long,ggplot2::aes(factor(Moderator),value))) + with(cc_long,ggplot2::geom_boxplot()) + with(cc_long,ggplot2::theme_bw()) + with(cc_long,ggplot2::labs(title=title)) + with(cc_long,ggplot2::theme(legend.position="bottom"))
-      filename<-paste(path,"/",myindicators[j]," plots",myfactors[i],".png",sep="")
+      filename<-paste(dir,"/",myindicators[j]," plots",myfactors[i],".png",sep="")
       png(filename=filename,
           units="in",
           width=11,
@@ -103,5 +103,5 @@ aMNLFA.itemplots<-function(input.object){
       dev.off()
     }}
 
-  message("Check '", path, "/' for png file with item plots")
+  message("Check '", dir, "/' for png file with item plots")
 }

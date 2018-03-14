@@ -4,13 +4,13 @@
 \alias{aMNLFA.object}
 \title{aMNLFA object function}
 \usage{
-aMNLFA.object(path, mrdata, indicators = NULL, catindicators = NULL,
+aMNLFA.object(dir, mrdata, indicators = NULL, catindicators = NULL,
   countindicators = NULL, meanimpact = NULL, varimpact = NULL,
   measinvar = NULL, factors = NULL, time = NULL, auxiliary = NULL,
   ID = NULL, thresholds = NULL)
 }
 \arguments{
-\item{path}{The directory in which data, inputs, and outputs are to be stored. Must be supplied.}
+\item{dir}{The directory in which data, inputs, and outputs are to be stored. Must be supplied.}
 
 \item{mrdata}{The R dataframe containing the multiple-record dataset. Must be supplied.}
 

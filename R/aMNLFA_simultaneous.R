@@ -8,7 +8,7 @@
 #' \dontrun{
 #'  wd <- "./aMNLFA/data"
 #   First create aMNLFA object.
-#   ob <- aMNLFA::aMNLFA.object(path          = wd,
+#   ob <- aMNLFA::aMNLFA.object(dir          = wd,
 #                            mrdata        = xstudy,
 #                            indicators    = paste0("BIN_", 1:12), 
 #                            catindicators = paste0("BIN_", 1:12), 
@@ -23,7 +23,7 @@
 
 aMNLFA.simultaneous<-function(input.object){
 
-  path = input.object$path
+  dir = input.object$dir
   mrdata = input.object$mrdata
   myindicators = input.object$indicators
   mycatindicators = input.object$catindicators
@@ -70,7 +70,7 @@ aMNLFA.simultaneous<-function(input.object){
   ####ROUND 1 USES p<.05 AS GATE TO GET TO ROUND 2 FOR MEAS INV and p<.1 for IMPACT####################
 
   ##Read in mean impact script and test for impact at p<.1
-  meanimpact<-MplusAutomation::readModels(paste(path,"/meanimpactscript.out",sep=""))
+  meanimpact<-MplusAutomation::readModels(paste(dir,"/meanimpactscript.out",sep=""))
   meanimpact<-as.data.frame(meanimpact$parameters$unstandardized)
   meanimpact<-meanimpact[which(meanimpact$paramHeader=="ETA.ON"),]
   meanimpact<-meanimpact[which(meanimpact$pval<.1),]
@@ -93,7 +93,7 @@ aMNLFA.simultaneous<-function(input.object){
   keepmeanimpact<-myMeanImpact[keepmeanimpact2]
 
   ##Read in var impact script and test for impact at p<.1
-  varimpact<-MplusAutomation::readModels(paste(path,"/varimpactscript.out",sep=""))
+  varimpact<-MplusAutomation::readModels(paste(dir,"/varimpactscript.out",sep=""))
   varimpact<-as.data.frame(varimpact$parameters$unstandardized)
 
   varimpact<-varimpact[which(varimpact$paramHeader=="New.Additional.Parameters"&varimpact$pval<.1),]  ######alpha <.1 to trim###########
@@ -126,7 +126,7 @@ aMNLFA.simultaneous<-function(input.object){
   colnames(alllambdadf)=c("items",myMeasInvar)
   alllambdadf$items=myindicators
   for (i in 1:length(myindicators)){
-    dif<-MplusAutomation::readModels(paste(path,"/measinvarscript_",myindicators[i],".out",sep=""))
+    dif<-MplusAutomation::readModels(paste(dir,"/measinvarscript_",myindicators[i],".out",sep=""))
     dif<-dif$parameters$unstandardized
     lambdadif<-dif[which(dif$paramHeader=="New.Additional.Parameters"),]
     lambdadif$param<-noquote(stringr::str_sub(lambdadif$param,-2,-1))
@@ -177,7 +177,7 @@ aMNLFA.simultaneous<-function(input.object){
     colnames(allinterceptdf)=c("items",myMeasInvar)
     allinterceptdf$items=myindicators
     for (i in 1:length(myindicators)){
-      dif<-MplusAutomation::readModels(paste(path,"/measinvarscript_",myindicators[i],".out",sep=""))
+      dif<-MplusAutomation::readModels(paste(dir,"/measinvarscript_",myindicators[i],".out",sep=""))
       dif<-dif$parameters$unstandardized
       keep<-c("param","pval")
       intdif<-dif[grep(".ON",dif$paramHeader),]
@@ -236,7 +236,7 @@ aMNLFA.simultaneous<-function(input.object){
   CONSTRAINT<-append(CONSTRAINT,semicolon)
   CONSTRAINT<-capture.output(cat(CONSTRAINT))
 
-  header<-readLines(paste0(path,"/header.txt"))
+  header<-readLines(paste0(dir,"/header.txt"))
 
   round2input<-as.data.frame(NULL)
   round2input[1,1]<-paste("TITLE: Round 2 Calibration Model")
@@ -311,7 +311,7 @@ aMNLFA.simultaneous<-function(input.object){
   round2input[21+3*l+ind,1]<-tech1
 
 
-  #write.table(round2input,paste(path,"/round2calibration.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
-  write.inp.file(round2input,paste(path,"/round2calibration.inp",sep=""))
-  message("Check '", path, "/' for Mplus inp file for round 2 calibration model (run this manually). \nNOTE: There is some Mplus output which is currently not able to be read in. \nIf your output contains the phrase 'BRANT WALD TEST FOR PROPORTIONAL ODDS,' please delete this section (including the heading itself) as well as everything after it. The last thing in your output should be 'LOGISTIC REGRESSION ODDS RATIO RESULTS.'")  
+  #write.table(round2input,paste(dir,"/round2calibration.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
+  write.inp.file(round2input,paste(dir,"/round2calibration.inp",sep=""))
+  message("COMPLETE. Check '", dir, "/' for Mplus inp file for round 2 calibration model (run this manually). \nNOTE: After running  your round 2 calibration, there may be some output from output that cannot be read in properly as a result of recent changes within Mplus. This will lead to errors in subsequent steps. \nAs a temporary fix the problem, please delete all output that comes after the 'LOGISTIC REGRESSION ODDS RATIO RESULTS' section after running your round 3 calibration, before proceeding to the next step. \nThis message will appear after all subsequent steps.")  
 }

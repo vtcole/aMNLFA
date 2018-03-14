@@ -1,7 +1,7 @@
 #' aMNLFA object function
 #'
 #' This function creates an aMNLFA object based on user specifications to pass to aMNLFA functions.
-#' @param path The directory in which data, inputs, and outputs are to be stored. Must be supplied.
+#' @param dir The directory in which data, inputs, and outputs are to be stored. Must be supplied.
 #' @param mrdata The R dataframe containing the multiple-record dataset. Must be supplied.
 #' @param indicators The names of all indicators (items, observed variables) in the MNLFA.
 #' @param catindicators The list of indicators which are categorical. Defaults to NULL.
@@ -20,7 +20,7 @@
 #' \dontrun{
 #'  wd <- "./aMNLFA/data"
 #   First create aMNLFA object.
-#   ob <- aMNLFA.object(path          = wd,
+#   ob <- aMNLFA.object(dir          = wd,
 #                            mrdata        = xstudy,
 #                            indicators    = paste0("BIN_", 1:12), 
 #                            catindicators = paste0("BIN_", 1:12), 
@@ -32,13 +32,13 @@
 #                            thresholds    = FALSE)
 #' }
 
-aMNLFA.object<-function(path, mrdata, indicators=NULL, catindicators=NULL, countindicators=NULL, meanimpact=NULL, varimpact=NULL, measinvar=NULL, factors=NULL, time=NULL, auxiliary=NULL, ID=NULL, thresholds=NULL)
+aMNLFA.object<-function(dir, mrdata, indicators=NULL, catindicators=NULL, countindicators=NULL, meanimpact=NULL, varimpact=NULL, measinvar=NULL, factors=NULL, time=NULL, auxiliary=NULL, ID=NULL, thresholds=NULL)
 {
   charOrNull <- function(x) {
     is.character(x) || is.null(x)
   }
 
-  stopifnot(charOrNull(path))
+  stopifnot(charOrNull(dir))
   stopifnot(charOrNull(indicators))
   stopifnot(charOrNull(catindicators))
   stopifnot(charOrNull(countindicators))
@@ -50,7 +50,7 @@ aMNLFA.object<-function(path, mrdata, indicators=NULL, catindicators=NULL, count
   stopifnot(charOrNull(auxiliary))
   stopifnot(charOrNull(ID))
 
-  object<-list(path=path, mrdata=mrdata, indicators=indicators, catindicators=catindicators, countindicators=countindicators, meanimpact=meanimpact, varimpact=varimpact, measinvar=measinvar, factors=factors, time=time, auxiliary=auxiliary, ID=ID, thresholds=thresholds)
+  object<-list(dir=dir, mrdata=mrdata, indicators=indicators, catindicators=catindicators, countindicators=countindicators, meanimpact=meanimpact, varimpact=varimpact, measinvar=measinvar, factors=factors, time=time, auxiliary=auxiliary, ID=ID, thresholds=thresholds)
 
   class(object)<-c("list","aMNLFA.object")
   return(object)

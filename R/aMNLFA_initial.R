@@ -8,7 +8,7 @@
 #' \dontrun{
 #'  wd <- "./aMNLFA/data"
 #   First create aMNLFA object.
-#   ob <- aMNLFA::aMNLFA.object(path          = wd,
+#   ob <- aMNLFA::aMNLFA.object(dir          = wd,
 #                            mrdata        = xstudy,
 #                            indicators    = paste0("BIN_", 1:12), 
 #                            catindicators = paste0("BIN_", 1:12), 
@@ -23,7 +23,7 @@
 
 aMNLFA.initial<-function(input.object){
   
-  path = input.object$path
+  dir = input.object$dir
   mrdata = input.object$mrdata
   myindicators = input.object$indicators
   mycatindicators = input.object$catindicators
@@ -85,7 +85,7 @@ aMNLFA.initial<-function(input.object){
   
   meaninput<-as.data.frame(NULL)
   
-  header<-readLines(paste0(path,"/header.txt"))
+  header<-readLines(paste0(dir,"/header.txt"))
   
   meaninput[1,1]<-paste("TITLE: Mean Impact Model")
   meaninput[2,1]<-header[2]
@@ -109,10 +109,10 @@ aMNLFA.initial<-function(input.object){
   meaninput[16+l,1]<-ETAON
   meaninput[17+l,1]<-tech1
   
-  #write.table(meaninput,paste(path,"/meanimpactscript.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
+  #write.table(meaninput,paste(dir,"/meanimpactscript.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
   #need to load the write.inp.file function (found in dropbox folder)
-  write.inp.file(meaninput,paste(path,"/meanimpactscript.inp",sep=""))
-  message("Check '", path, "/' for Mplus inp file for mean impact model (run this manually)")
+  write.inp.file(meaninput,paste(dir,"/meanimpactscript.inp",sep=""))
+  message("Check '", dir, "/' for Mplus inp file for mean impact model (run this manually)")
   
   
   ##Variance impact script
@@ -170,9 +170,9 @@ aMNLFA.initial<-function(input.object){
   varinput[20+l+v+v,1]<-tech1
   
   
-  #write.table(varinput,paste(path,"/varimpactscript.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
-  write.inp.file(varinput,paste(path,"/varimpactscript.inp",sep=""))
-  message("Check '", path, "/' for Mplus inp file for variance impact model (run this manually). If you trim the variance model manually, do not change the new parameter labels (e.g., v2 is still v2 if you drop the v1 parameter).")
+  #write.table(varinput,paste(dir,"/varimpactscript.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
+  write.inp.file(varinput,paste(dir,"/varimpactscript.inp",sep=""))
+  message("Check '", dir, "/' for Mplus inp file for variance impact model (run this manually). If you trim the variance model manually, do not change the new parameter labels (e.g., v2 is still v2 if you drop the v1 parameter).")
   
   
   
@@ -286,9 +286,9 @@ aMNLFA.initial<-function(input.object){
         
         
         
-        # write.table(miinput,paste(path,'/measinvarscript_',myindicators[w],'.inp',sep=''),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
-        write.inp.file(miinput, paste(path, "/measinvarscript_", myindicators[w], ".inp", sep = ""))
-        message("Check '", path, "/' for Mplus inp file for measurement invariance model for ", myindicators[w], " (run this manually).")
+        # write.table(miinput,paste(dir,'/measinvarscript_',myindicators[w],'.inp',sep=''),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
+        write.inp.file(miinput, paste(dir, "/measinvarscript_", myindicators[w], ".inp", sep = ""))
+        message("COMPLETE. Check '", dir, "/' for Mplus inp file for measurement invariance model for ", myindicators[w], " (run this manually).")  
       }
     }
   } else {
@@ -344,9 +344,10 @@ aMNLFA.initial<-function(input.object){
       miinput[23 + l + h + h, 1] <- tech1
       
       
-      # write.table(miinput,paste(path,'/measinvarscript_',myindicators[w],'.inp',sep=''),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
-      write.inp.file(miinput, paste(path, "/measinvarscript_", myindicators[w], ".inp", sep = ""))
-      message("Check '", path, "/' for Mplus inp file for measurement invariance model for ", myindicators[w], " (run this manually).")
+      # write.table(miinput,paste(dir,'/measinvarscript_',myindicators[w],'.inp',sep=''),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
+      write.inp.file(miinput, paste(dir, "/measinvarscript_", myindicators[w], ".inp", sep = ""))
+      message("COMPLETE. Check '", dir, "/' for Mplus inp file for measurement invariance model for ", myindicators[w], " (run this manually).")  
     }
   }
+  message("\nNOTE: After running these models, there may be some output from output that cannot be read in properly as a result of recent changes within Mplus. This will lead to errors in subsequent steps. \nAs a temporary fix the problem, please delete all output that comes after the 'LOGISTIC REGRESSION ODDS RATIO RESULTS' section after running your round 3 calibration, before proceeding to the next step. \nThis message will appear after all subsequent steps.")
 }

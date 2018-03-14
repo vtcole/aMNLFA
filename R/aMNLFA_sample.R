@@ -8,7 +8,7 @@
 #' \dontrun{
 #'  wd <- "./aMNLFA/data"
 #   First create aMNLFA object.
-#   ob <- aMNLFA::aMNLFA.object(path          = wd,
+#   ob <- aMNLFA::aMNLFA.object(dir          = wd,
 #                            mrdata        = xstudy,
 #                            indicators    = paste0("BIN_", 1:12), 
 #                            catindicators = paste0("BIN_", 1:12), 
@@ -24,7 +24,7 @@
 
 aMNLFA.sample<-function(input.object){
 
-  path = input.object$path
+  dir = input.object$dir
   mrdata = input.object$mrdata
   myindicators = input.object$indicators
   myMeanImpact = input.object$meanimpact
@@ -45,23 +45,23 @@ aMNLFA.sample<-function(input.object){
     srdata<-srdata[varlist]
     srdata <- sapply( srdata, as.numeric )
     srdata<-as.data.frame(srdata)
-    header<-capture.output(MplusAutomation::prepareMplusData(srdata, paste(path,"/calibration.dat",sep=""), keepCols=c(varlist)))
+    header<-capture.output(MplusAutomation::prepareMplusData(srdata, paste(dir,"/calibration.dat",sep=""), keepCols=c(varlist)))
   }
   if (is.null(mytime)){
-    header<-capture.output(MplusAutomation::prepareMplusData(mrdata, paste(path,"/calibration.dat",sep=""), keepCols=c(varlist)))
+    header<-capture.output(MplusAutomation::prepareMplusData(mrdata, paste(dir,"/calibration.dat",sep=""), keepCols=c(varlist)))
   }
   mruse<-mrdata[varlist]
   mruse<-sapply(mruse,as.numeric)
   mruse<-as.data.frame(mruse)
-  if (!is.null(mytime)) write.table(srdata, paste(path,"/srdata.dat",sep=""),quote=FALSE, sep="\t",col.names=TRUE,row.names=FALSE)
-  if (is.null(mytime)) write.table(mruse, paste(path,"/srdata.dat",sep=""),quote=FALSE, sep="\t",col.names=TRUE,row.names=FALSE)
-  header2<-capture.output(MplusAutomation::prepareMplusData(mruse, paste(path,"/full.dat",sep=""), keepCols=c(varlist)))
+  if (!is.null(mytime)) write.table(srdata, paste(dir,"/srdata.dat",sep=""),quote=FALSE, sep="\t",col.names=TRUE,row.names=FALSE)
+  if (is.null(mytime)) write.table(mruse, paste(dir,"/srdata.dat",sep=""),quote=FALSE, sep="\t",col.names=TRUE,row.names=FALSE)
+  header2<-capture.output(MplusAutomation::prepareMplusData(mruse, paste(dir,"/full.dat",sep=""), keepCols=c(varlist)))
 
 
-  h1file<-file(paste0(path,"/header.txt"))
+  h1file<-file(paste0(dir,"/header.txt"))
   writeLines(header, h1file)
   close(h1file)
-  h2file<-file(paste0(path,"/header2.txt"))
+  h2file<-file(paste0(dir,"/header2.txt"))
   writeLines(header2, h2file)
   close(h2file)
 }
