@@ -17,7 +17,20 @@
 #' @keywords MNLFA
 #' @export
 #' @examples
-#' aMNLFA.object()
+#' \dontrun{
+#'  wd <- "./aMNLFA/data"
+#   First create aMNLFA object.
+#   ob <- aMNLFA.object(path          = wd,
+#                            mrdata        = xstudy,
+#                            indicators    = paste0("BIN_", 1:12), 
+#                            catindicators = paste0("BIN_", 1:12), 
+#                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
+#                            varimpact     = c("AGE", "GENDER", "STUDY"), 
+#                            measinvar     = c("AGE", "GENDER", "STUDY"), 
+#                            factors       = c("GENDER", "STUDY"), 
+#                            ID            = "ID", 
+#                            thresholds    = FALSE)
+#' }
 
 aMNLFA.object<-function(path, mrdata, indicators=NULL, catindicators=NULL, countindicators=NULL, meanimpact=NULL, varimpact=NULL, measinvar=NULL, factors=NULL, time=NULL, auxiliary=NULL, ID=NULL, thresholds=NULL)
 {

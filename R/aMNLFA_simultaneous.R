@@ -5,7 +5,21 @@
 #' @keywords MNLFA
 #' @export
 #' @examples
-#' aMNLFA.simultaneous()
+#' \dontrun{
+#'  wd <- "./aMNLFA/data"
+#   First create aMNLFA object.
+#   ob <- aMNLFA::aMNLFA.object(path          = wd,
+#                            mrdata        = xstudy,
+#                            indicators    = paste0("BIN_", 1:12), 
+#                            catindicators = paste0("BIN_", 1:12), 
+#                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
+#                            varimpact     = c("AGE", "GENDER", "STUDY"), 
+#                            measinvar     = c("AGE", "GENDER", "STUDY"), 
+#                            factors       = c("GENDER", "STUDY"), 
+#                            ID            = "ID", 
+#                            thresholds    = FALSE)
+#'  aMNLFA.simultaneous(ob)
+#' }
 
 aMNLFA.simultaneous<-function(input.object){
 
@@ -56,7 +70,7 @@ aMNLFA.simultaneous<-function(input.object){
   ####ROUND 1 USES p<.05 AS GATE TO GET TO ROUND 2 FOR MEAS INV and p<.1 for IMPACT####################
 
   ##Read in mean impact script and test for impact at p<.1
-  meanimpact<-readModels(paste(path,"/meanimpactscript.out",sep=""))
+  meanimpact<-MplusAutomation::readModels(paste(path,"/meanimpactscript.out",sep=""))
   meanimpact<-as.data.frame(meanimpact$parameters$unstandardized)
   meanimpact<-meanimpact[which(meanimpact$paramHeader=="ETA.ON"),]
   meanimpact<-meanimpact[which(meanimpact$pval<.1),]
@@ -79,7 +93,7 @@ aMNLFA.simultaneous<-function(input.object){
   keepmeanimpact<-myMeanImpact[keepmeanimpact2]
 
   ##Read in var impact script and test for impact at p<.1
-  varimpact<-readModels(paste(path,"/varimpactscript.out",sep=""))
+  varimpact<-MplusAutomation::readModels(paste(path,"/varimpactscript.out",sep=""))
   varimpact<-as.data.frame(varimpact$parameters$unstandardized)
 
   varimpact<-varimpact[which(varimpact$paramHeader=="New.Additional.Parameters"&varimpact$pval<.1),]  ######alpha <.1 to trim###########
@@ -112,7 +126,7 @@ aMNLFA.simultaneous<-function(input.object){
   colnames(alllambdadf)=c("items",myMeasInvar)
   alllambdadf$items=myindicators
   for (i in 1:length(myindicators)){
-    dif<-readModels(paste(path,"/measinvarscript_",myindicators[i],".out",sep=""))
+    dif<-MplusAutomation::readModels(paste(path,"/measinvarscript_",myindicators[i],".out",sep=""))
     dif<-dif$parameters$unstandardized
     lambdadif<-dif[which(dif$paramHeader=="New.Additional.Parameters"),]
     lambdadif$param<-noquote(stringr::str_sub(lambdadif$param,-2,-1))
@@ -163,7 +177,7 @@ aMNLFA.simultaneous<-function(input.object){
     colnames(allinterceptdf)=c("items",myMeasInvar)
     allinterceptdf$items=myindicators
     for (i in 1:length(myindicators)){
-      dif<-readModels(paste(path,"/measinvarscript_",myindicators[i],".out",sep=""))
+      dif<-MplusAutomation::readModels(paste(path,"/measinvarscript_",myindicators[i],".out",sep=""))
       dif<-dif$parameters$unstandardized
       keep<-c("param","pval")
       intdif<-dif[grep(".ON",dif$paramHeader),]

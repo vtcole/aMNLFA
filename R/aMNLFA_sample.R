@@ -5,7 +5,21 @@
 #' @keywords MNLFA
 #' @export
 #' @examples
-#' aMNLFA.sample()
+#' \dontrun{
+#'  wd <- "./aMNLFA/data"
+#   First create aMNLFA object.
+#   ob <- aMNLFA::aMNLFA.object(path          = wd,
+#                            mrdata        = xstudy,
+#                            indicators    = paste0("BIN_", 1:12), 
+#                            catindicators = paste0("BIN_", 1:12), 
+#                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
+#                            varimpact     = c("AGE", "GENDER", "STUDY"), 
+#                            measinvar     = c("AGE", "GENDER", "STUDY"), 
+#                            factors       = c("GENDER", "STUDY"), 
+#                            ID            = "ID", 
+#                            thresholds    = FALSE)
+#'  aMNLFA.sample(ob)
+#' }
 
 
 aMNLFA.sample<-function(input.object){
@@ -20,7 +34,6 @@ aMNLFA.sample<-function(input.object){
   myauxiliary = input.object$auxiliary
   myID = input.object$ID
 
-  mrdata<-read.table(paste(path,"/mr.dat",sep=""), header=TRUE,as.is = TRUE)
   varlist<-c(myID,myauxiliary,myindicators,myMeasInvar,myMeanImpact,myVarImpact)
   
   varlist<-unique(varlist)
@@ -32,17 +45,17 @@ aMNLFA.sample<-function(input.object){
     srdata<-srdata[varlist]
     srdata <- sapply( srdata, as.numeric )
     srdata<-as.data.frame(srdata)
-    header<-capture.output(prepareMplusData(srdata, paste(path,"/calibration.dat",sep=""), keepCols=c(varlist)))
+    header<-capture.output(MplusAutomation::prepareMplusData(srdata, paste(path,"/calibration.dat",sep=""), keepCols=c(varlist)))
   }
   if (is.null(mytime)){
-    header<-capture.output(prepareMplusData(mrdata, paste(path,"/calibration.dat",sep=""), keepCols=c(varlist)))
+    header<-capture.output(MplusAutomation::prepareMplusData(mrdata, paste(path,"/calibration.dat",sep=""), keepCols=c(varlist)))
   }
   mruse<-mrdata[varlist]
   mruse<-sapply(mruse,as.numeric)
   mruse<-as.data.frame(mruse)
   if (!is.null(mytime)) write.table(srdata, paste(path,"/srdata.dat",sep=""),quote=FALSE, sep="\t",col.names=TRUE,row.names=FALSE)
   if (is.null(mytime)) write.table(mruse, paste(path,"/srdata.dat",sep=""),quote=FALSE, sep="\t",col.names=TRUE,row.names=FALSE)
-  header2<-capture.output(prepareMplusData(mruse, paste(path,"/full.dat",sep=""), keepCols=c(varlist)))
+  header2<-capture.output(MplusAutomation::prepareMplusData(mruse, paste(path,"/full.dat",sep=""), keepCols=c(varlist)))
 
 
   h1file<-file(paste0(path,"/header.txt"))

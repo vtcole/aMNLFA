@@ -5,7 +5,21 @@
 #' @keywords MNLFA
 #' @export
 #' @examples
-#' aMNLFA.scores()
+#' \dontrun{
+#'  wd <- "./aMNLFA/data"
+#   First create aMNLFA object.
+#   ob <- aMNLFA::aMNLFA.object(path          = wd,
+#                            mrdata        = xstudy,
+#                            indicators    = paste0("BIN_", 1:12), 
+#                            catindicators = paste0("BIN_", 1:12), 
+#                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
+#                            varimpact     = c("AGE", "GENDER", "STUDY"), 
+#                            measinvar     = c("AGE", "GENDER", "STUDY"), 
+#                            factors       = c("GENDER", "STUDY"), 
+#                            ID            = "ID", 
+#                            thresholds    = FALSE)
+#'  aMNLFA.scores(ob)
+#' }
 
 aMNLFA.scores<-function(input.object){
   
@@ -22,7 +36,7 @@ aMNLFA.scores<-function(input.object){
   myID = input.object$ID
   thresholds = input.object$thresholds
   
-  mrdata<-read.table(paste(path,"/mr.dat",sep=""), header=TRUE,as.is = TRUE,na=".")
+  mrdata<-read.table(paste(path,"/mr.dat",sep=""), header=TRUE,as.is = TRUE,na.strings=".")
   srdata<-read.table(paste(path,"/srdata.dat",sep=""),header=TRUE)
   
   varlist<-c(myID,myauxiliary,myindicators,myMeasInvar,myMeanImpact,myVarImpact)
@@ -67,7 +81,7 @@ aMNLFA.scores<-function(input.object){
   ##############Output scoring model input#####################################
   #############################################################################
   
-  round3output<-readModels(paste(path,"/round3calibration.out",sep=""))
+  round3output<-MplusAutomation::readModels(paste(path,"/round3calibration.out",sep=""))
   round3input<-round3output$input$model.constraint
   
   keepvarimpact<-list()

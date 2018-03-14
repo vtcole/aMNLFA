@@ -13,7 +13,10 @@ aMNLFA.scoreplots(input.object)
 This function creates plots of scores generated using aMNLFA. Can only be run after the aMNLFA.scores function.
 }
 \examples{
-aMNLFA.scoreplots()
+\dontrun{
+ wd <- "./aMNLFA/data"
+ aMNLFA.scoreplots(ob)
+}
 }
 \keyword{MNLFA}
 

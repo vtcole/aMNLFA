@@ -13,7 +13,10 @@ aMNLFA.scores(input.object)
 This function creates scores generated using aMNLFA. Can only be run after the final model has been fit -- i.e., after the aMNLFA.final function.
 }
 \examples{
-aMNLFA.scores()
+\dontrun{
+ wd <- "./aMNLFA/data"
+ aMNLFA.scores(ob)
+}
 }
 \keyword{MNLFA}
 

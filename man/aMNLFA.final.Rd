@@ -13,7 +13,10 @@ aMNLFA.final(input.object)
 This function generates the final aMNLFA model on which scores will be based. Can only be run after a model containing all impact and DIF effects -- i.e., after the aMNLFA.simultaneous function.
 }
 \examples{
-aMNLFA.final()
+\dontrun{
+ wd <- "./aMNLFA/data"
+ aMNLFA.final(ob)
+}
 }
 \keyword{MNLFA}
 

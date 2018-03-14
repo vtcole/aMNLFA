@@ -13,7 +13,10 @@ aMNLFA.sample(input.object)
 This function generates a single-record dataset using a random sample of time points from the multiple-record sample.
 }
 \examples{
-aMNLFA.sample()
+\dontrun{
+ wd <- "./aMNLFA/data"
+ aMNLFA.sample(ob)
+}
 }
 \keyword{MNLFA}
 

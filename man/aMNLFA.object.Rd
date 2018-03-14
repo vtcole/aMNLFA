@@ -40,7 +40,9 @@ aMNLFA.object(path, mrdata, indicators = NULL, catindicators = NULL,
 This function creates an aMNLFA object based on user specifications to pass to aMNLFA functions.
 }
 \examples{
-aMNLFA.object()
+\dontrun{
+ wd <- "./aMNLFA/data"
+}
 }
 \keyword{MNLFA}
 

@@ -13,7 +13,10 @@ aMNLFA.initial(input.object)
 This function generates the initial itemwise aMNLFA models.
 }
 \examples{
-aMNLFA.initial()
+\dontrun{
+ wd <- "./aMNLFA/data"
+ aMNLFA.initial(ob)
+}
 }
 \keyword{MNLFA}
 

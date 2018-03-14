@@ -6,7 +6,11 @@
 #' @keywords MNLFA
 #' @export
 #' @examples
-#' write.mplus.script()
+#' \dontrun{
+#'  wd <- "./aMNLFA/data"
+#'  teststring<-""
+#   write.inp.file(teststring,file.path(wd,"testoutput.inp"))
+#' }
 
 
 write.inp.file <- function(df, outfile) {

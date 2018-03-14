@@ -13,7 +13,10 @@ aMNLFA.simultaneous(input.object)
 This function generates the simultaneous aMNLFA model from all the initial inputs.
 }
 \examples{
-aMNLFA.simultaneous()
+\dontrun{
+ wd <- "./aMNLFA/data"
+ aMNLFA.simultaneous(ob)
+}
 }
 \keyword{MNLFA}
 

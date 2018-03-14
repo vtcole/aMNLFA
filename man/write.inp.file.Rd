@@ -15,7 +15,10 @@ write.inp.file(df, outfile)
 This is a helper function which the user will not interface with; it is used to create Mplus inputs.
 }
 \examples{
-write.mplus.script()
+\dontrun{
+ wd <- "./aMNLFA/data"
+ teststring<-""
+}
 }
 \keyword{MNLFA}
 

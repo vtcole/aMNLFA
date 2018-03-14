@@ -4,7 +4,8 @@ Title: Automated fitting of moderated nonlinear factor analysis (MNLFA) through
 Version: 0.0.0.9000
 Authors@R: c(person("Nisha", "Gottfredson", email = "gottfredson@email.unc.edu", role = c("aut", "cre")),
   person("Michael", "Giordano", email = "mgiordano@email.unc.edu", role = c("aut")),
-  person("Veronica", "Cole", email = "vcole@email.unc.edu", role = c("aut")))
+  person("Veronica", "Cole", email = "vcole@email.unc.edu", role = c("aut")),
+  person("Tim", "Janssen", email = "tim_janssen@brown.edu", role = c("ctb")))
 Description: Automated generation, running, and interpretation of moderated
     nonlinear factor analysis (MNLFA) models for obtaining scores from observed
     variables. Models may include latent variable impact (both mean and variance)
@@ -12,14 +13,14 @@ Description: Automated generation, running, and interpretation of moderated
     fitting of these models by interfacing the the Mplus software program.
 Depends:
     R (>= 3.1.0),
+Imports:
     ggplot2,
     MplusAutomation,
-    reshape,
+    reshape2,
     gridExtra,
-    taRifx,
-    plyr,
-    devtools
-License: MIT
+    stringr,
+    plyr
+License: GPL-2
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 5.0.1

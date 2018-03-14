@@ -5,7 +5,21 @@
 #' @keywords MNLFA
 #' @export
 #' @examples
-#' aMNLFA.itemplots()
+#' \dontrun{
+#'  wd <- "./aMNLFA/data"
+#   First create aMNLFA object.
+#   ob <- aMNLFA::aMNLFA.object(path          = wd,
+#                            mrdata        = xstudy,
+#                            indicators    = paste0("BIN_", 1:12), 
+#                            catindicators = paste0("BIN_", 1:12), 
+#                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
+#                            varimpact     = c("AGE", "GENDER", "STUDY"), 
+#                            measinvar     = c("AGE", "GENDER", "STUDY"), 
+#                            factors       = c("GENDER", "STUDY"), 
+#                            ID            = "ID", 
+#                            thresholds    = FALSE)
+#'  aMNLFA.itemplots(ob)
+#' }
 
 aMNLFA.itemplots<-function(input.object){
 
@@ -19,10 +33,10 @@ aMNLFA.itemplots<-function(input.object){
 
   #Visualize indicators as a function of time and moderators
   #re-structure data to allow facet_wrap visualization
-  if (!is.null(mytime)) indlong<-melt(mrdata,id.vars=c(myauxiliary,mytime,myfactors),measure.vars=myindicators)
-  if (is.null(mytime)) indlong<-melt(mrdata,id.vars=c(myauxiliary,myfactors),measure.vars=myindicators)
+  if (!is.null(mytime)) indlong<-reshape2::melt(mrdata,id.vars=c(myauxiliary,mytime,myfactors),measure.vars=myindicators)
+  if (is.null(mytime)) indlong<-reshape2::melt(mrdata,id.vars=c(myauxiliary,myfactors),measure.vars=myindicators)
 
-  attach(indlong)
+  #attach(indlong) #Should not have attach in here -- downstream references resolved
   indlong$AvgItemResponse<-as.character(indlong$value)
   indlong$AvgItemResponse<-as.numeric(indlong$AvgItemResponse)
   if (!is.null(mytime)) indlong$time<-as.numeric(unlist(indlong[mytime]))
@@ -31,13 +45,13 @@ aMNLFA.itemplots<-function(input.object){
   srdatacheck<-mrdata[!duplicated(mrdata[myID]),]
   N<-dim(srdatacheck)[1]
   min<-.01*N
-  if (!is.null(mytime)) aggindlong<-aggregate(AvgItemResponse~variable+time,indlong,FUN="mean")
-  if (!is.null(mytime)) aggindlong2<-aggregate(AvgItemResponse~variable+time,indlong,FUN="length")
-  if (is.null(mytime)) aggindlong<-aggregate(AvgItemResponse~variable,indlong,FUN="mean")
-  if (is.null(mytime)) aggindlong2<-aggregate(AvgItemResponse~variable,indlong,FUN="length")
+  if (!is.null(mytime)) aggindlong<-with(indlong,aggregate(AvgItemResponse~variable+time,indlong,FUN="mean"))
+  if (!is.null(mytime)) aggindlong2<-with(indlong,aggregate(AvgItemResponse~variable+time,indlong,FUN="length"))
+  if (is.null(mytime)) aggindlong<-with(indlong,aggregate(AvgItemResponse~variable,indlong,FUN="mean"))
+  if (is.null(mytime)) aggindlong2<-with(indlong,aggregate(AvgItemResponse~variable,indlong,FUN="length"))
   aggindlong$N<-aggindlong2$AvgItemResponse
   aggindlong<-aggindlong[which(aggindlong$N>min),]
-  if (!is.null(mytime)) marg<-ggplot(aggindlong,aes(x=time,y=AvgItemResponse))+ facet_wrap(~ variable,nrow=1) +geom_point(aes(size=N))+stat_smooth(se=FALSE)+theme_bw()+labs(title="Average Indicator Responses over Time")+ theme(legend.position="bottom")
+  if (!is.null(mytime)) marg<-with(aggindlong,ggplot2::ggplot(aggindlong,ggplot2::aes(x=time,y=AvgItemResponse)))+ with(aggindlong,ggplot2::facet_wrap(~ variable,nrow=1)) + with(aggindlong,ggplot2::geom_point(ggplot2::aes(size=N)))+ with(aggindlong,ggplot2::stat_smooth(se=FALSE)) + with(aggindlong,ggplot2::theme_bw()) + with(aggindlong,labs(title="Average Indicator Responses over Time")) + with(aggindlong,ggplot2::theme(legend.position="bottom"))
   #plot for each moderator
   l<-length(myfactors)
 
@@ -48,12 +62,12 @@ aMNLFA.itemplots<-function(input.object){
     names(indlongmod)[4]<-"Moderator"
     ic<-indlongmod$Moderator=="."|is.na(indlongmod$Moderator)|indlongmod$Moderator=="NA"
     cc_long<-indlongmod[which(ic=="FALSE"),]
-    aggindlongmod<-aggregate(AvgItemResponse~variable+time+Moderator,cc_long,FUN="mean")
-    aggindlongmod_2<-aggregate(AvgItemResponse~variable+time+Moderator,cc_long,FUN="length")
-    aggindlongmod$N<-aggindlongmod_2$AvgItemResponse
+    aggindlongmod<-with(cc_long,aggregate(AvgItemResponse~variable+time+Moderator,cc_long,FUN="mean"))
+    aggindlongmod_2<-with(cc_long,aggregate(AvgItemResponse~variable+time+Moderator,cc_long,FUN="length"))
+    aggindlongmod$N<-with(cc_long,aggindlongmod_2$AvgItemResponse)
     title<-paste("Average Indicator Responses over Time by ",myfactors[i],sep="")
     aggindlongmod$Moderator<-as.factor(aggindlongmod$Moderator)
-    p<-ggplot(aggindlongmod,aes(x=time,y=AvgItemResponse))+ facet_wrap(~ variable,nrow=round(sqrt(length(myfactors)))) +geom_point(aes(size=N,colour=Moderator))+stat_smooth(se=FALSE,aes(colour=Moderator))+theme_bw()+labs(title=title)+ theme(legend.position="bottom") + guides(size=FALSE)
+    p<-with(aggindlongmod,ggplot2::ggplot(aggindlongmod,ggplot2::aes(x=time,y=AvgItemResponse)))+ with(aggindlongmod,ggplot2::facet_wrap(~ variable,nrow=round(sqrt(length(myfactors))))) + with(aggindlongmod,ggplot2::geom_point(ggplot2::aes(size=N,colour=Moderator)))+ with(aggindlongmod,ggplot2::stat_smooth(se=FALSE,ggplot2::aes(colour=Moderator))) + with(aggindlongmod,ggplot2::theme_bw())+ with(aggindlongmod,ggplot2::labs(title=title)) + with(aggindlongmod,ggplot2::theme(legend.position="bottom")) + with(aggindlongmod,ggplot2::guides(size=FALSE))
 
     filename<-paste(path,"/itemplots",myfactors[i],".png",sep="")
     png(filename=filename,
@@ -70,14 +84,14 @@ aMNLFA.itemplots<-function(input.object){
   if (is.null(mytime)) for (i in 1:l){
     for (j in 1:length(myindicators)){
       p<-NULL
-      indlong2<-indlong[which(variable==myindicators[j]),]
+      indlong2<-indlong[which(indlong$variable==myindicators[j]),]
       keep<-c("value",myfactors[i])
       indlongmod<-indlong2[keep]
       names(indlongmod)[2]<-"Moderator"
       ic<-indlongmod$Moderator=="."|is.na(indlongmod$Moderator)|indlongmod$Moderator=="NA"
       cc_long<-indlongmod[which(ic=="FALSE"),]
       title<-paste(myindicators[j],"Responses Distribution by ",myfactors[i],sep="")
-      p<-ggplot(cc_long,aes(factor(Moderator),value))+geom_boxplot()+theme_bw()+labs(title=title)+ theme(legend.position="bottom")
+      p<-with(cc_long,ggplot2::ggplot(cc_long,ggplot2::aes(factor(Moderator),value))) + with(cc_long,ggplot2::geom_boxplot()) + with(cc_long,ggplot2::theme_bw()) + with(cc_long,ggplot2::labs(title=title)) + with(cc_long,ggplot2::theme(legend.position="bottom"))
       filename<-paste(path,"/",myindicators[j]," plots",myfactors[i],".png",sep="")
       png(filename=filename,
           units="in",

@@ -5,7 +5,21 @@
 #' @keywords MNLFA
 #' @export
 #' @examples
-#' aMNLFA.scoreplots()
+#' \dontrun{
+#'  wd <- "./aMNLFA/data"
+#   First create aMNLFA object.
+#   ob <- aMNLFA::aMNLFA.object(path          = wd,
+#                            mrdata        = xstudy,
+#                            indicators    = paste0("BIN_", 1:12), 
+#                            catindicators = paste0("BIN_", 1:12), 
+#                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
+#                            varimpact     = c("AGE", "GENDER", "STUDY"), 
+#                            measinvar     = c("AGE", "GENDER", "STUDY"), 
+#                            factors       = c("GENDER", "STUDY"), 
+#                            ID            = "ID", 
+#                            thresholds    = FALSE)
+#'  aMNLFA.scoreplots(ob)
+#' }
 
 
 aMNLFA.scoreplots<-function(input.object){
@@ -20,9 +34,9 @@ aMNLFA.scoreplots<-function(input.object){
   
   #####Read in scores and merge with data
   MplusOutput<-paste(path,"/scoring.out",sep="")
-  modelResults <- readModels(MplusOutput)
+  modelResults <- MplusAutomation::readModels(MplusOutput)
   varorder<-modelResults$savedata_info$fileVarNames
-  factorscores<-read.table(paste(path,"/scores.dat",sep=""),head=FALSE)
+  factorscores<-read.table(paste(path,"/scores.dat",sep=""),header=FALSE)
   colnames(factorscores)<-varorder
   keep<-c(myID,"ETA")
   factorscores<-factorscores[keep]
@@ -32,7 +46,7 @@ aMNLFA.scoreplots<-function(input.object){
   if (is.null(mytime) == 0) sc$time<-as.numeric(sc$time)
   if (is.null(mytime) == 0) sc$time<-round(sc$time,.1)
   if (is.null(mytime) == 0) sc$time<-as.factor(sc$time)
-  if (is.null(mytime) == 0) p<-ggplot(sc, aes(factor(time),ETA))+ geom_boxplot()+labs(x=paste(mytime))+ ggtitle("Factor Score Estimates over Time")
+  if (is.null(mytime) == 0) p<-with(sc,ggplot2::ggplot(sc, aes(factor(time),ETA))) + with(sc,ggplot2::geom_boxplot()) + with(sc,ggplot2::labs(x=paste(mytime))) + with(sc,ggplot2::ggtitle("Factor Score Estimates over Time"))
   if (is.null(mytime) == 0) filename<-paste(path,"/eta_by_time.png",sep="")
   if (is.null(mytime) == 0) png(filename=filename,
                          units="in",
@@ -44,9 +58,10 @@ aMNLFA.scoreplots<-function(input.object){
   if (is.null(mytime) == 0) dev.off()
   #Visualize indicators as a function of time and moderators
   #re-structure data to allow facet_wrap visualization
-  if (is.null(mytime) == 0) etalong<-melt(data_plus_scores,id.vars=c(myID,mytime,myfactors,"ETA"),measure.vars="ETA")
-  if (is.null(mytime) == 1) etalong<-melt(data_plus_scores,id.vars=c(myID,myfactors,"ETA"),measure.vars="ETA")
-  attach(etalong)
+  if (is.null(mytime) == 0) etalong<-reshape2::melt(data_plus_scores,id.vars=c(myID,mytime,myfactors,"ETA"),measure.vars="ETA")
+  if (is.null(mytime) == 1) etalong<-reshape2::melt(data_plus_scores,id.vars=c(myID,myfactors,"ETA"),measure.vars="ETA")
+  
+  #attach(etalong) #Should not use attach in here -- downstream references now resolved
   etalong$AvgEtaScore<-as.character(etalong$value)
   etalong$AvgEtaScore<-as.numeric(etalong$AvgEtaScore)
   if (is.null(mytime) == 0) etalong$time<-unlist(etalong[mytime])
@@ -60,7 +75,7 @@ aMNLFA.scoreplots<-function(input.object){
   if (is.null(mytime) == 0) aggetalong<-aggregate(AvgEtaScore~variable+time,etalong,FUN="mean")
   if (is.null(mytime) == 0) aggetalong2<-aggregate(AvgEtaScore~variable+time,etalong,FUN="length")
   if (is.null(mytime) == 0) aggetalong$N<-aggetalong2$AvgEtaScore
-  if (is.null(mytime) == 0) margeta<-ggplot(aggetalong,aes(x=time,y=AvgEtaScore))+ facet_wrap(~ variable,nrow=1) +geom_point(aes(size=N))+stat_smooth(se=FALSE)+theme_bw()+labs(title="Average Factor Score Estimate over Time")+ theme(legend.position="bottom")
+  if (is.null(mytime) == 0) margeta<-with(aggetalong,ggplot2::ggplot(aggetalong,aes(x=time,y=AvgEtaScore))) + with(aggetalong,ggplot2::facet_wrap(~ variable,nrow=1)) + with(aggetalong,ggplot2::geom_point(aes(size=N))) + with(aggetalong,ggplot2::stat_smooth(se=FALSE)) + with(aggetalong,ggplot2::theme_bw()) + with(aggetalong,ggplot2::labs(title="Average Factor Score Estimate over Time")) + with(aggetalong,ggplot2::theme(legend.position="bottom"))
   #plot for each moderator
   l<-length(myfactors)
   if (is.null(mytime) == 0) p=list()
@@ -78,7 +93,7 @@ aMNLFA.scoreplots<-function(input.object){
       aggetalongmod$N<-aggetalongmod_2$AvgEtaScore
       aggetalongmod<-aggetalongmod[which(aggetalongmod$N>min),]
       title<-paste("Average Factor ScoreEstimate over Time by ",myfactors[i],sep="")
-      p[[i+1]]<-ggplot(aggetalongmod,aes(x=time,y=AvgEtaScore)) +geom_point(aes(size=N,colour=Moderator))+stat_smooth(se=FALSE,aes(colour=Moderator))+theme_bw()+labs(title=title)+ theme(legend.position="bottom") + guides(size=FALSE)
+      p[[i+1]]<-with(aggetalongmod,ggplot2::ggplot(aggetalongmod,aes(x=time,y=AvgEtaScore))) + with(aggetalongmod,ggplot2::geom_point(aes(size=N,colour=Moderator))) + with(aggetalongmod,ggplot2::stat_smooth(se=FALSE,aes(colour=Moderator))) + with(aggetalongmod,ggplot2::theme_bw()) + with(aggetalongmod,ggplot2::labs(title=title)) + with(aggetalongmod,ggplot2::theme(legend.position="bottom")) + with(aggetalongmod,ggplot2::guides(size=FALSE))
     }
   if (is.null(mytime) == 0) filename<-paste(path,"/factorscoreplots.png",sep="")
   if (is.null(mytime) == 0) png(filename=filename,
@@ -87,7 +102,7 @@ aMNLFA.scoreplots<-function(input.object){
                           height=8.5,
                           pointsize=12,
                           res=72)
-  if (is.null(mytime) == 0) if (length(myfactors)>1) do.call(grid.arrange,p)
+  if (is.null(mytime) == 0) if (length(myfactors)>1) do.call(gridExtra::grid.arrange,p)
   if (is.null(mytime) == 0) if (length(myfactors)==1) p
   if (is.null(mytime) == 0) dev.off()
   if (is.null(mytime) == 0) message("Check '", path, "/' for png file with factor score plots")
@@ -102,7 +117,7 @@ aMNLFA.scoreplots<-function(input.object){
     ic<-etalongmod$Moderator=="."|is.na(etalongmod$Moderator)|etalongmod$Moderator=="NA"
     cc_long<-etalongmod[which(ic=="FALSE"),]
     title<-paste("Average Factor ScoreEstimate by ",myfactors[i],sep="")
-    p[[i+1]]<-ggplot(cc_long,aes(factor(Moderator),AvgEtaScore)) +geom_boxplot()+theme_bw()+labs(title=title)+ theme(legend.position="bottom")
+    p[[i+1]]<-with(cc_long,ggplot2::ggplot(cc_long,aes(factor(Moderator),AvgEtaScore))) + with(cc_long,ggplot2::geom_boxplot()) + with(cc_long,ggplot2::theme_bw()) + with(cc_long,ggplot2::labs(title=title)) + with(cc_long,ggplot2::theme(legend.position="bottom"))
   }
   if (is.null(mytime) == 1) filename<-paste(path,"/factorscoreplots.png",sep="")
   if (is.null(mytime) == 1) png(filename=filename,
@@ -111,16 +126,18 @@ aMNLFA.scoreplots<-function(input.object){
                           height=8.5,
                           pointsize=12,
                           res=72)
-  if (is.null(mytime) == 1) if (length(myfactors)>1) do.call(grid.arrange,p)
+  if (is.null(mytime) == 1) if (length(myfactors)>1) do.call(gridExtra::grid.arrange,p)
   if (is.null(mytime) == 1) if (length(myfactors)==1) p
   if (is.null(mytime) == 1) dev.off()
   if (is.null(mytime) == 1) message("Check '", path, "/' for png file with factor score plots")
   
   ##Empirical ICCs
-  itemlong<-melt(data_plus_scores,id.vars=c(myfactors,myindicators,"ETA"),measure.vars=myindicators)
+  itemlong<-reshape2::melt(data_plus_scores,id.vars=c(myfactors,myindicators,"ETA"),measure.vars=myindicators)
   itemlong$value<-as.character(itemlong$value)
   itemlong$value<-as.numeric(itemlong$value)
-  attach(itemlong)
+  
+  #attach(itemlong) #Should not have attach in here -- removed downstream references
+  
   itemlong$roundETA<-ifelse(itemlong$ETA < -2.75,-3,itemlong$ETA)
   itemlong$roundETA<-ifelse(itemlong$ETA > -2.75&itemlong$ETA< -2.25,-2.5,itemlong$roundETA)
   itemlong$roundETA<-ifelse(itemlong$ETA > -2.25&itemlong$ETA< -1.75,-2,itemlong$roundETA)
@@ -137,7 +154,7 @@ aMNLFA.scoreplots<-function(input.object){
   aggitemlong<-aggregate(value~variable+roundETA,data=itemlong,FUN="mean")
   aggitemlong$eta<-aggitemlong$roundETA
   aggitemlong$item_response<-aggitemlong$value
-  ICC<-ggplot(aggitemlong,aes(x=eta,y=item_response))+ facet_wrap(~ variable,nrow=1) +stat_smooth(method='lm',formula=y~exp(x)/(1+exp(x)),se=FALSE)+theme_bw()+labs(title="Empirical Item Characteristic Curves")+ theme(legend.position="bottom")
+  ICC<-with(aggitemlong,ggplot2::ggplot(aggitemlong,aes(x=eta,y=item_response))) + with(aggitemlong,ggplot2::facet_wrap(~ variable,nrow=1)) + with(aggitemlong,ggplot2::stat_smooth(method='lm',formula=y~exp(x)/(1+exp(x)),se=FALSE)) + with(aggitemlong,ggplot2::theme_bw()) + with(aggitemlong,ggplot2::labs(title="Empirical Item Characteristic Curves")) + with(aggitemlong,ggplot2::theme(legend.position="bottom"))
   filename<-paste(path,"/ICCplots.png",sep="")
   png(filename=filename,
       units="in",

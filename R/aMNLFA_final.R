@@ -5,7 +5,21 @@
 #' @keywords MNLFA
 #' @export
 #' @examples
-#' aMNLFA.final()
+#' \dontrun{
+#'  wd <- "./aMNLFA/data"
+#   First create aMNLFA object.
+#   ob <- aMNLFA::aMNLFA.object(path          = wd,
+#                            mrdata        = xstudy,
+#                            indicators    = paste0("BIN_", 1:12), 
+#                            catindicators = paste0("BIN_", 1:12), 
+#                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
+#                            varimpact     = c("AGE", "GENDER", "STUDY"), 
+#                            measinvar     = c("AGE", "GENDER", "STUDY"), 
+#                            factors       = c("GENDER", "STUDY"), 
+#                            ID            = "ID", 
+#                            thresholds    = FALSE)
+#'  aMNLFA.final(ob)
+#' }
 
 aMNLFA.final<-function(input.object){
   
@@ -62,7 +76,7 @@ aMNLFA.final<-function(input.object){
   #################################################################################################
   
   ##Read in output and test for sig effects at p<.01
-  round2output<-readModels(paste(path,"/round2calibration.out",sep=""))
+  round2output<-MplusAutomation::readModels(paste(path,"/round2calibration.out",sep=""))
   round2output<-as.data.frame(round2output$parameters$unstandardized)
   
   meanimpact<-round2output[which(round2output$paramHeader=="ETA.ON"),]
@@ -117,7 +131,7 @@ aMNLFA.final<-function(input.object){
   #The following line obtains the last 2 characters of each parameter; it uses str_sub rather than stringr to handle names of different length
   lambdaconstraints<-lambdaconstraints[which(stringr::str_sub(lambdaconstraints$param,start=-2)!="00"),]
   lambdaconstraints<-lambdaconstraints[order(lambdaconstraints$pval),]
-  ###FDR correctioin: BH-crit=(m-rank+1)*.05/(2*m); m=# indicators*# predictors; rank = highest-to-lowest p-value amongst in m
+  ###FDR correction: BH-crit=(m-rank+1)*.05/(2*m); m=# indicators*# predictors; rank = highest-to-lowest p-value amongst in m
   m<-length(myindicators)*length(myMeasInvar)
   
   # ----------------------------- seem to be having trouble here
@@ -199,7 +213,7 @@ aMNLFA.final<-function(input.object){
   int_totest$sig<-ifelse(int_totest$pval<int_totest$BHcrit,"TRUE","FALSE")
   int_totest<-int_totest[which(int_totest$sig=="TRUE"),]
   int<-interceptconstraints[which(interceptconstraints$siglambda=="TRUE"),]
-  int<-rbind.fill(int_totest,int)
+  int<-plyr::rbind.fill(int_totest,int)
   allintdf<-data.frame(matrix(nrow=length(myindicators),ncol=length(myMeasInvar)))
   colnames(allintdf)<-myMeasInvar
   rownames(allintdf)<-myindicators
