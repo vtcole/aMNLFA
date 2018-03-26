@@ -5,21 +5,20 @@
 #' @keywords MNLFA
 #' @export
 #' @examples
-#' \dontrun{
-#'  wd <- "./aMNLFA/data"
-#   First create aMNLFA object.
-#   ob <- aMNLFA::aMNLFA.object(dir          = wd,
-#                            mrdata        = xstudy,
-#                            indicators    = paste0("BIN_", 1:12), 
-#                            catindicators = paste0("BIN_", 1:12), 
-#                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
-#                            varimpact     = c("AGE", "GENDER", "STUDY"), 
-#                            measinvar     = c("AGE", "GENDER", "STUDY"), 
-#                            factors       = c("GENDER", "STUDY"), 
-#                            ID            = "ID", 
-#                            thresholds    = FALSE)
+#' 
+#'  wd <- system.file("examplefiles",package="aMNLFA")
+#'  ob <- aMNLFA::aMNLFA.object(dir          = wd,
+#'                            mrdata        = xstudy,
+#'                            indicators    = paste0("BIN_", 1:12), 
+#'                            catindicators = paste0("BIN_", 1:12), 
+#'                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
+#'                            varimpact     = c("AGE", "GENDER", "STUDY"), 
+#'                            measinvar     = c("AGE", "GENDER", "STUDY"), 
+#'                            factors       = c("GENDER", "STUDY"), 
+#'                            ID            = "ID", 
+#'                            thresholds    = FALSE)
 #'  aMNLFA.scores(ob)
-#' }
+#' 
 
 aMNLFA.scores<-function(input.object){
   
@@ -36,8 +35,6 @@ aMNLFA.scores<-function(input.object){
   myID = input.object$ID
   thresholds = input.object$thresholds
   
-  mrdata<-read.table(paste(dir,"/mr.dat",sep=""), header=TRUE,as.is = TRUE,na.strings=".")
-  srdata<-read.table(paste(dir,"/srdata.dat",sep=""),header=TRUE)
   
   varlist<-c(myID,myauxiliary,myindicators,myMeasInvar,myMeanImpact,myVarImpact)
   varlist<-unique(varlist)
@@ -50,15 +47,15 @@ aMNLFA.scores<-function(input.object){
   AUXILIARY<-paste("AUXILIARY=")
   AUXILIARY<-append(AUXILIARY,myauxiliary)
   AUXILIARY<-noquote(append(AUXILIARY,semicolon))
-  AUXILIARY<-capture.output(cat(AUXILIARY))
+  AUXILIARY<-utils::capture.output(cat(AUXILIARY))
   CATEGORICAL<-paste("CATEGORICAL=")
   CATEGORICAL<-append(CATEGORICAL,mycatindicators)
   CATEGORICAL<-noquote(append(CATEGORICAL,semicolon))
-  CATEGORICAL<-capture.output(cat(CATEGORICAL))
+  CATEGORICAL<-utils::capture.output(cat(CATEGORICAL))
   COUNT<-paste("COUNT=")
   COUNT<-append(COUNT,mycountindicators)
   COUNT<-noquote(append(COUNT,semicolon))
-  COUNT<-capture.output(cat(COUNT))
+  COUNT<-utils::capture.output(cat(COUNT))
   ANALYSIS<-noquote("ANALYSIS: ESTIMATOR=ML;ALGORITHM=INTEGRATION;INTEGRATION=MONTECARLO;PROCESSORS=4;")
   ETA<-paste("ETA BY ")
   l<-length(myindicators)
@@ -93,7 +90,7 @@ aMNLFA.scores<-function(input.object){
   foo<-strsplit(as.character(unlist(foo)),"*",fixed=TRUE)
   foo<-unlist(foo)
   foo<-foo[!is.na(match(foo,myVarImpact))]
-  keepvarimpact<-capture.output(cat(foo))
+  keepvarimpact<-utils::capture.output(cat(foo))
   round3output<-as.data.frame(round3output$parameters$unstandardized)
   
   ETAPREDLIST<-round3output[which(round3output$paramHeader=="ETA.ON"),]
@@ -120,7 +117,7 @@ aMNLFA.scores<-function(input.object){
   }
   keepround4<-unique(keepround4)
   keepround4<-keepround4[!is.na(keepround4)]
-  keepround4<-capture.output(cat(keepround4))
+  keepround4<-utils::capture.output(cat(keepround4))
   
   lc<-lambdaconstraints$predictor[which(lambdaconstraints$predictor!="intercept")]
   lc<-unique(lc)
@@ -131,7 +128,7 @@ aMNLFA.scores<-function(input.object){
   con<-unique(append(keepvarimpact,lc))
   CONSTRAINT<-noquote(append(CONSTRAINT,con))
   CONSTRAINT<-append(CONSTRAINT,semicolon)
-  CONSTRAINT<-capture.output(cat(CONSTRAINT))
+  CONSTRAINT<-utils::capture.output(cat(CONSTRAINT))
   CONSTRAINT<-ifelse(length(con)>0,CONSTRAINT,"!")
   
   meanimpact<-round3output[which(round3output$paramHeader=="ETA.ON"),]
@@ -185,7 +182,7 @@ aMNLFA.scores<-function(input.object){
   intcode<-character(0)
   if (nrow(intdif)>0)
     {
-    intdif$item<-read.table(text = intdif$paramHeader, sep = ".", as.is = TRUE)$V1
+    intdif$item<-utils::read.table(text = intdif$paramHeader, sep = ".", as.is = TRUE)$V1
     intdif<-intdif[which(intdif$item!="ETA"),]
     keepcols<-c("param","est","item")
     intdif<-intdif[,keepcols]
@@ -207,9 +204,9 @@ aMNLFA.scores<-function(input.object){
   varval<-round3output[which(round3output$paramHeader=="New.Additional.Parameters"&substr(round3output$param,1,1)=="V"),]
   vstart<-data.frame(NULL)
   for (v in 1:length(keepvarimpact)){
-    vstart[v,1]<-capture.output(cat(paste(varval$est[v],"*",keepvarimpact[v],"+",sep="")))
+    vstart[v,1]<-utils::capture.output(cat(paste(varval$est[v],"*",keepvarimpact[v],"+",sep="")))
   }
-  vstart<-paste(capture.output(cat(noquote(unlist(vstart)))),sep="")
+  vstart<-paste(utils::capture.output(cat(noquote(unlist(vstart)))),sep="")
   
   scoringinput[19+2*l+length(ETAON3)+length(intcode),1]<-ifelse(length(keepvarimpact)>0,paste("veta=1*exp("),"!")
   scoringinput[20+2*l+length(ETAON3)+length(intcode),1]<-ifelse(length(keepvarimpact)>0,vstart ,"!")
@@ -230,20 +227,20 @@ aMNLFA.scores<-function(input.object){
     }}}
   keep<-c("item","predictor","eq")
   lval<-lval[keep]
-  wide<-reshape(lval, idvar = "item", timevar = "predictor", direction = "wide")
+  wide<-stats::reshape(lval, idvar = "item", timevar = "predictor", direction = "wide")
   wide<-wide[,-1]
   for (i in 1:dim(wide)[1]){
     line<-wide[i,]
     line<-line[!is.na(line)]
-    line<-capture.output(cat(line))
+    line<-utils::capture.output(cat(line))
     line<-append(line,semicolon)
-    line<-capture.output(cat(line))
+    line<-utils::capture.output(cat(line))
     scoringinput[22+2*l+length(ETAON3)+length(intcode)+i,1]<-ifelse(dim(lval)[1]>0,line,"!")
   }
   scoringinput[23+2*l+length(ETAON3)+length(intcode)+length(dim(wide)[1]),1]<-tech1
   scoringinput[24+2*l+length(ETAON3)+length(intcode)+length(dim(wide)[1]),1]<-paste("SAVEDATA: SAVE=FSCORES; FILE=scores.dat;")
   
-  #write.table(scoringinput,paste(dir,"/scoring.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
+  #utils::write.table(scoringinput,paste(dir,"/scoring.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
   write.inp.file(scoringinput,paste(dir,"/scoring.inp",sep=""))
   message("Check '", dir, "/' for Mplus inp file for scoring model (run this manually).")
 }

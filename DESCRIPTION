@@ -1,19 +1,27 @@
 Package: aMNLFA
-Title: Automated fitting of moderated nonlinear factor analysis (MNLFA) through
-    the Mplus program.
+Title: Automated Fitting of Moderated Nonlinear Factor Analysis Through the Mplus Program
 Version: 0.1
-Authors@R: c(person("Nisha", "Gottfredson", email = "gottfredson@email.unc.edu", role = c("aut")),
-  person("Michael", "Giordano", email = "mgiordano@email.unc.edu", role = c("aut")),
+Authors@R: c(
   person("Veronica", "Cole", email = "vcole@email.unc.edu", role = c("aut","cre")),
+  person("Nisha", "Gottfredson", email = "gottfredson@email.unc.edu", role = c("aut")),
+  person("Michael", "Giordano", email = "mgiordano@email.unc.edu", role = c("aut")),
   person("Tim", "Janssen", email = "tim_janssen@brown.edu", role = c("ctb")))
 Description: Automated generation, running, and interpretation of moderated
-    nonlinear factor analysis (MNLFA) models for obtaining scores from observed
-    variables. Models may include latent variable impact (both mean and variance)
-    as well as differential item functioning. The aMNLFA package facilitates the
-    fitting of these models by interfacing the the Mplus software program.
+    nonlinear factor analysis models for obtaining scores from observed
+    variables. This package creates 'Mplus' input files which may be run iteratively
+    to test two different types of covariate effects on items: 
+    (1) latent variable impact (both mean and variance); and (2) differential 
+    item functioning. After sequentially testing for all effects, it also creates a final
+    model by including all significant effects after adjusting for multiple comparisons.
+    Finally, the package creates a scoring model which uses the final values of parameter
+    estimates to generate latent variable scores.
 Depends:
     R (>= 3.1.0),
 Imports:
+    grDevices,
+    graphics,
+    stats,
+    utils,
     ggplot2,
     MplusAutomation,
     reshape2,

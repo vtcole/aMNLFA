@@ -11,7 +11,7 @@
 \item{GENDER}{Effect-coded gender}
 \item{STUDY}{Effect-coded study membership}
 \item{STUDYAGE}{Interaction between age and study}
-\item{ETA}{True score on latent variable for each subject -- not used in analysis}
+\item{TRUEETA}{True score on latent variable for each subject -- not used in analysis}
 \item{STUDYETA}{Interaction between study and score -- not used in analysis}
 \item{ZETA}{Deviation score -- not used in analysis}
 \item{W}{External covariate for original simulation -- not used in analysis}

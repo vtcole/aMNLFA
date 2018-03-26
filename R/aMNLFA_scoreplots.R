@@ -5,22 +5,21 @@
 #' @keywords MNLFA
 #' @export
 #' @examples
-#' \dontrun{
-#'  wd <- "./aMNLFA/data"
-#   First create aMNLFA object.
-#   ob <- aMNLFA::aMNLFA.object(dir          = wd,
-#                            mrdata        = xstudy,
-#                            indicators    = paste0("BIN_", 1:12), 
-#                            catindicators = paste0("BIN_", 1:12), 
-#                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
-#                            varimpact     = c("AGE", "GENDER", "STUDY"), 
-#                            measinvar     = c("AGE", "GENDER", "STUDY"), 
-#                            factors       = c("GENDER", "STUDY"), 
-#                            ID            = "ID", 
-#                            thresholds    = FALSE)
+#' 
+#'  wd <- system.file("examplefiles",package="aMNLFA")
+#'  ob <- aMNLFA::aMNLFA.object(dir          = wd,
+#'                            mrdata        = xstudy,
+#'                            indicators    = paste0("BIN_", 1:12), 
+#'                            catindicators = paste0("BIN_", 1:12), 
+#'                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
+#'                            varimpact     = c("AGE", "GENDER", "STUDY"), 
+#'                            measinvar     = c("AGE", "GENDER", "STUDY"), 
+#'                            factors       = c("GENDER", "STUDY"), 
+#'                            ID            = "ID",
+#'                            time          = NULL, 
+#'                            thresholds    = FALSE)
 #'  aMNLFA.scoreplots(ob)
-#' }
-
+#' 
 
 aMNLFA.scoreplots<-function(input.object){
   
@@ -36,7 +35,7 @@ aMNLFA.scoreplots<-function(input.object){
   MplusOutput<-paste(dir,"/scoring.out",sep="")
   modelResults <- MplusAutomation::readModels(MplusOutput)
   varorder<-modelResults$savedata_info$fileVarNames
-  factorscores<-read.table(paste(dir,"/scores.dat",sep=""),header=FALSE)
+  factorscores<-utils::read.table(paste(dir,"/scores.dat",sep=""),header=FALSE)
   colnames(factorscores)<-varorder
   keep<-c(myID,"ETA")
   factorscores<-factorscores[keep]
@@ -48,14 +47,14 @@ aMNLFA.scoreplots<-function(input.object){
   if (is.null(mytime) == 0) sc$time<-as.factor(sc$time)
   if (is.null(mytime) == 0) p<-with(sc,ggplot2::ggplot(sc, aes(factor(time),ETA))) + with(sc,ggplot2::geom_boxplot()) + with(sc,ggplot2::labs(x=paste(mytime))) + with(sc,ggplot2::ggtitle("Factor Score Estimates over Time"))
   if (is.null(mytime) == 0) filename<-paste(dir,"/eta_by_time.png",sep="")
-  if (is.null(mytime) == 0) png(filename=filename,
+  if (is.null(mytime) == 0) grDevices::png(filename=filename,
                          units="in",
                          width=11,
                          height=8.5,
                          pointsize=12,
                          res=72)
   if (is.null(mytime) == 0) p
-  if (is.null(mytime) == 0) dev.off()
+  if (is.null(mytime) == 0) grDevices::dev.off()
   #Visualize indicators as a function of time and moderators
   #re-structure data to allow facet_wrap visualization
   if (is.null(mytime) == 0) etalong<-reshape2::melt(data_plus_scores,id.vars=c(myID,mytime,myfactors,"ETA"),measure.vars="ETA")
@@ -72,8 +71,8 @@ aMNLFA.scoreplots<-function(input.object){
   srdatacheck<-mrdata[!duplicated(mrdata[myID]),]
   N<-dim(srdatacheck)[1]
   min<-.01*N
-  if (is.null(mytime) == 0) aggetalong<-aggregate(AvgEtaScore~variable+time,etalong,FUN="mean")
-  if (is.null(mytime) == 0) aggetalong2<-aggregate(AvgEtaScore~variable+time,etalong,FUN="length")
+  if (is.null(mytime) == 0) aggetalong<-stats::aggregate(AvgEtaScore~variable+time,etalong,FUN="mean")
+  if (is.null(mytime) == 0) aggetalong2<-stats::aggregate(AvgEtaScore~variable+time,etalong,FUN="length")
   if (is.null(mytime) == 0) aggetalong$N<-aggetalong2$AvgEtaScore
   if (is.null(mytime) == 0) margeta<-with(aggetalong,ggplot2::ggplot(aggetalong,aes(x=time,y=AvgEtaScore))) + with(aggetalong,ggplot2::facet_wrap(~ variable,nrow=1)) + with(aggetalong,ggplot2::geom_point(aes(size=N))) + with(aggetalong,ggplot2::stat_smooth(se=FALSE)) + with(aggetalong,ggplot2::theme_bw()) + with(aggetalong,ggplot2::labs(title="Average Factor Score Estimate over Time")) + with(aggetalong,ggplot2::theme(legend.position="bottom"))
   #plot for each moderator
@@ -87,24 +86,29 @@ aMNLFA.scoreplots<-function(input.object){
       names(etalongmod)[3]<-"Moderator"
       ic<-etalongmod$Moderator=="."|is.na(etalongmod$Moderator)|etalongmod$Moderator=="NA"
       cc_long<-etalongmod[which(ic=="FALSE"),]
-      aggetalongmod<-aggregate(AvgEtaScore~time+Moderator,cc_long,FUN="mean")
-      aggetalongmod<-aggregate(AvgEtaScore~time+Moderator,etalongmod,FUN="mean")
-      aggetalongmod_2<-aggregate(AvgEtaScore~time+Moderator,etalongmod,FUN="length")
+      aggetalongmod<-stats::aggregate(AvgEtaScore~time+Moderator,cc_long,FUN="mean")
+      aggetalongmod<-stats::aggregate(AvgEtaScore~time+Moderator,etalongmod,FUN="mean")
+      aggetalongmod_2<-stats::aggregate(AvgEtaScore~time+Moderator,etalongmod,FUN="length")
       aggetalongmod$N<-aggetalongmod_2$AvgEtaScore
       aggetalongmod<-aggetalongmod[which(aggetalongmod$N>min),]
       title<-paste("Average Factor ScoreEstimate over Time by ",myfactors[i],sep="")
       p[[i+1]]<-with(aggetalongmod,ggplot2::ggplot(aggetalongmod,aes(x=time,y=AvgEtaScore))) + with(aggetalongmod,ggplot2::geom_point(aes(size=N,colour=Moderator))) + with(aggetalongmod,ggplot2::stat_smooth(se=FALSE,aes(colour=Moderator))) + with(aggetalongmod,ggplot2::theme_bw()) + with(aggetalongmod,ggplot2::labs(title=title)) + with(aggetalongmod,ggplot2::theme(legend.position="bottom")) + with(aggetalongmod,ggplot2::guides(size=FALSE))
     }
   if (is.null(mytime) == 0) filename<-paste(dir,"/factorscoreplots.png",sep="")
-  if (is.null(mytime) == 0) png(filename=filename,
+  if (is.null(mytime) == 0) grDevices::png(filename=filename,
                           units="in",
                           width=11,
                           height=8.5,
                           pointsize=12,
                           res=72)
-  if (is.null(mytime) == 0) if (length(myfactors)>1) do.call(gridExtra::grid.arrange,p)
+  if (is.null(mytime) == 0) if (length(myfactors)>1) {
+    graphics::par(mfrow=c(1,length(myfactors)))
+    p
+    graphics::par(mfrow=c(1,1))
+  }
+    #do.call(gridExtra::grid.arrange,p)
   if (is.null(mytime) == 0) if (length(myfactors)==1) p
-  if (is.null(mytime) == 0) dev.off()
+  if (is.null(mytime) == 0) grDevices::dev.off()
   if (is.null(mytime) == 0) message("Check '", dir, "/' for png file with factor score plots")
   
   if (is.null(mytime) == 1)
@@ -117,18 +121,23 @@ aMNLFA.scoreplots<-function(input.object){
     ic<-etalongmod$Moderator=="."|is.na(etalongmod$Moderator)|etalongmod$Moderator=="NA"
     cc_long<-etalongmod[which(ic=="FALSE"),]
     title<-paste("Average Factor ScoreEstimate by ",myfactors[i],sep="")
-    p[[i+1]]<-with(cc_long,ggplot2::ggplot(cc_long,aes(factor(Moderator),AvgEtaScore))) + with(cc_long,ggplot2::geom_boxplot()) + with(cc_long,ggplot2::theme_bw()) + with(cc_long,ggplot2::labs(title=title)) + with(cc_long,ggplot2::theme(legend.position="bottom"))
+    p[[i+1]]<-with(cc_long,ggplot2::ggplot(cc_long,ggplot2::aes(x=factor(Moderator),y=AvgEtaScore))) + with(cc_long,ggplot2::geom_boxplot()) + with(cc_long,ggplot2::theme_bw()) + with(cc_long,ggplot2::labs(title=title)) + with(cc_long,ggplot2::theme(legend.position="bottom"))
   }
   if (is.null(mytime) == 1) filename<-paste(dir,"/factorscoreplots.png",sep="")
-  if (is.null(mytime) == 1) png(filename=filename,
+  if (is.null(mytime) == 1) grDevices::png(filename=filename,
                           units="in",
                           width=11,
                           height=8.5,
                           pointsize=12,
                           res=72)
-  if (is.null(mytime) == 1) if (length(myfactors)>1) do.call(gridExtra::grid.arrange,p)
+  if (is.null(mytime) == 1) if (length(myfactors)>1) {
+    graphics::par(mfrow=c(1,length(myfactors)))
+    p
+    graphics::par(mfrow=c(1,1))
+  }
+    #do.call(gridExtra::grid.arrange,p)
   if (is.null(mytime) == 1) if (length(myfactors)==1) p
-  if (is.null(mytime) == 1) dev.off()
+  if (is.null(mytime) == 1) grDevices::dev.off()
   if (is.null(mytime) == 1) message("Check '", dir, "/' for png file with factor score plots")
   
   ##Empirical ICCs
@@ -151,22 +160,22 @@ aMNLFA.scoreplots<-function(input.object){
   itemlong$roundETA<-ifelse(itemlong$ETA > 1.75&itemlong$ETA< 2.25,2,itemlong$roundETA)
   itemlong$roundETA<-ifelse(itemlong$ETA > 2.25&itemlong$ETA< 2.75,2.5,itemlong$roundETA)
   itemlong$roundETA<-ifelse(itemlong$ETA > 2.75,3,itemlong$roundETA)
-  aggitemlong<-aggregate(value~variable+roundETA,data=itemlong,FUN="mean")
+  aggitemlong<-stats::aggregate(value~variable+roundETA,data=itemlong,FUN="mean")
   aggitemlong$eta<-aggitemlong$roundETA
   aggitemlong$item_response<-aggitemlong$value
-  ICC<-with(aggitemlong,ggplot2::ggplot(aggitemlong,aes(x=eta,y=item_response))) + with(aggitemlong,ggplot2::facet_wrap(~ variable,nrow=1)) + with(aggitemlong,ggplot2::stat_smooth(method='lm',formula=y~exp(x)/(1+exp(x)),se=FALSE)) + with(aggitemlong,ggplot2::theme_bw()) + with(aggitemlong,ggplot2::labs(title="Empirical Item Characteristic Curves")) + with(aggitemlong,ggplot2::theme(legend.position="bottom"))
+  ICC<-with(aggitemlong,ggplot2::ggplot(aggitemlong,ggplot2::aes(x=eta,y=item_response))) + with(aggitemlong,ggplot2::facet_wrap(~ variable,nrow=1)) + with(aggitemlong,ggplot2::stat_smooth(method='lm',formula=y~exp(x)/(1+exp(x)),se=FALSE)) + with(aggitemlong,ggplot2::theme_bw()) + with(aggitemlong,ggplot2::labs(title="Empirical Item Characteristic Curves")) + with(aggitemlong,ggplot2::theme(legend.position="bottom"))
   filename<-paste(dir,"/ICCplots.png",sep="")
-  png(filename=filename,
+  grDevices::png(filename=filename,
       units="in",
       width=11,
       height=8.5,
       pointsize=12,
       res=72)
   ICC
-  dev.off()
+  grDevices::dev.off()
   message("Check '", dir, "/' for png file with empirical ICC plots")
   
-  write.table(data_plus_scores, paste(dir,"/mr_with_scores.dat",sep=""), sep="\t",col.names=TRUE,row.names=FALSE)
+  utils::write.table(data_plus_scores, paste(dir,"/mr_with_scores.dat",sep=""), sep="\t",col.names=TRUE,row.names=FALSE)
   
   message("Check '", dir, "/' for merged data file")
 }

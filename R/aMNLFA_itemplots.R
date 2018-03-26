@@ -5,22 +5,20 @@
 #' @keywords MNLFA
 #' @export
 #' @examples
-#' \dontrun{
-#'  wd <- "./aMNLFA/data"
-#   First create aMNLFA object.
-#   ob <- aMNLFA::aMNLFA.object(dir          = wd,
-#                            mrdata        = xstudy,
-#                            indicators    = paste0("BIN_", 1:12), 
-#                            catindicators = paste0("BIN_", 1:12), 
-#                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
-#                            varimpact     = c("AGE", "GENDER", "STUDY"), 
-#                            measinvar     = c("AGE", "GENDER", "STUDY"), 
-#                            factors       = c("GENDER", "STUDY"), 
-#                            ID            = "ID", 
-#                            thresholds    = FALSE)
+#' 
+#'  wd <- system.file("examplefiles",package="aMNLFA")
+#'  ob <- aMNLFA::aMNLFA.object(dir          = wd,
+#'                            mrdata        = xstudy,
+#'                            indicators    = paste0("BIN_", 1:12), 
+#'                            catindicators = paste0("BIN_", 1:12), 
+#'                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
+#'                            varimpact     = c("AGE", "GENDER", "STUDY"), 
+#'                            measinvar     = c("AGE", "GENDER", "STUDY"), 
+#'                            factors       = c("GENDER", "STUDY"), 
+#'                            ID            = "ID", 
+#'                            thresholds    = FALSE)
 #'  aMNLFA.itemplots(ob)
-#' }
-
+#'  
 aMNLFA.itemplots<-function(input.object){
 
   dir = input.object$dir
@@ -70,14 +68,14 @@ aMNLFA.itemplots<-function(input.object){
     p<-with(aggindlongmod,ggplot2::ggplot(aggindlongmod,ggplot2::aes(x=time,y=AvgItemResponse)))+ with(aggindlongmod,ggplot2::facet_wrap(~ variable,nrow=round(sqrt(length(myfactors))))) + with(aggindlongmod,ggplot2::geom_point(ggplot2::aes(size=N,colour=Moderator)))+ with(aggindlongmod,ggplot2::stat_smooth(se=FALSE,ggplot2::aes(colour=Moderator))) + with(aggindlongmod,ggplot2::theme_bw())+ with(aggindlongmod,ggplot2::labs(title=title)) + with(aggindlongmod,ggplot2::theme(legend.position="bottom")) + with(aggindlongmod,ggplot2::guides(size=FALSE))
 
     filename<-paste(dir,"/itemplots",myfactors[i],".png",sep="")
-    png(filename=filename,
+    grDevices::png(filename=filename,
         units="in",
         width=11,
         height=8.5,
         pointsize=12,
         res=72)
     print(p)
-    dev.off()
+    grDevices::dev.off()
   }
 
 
@@ -93,14 +91,14 @@ aMNLFA.itemplots<-function(input.object){
       title<-paste(myindicators[j],"Responses Distribution by ",myfactors[i],sep="")
       p<-with(cc_long,ggplot2::ggplot(cc_long,ggplot2::aes(factor(Moderator),value))) + with(cc_long,ggplot2::geom_boxplot()) + with(cc_long,ggplot2::theme_bw()) + with(cc_long,ggplot2::labs(title=title)) + with(cc_long,ggplot2::theme(legend.position="bottom"))
       filename<-paste(dir,"/",myindicators[j]," plots",myfactors[i],".png",sep="")
-      png(filename=filename,
+      grDevices::png(filename=filename,
           units="in",
           width=11,
           height=8.5,
           pointsize=12,
           res=72)
       print(p)
-      dev.off()
+      grDevices::dev.off()
     }}
 
   message("Check '", dir, "/' for png file with item plots")

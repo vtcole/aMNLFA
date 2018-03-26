@@ -5,21 +5,20 @@
 #' @keywords MNLFA
 #' @export
 #' @examples
-#' \dontrun{
-#'  wd <- "./aMNLFA/data"
-#   First create aMNLFA object.
-#   ob <- aMNLFA::aMNLFA.object(dir          = wd,
-#                            mrdata        = xstudy,
-#                            indicators    = paste0("BIN_", 1:12), 
-#                            catindicators = paste0("BIN_", 1:12), 
-#                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
-#                            varimpact     = c("AGE", "GENDER", "STUDY"), 
-#                            measinvar     = c("AGE", "GENDER", "STUDY"), 
-#                            factors       = c("GENDER", "STUDY"), 
-#                            ID            = "ID", 
-#                            thresholds    = FALSE)
+#' 
+#'  wd <- system.file("examplefiles",package="aMNLFA")
+#'  ob <- aMNLFA::aMNLFA.object(dir          = wd,
+#'                            mrdata        = xstudy,
+#'                            indicators    = paste0("BIN_", 1:12), 
+#'                            catindicators = paste0("BIN_", 1:12), 
+#'                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
+#'                            varimpact     = c("AGE", "GENDER", "STUDY"), 
+#'                            measinvar     = c("AGE", "GENDER", "STUDY"), 
+#'                            factors       = c("GENDER", "STUDY"), 
+#'                            ID            = "ID", 
+#'                            thresholds    = FALSE)
 #'  aMNLFA.final(ob)
-#' }
+#' 
 
 aMNLFA.final<-function(input.object){
   
@@ -46,15 +45,15 @@ aMNLFA.final<-function(input.object){
   AUXILIARY<-paste("AUXILIARY=")
   AUXILIARY<-append(AUXILIARY,myauxiliary)
   AUXILIARY<-noquote(append(AUXILIARY,semicolon))
-  AUXILIARY<-capture.output(cat(AUXILIARY))
+  AUXILIARY<-utils::capture.output(cat(AUXILIARY))
   CATEGORICAL<-paste("CATEGORICAL=")
   CATEGORICAL<-append(CATEGORICAL,mycatindicators)
   CATEGORICAL<-noquote(append(CATEGORICAL,semicolon))
-  CATEGORICAL<-capture.output(cat(CATEGORICAL))
+  CATEGORICAL<-utils::capture.output(cat(CATEGORICAL))
   COUNT<-paste("COUNT=")
   COUNT<-append(COUNT,mycountindicators)
   COUNT<-noquote(append(COUNT,semicolon))
-  COUNT<-capture.output(cat(COUNT))
+  COUNT<-utils::capture.output(cat(COUNT))
   ANALYSIS<-noquote("ANALYSIS: ESTIMATOR=ML;ALGORITHM=INTEGRATION;INTEGRATION=MONTECARLO;PROCESSORS=4;")
   ETA<-paste("ETA BY ")
   l<-length(myindicators)
@@ -191,7 +190,7 @@ aMNLFA.final<-function(input.object){
   interceptconstraints<-round2output[grep(".ON",round2output$paramHeader),]
   interceptconstraints<-interceptconstraints[which(interceptconstraints$paramHeader!="ETA.ON"),]
   
-  interceptconstraints$item_k<-read.table(text = interceptconstraints$paramHeader, sep = ".", as.is = TRUE)$V1
+  interceptconstraints$item_k<-utils::read.table(text = interceptconstraints$paramHeader, sep = ".", as.is = TRUE)$V1
   interceptconstraints$itemnum<-match(interceptconstraints$item_k, myindicators)
   interceptconstraints$prenum<-match(interceptconstraints$param,myMeasInvar)
   
@@ -272,7 +271,7 @@ aMNLFA.final<-function(input.object){
   useround3<-unlist(useround3)
   useround3<-unique(useround3)
   useround3<-useround3[!is.na(useround3)]
-  useround3<-capture.output(cat(useround3))
+  useround3<-utils::capture.output(cat(useround3))
   ETAON2<-paste("ETA ON ",keepmeanimpact,semicolon,sep="")
   ETAON3<-paste("ETA ON ",keepmeanimpact,"@",sep="")
   
@@ -281,7 +280,7 @@ aMNLFA.final<-function(input.object){
   con<-unique(append(keepvarimpact,uniquelambda))
   CONSTRAINT<-noquote(append(CONSTRAINT,con))
   CONSTRAINT<-append(CONSTRAINT,semicolon)
-  CONSTRAINT<-capture.output(cat(CONSTRAINT))
+  CONSTRAINT<-utils::capture.output(cat(CONSTRAINT))
   CONSTRAINT<-ifelse(length(con)>0,CONSTRAINT,"!")
   
   round3input<-as.data.frame(NULL)
@@ -308,13 +307,13 @@ aMNLFA.final<-function(input.object){
   for (i in 1:l){
     round3input[16+i,1]<-loadings[i]
   }
-  round3input[17+l,1]<-ifelse(length(keepmeanimpact)>0,capture.output(cat(ETAON2 )),"!")
+  round3input[17+l,1]<-ifelse(length(keepmeanimpact)>0,utils::capture.output(cat(ETAON2 )),"!")
   
   for (i in 1:l){
     predlist<-unlist(allintdf[i,])
     predlist<-predlist[!is.na(predlist)]
     predlist<-predlist[predlist!="NA"]
-    predlist<-capture.output(cat(predlist))
+    predlist<-utils::capture.output(cat(predlist))
     round3input[17+l+i,1]<-ifelse(length(predlist)>0,paste(myindicators[i]," on ",predlist,";",sep=""),"!")
   }
   vstart<-data.frame(NULL)
@@ -323,8 +322,8 @@ aMNLFA.final<-function(input.object){
       vstart[v,1]<-paste("v",v,"*0",sep="")
     }
   
-  vstart<-ifelse(length(keepvarimpact)>0,paste(capture.output(cat(noquote(unlist(vstart)))),sep=""),"")
-  round3input[18+2*l,1]<-capture.output(cat(append(MODELCONSTRAINT,vstart)) )
+  vstart<-ifelse(length(keepvarimpact)>0,paste(utils::capture.output(cat(noquote(unlist(vstart)))),sep=""),"")
+  round3input[18+2*l,1]<-utils::capture.output(cat(append(MODELCONSTRAINT,vstart)) )
   m<-length(myMeasInvar)
   ind<-length(myindicators)
   for (i in 1:ind){
@@ -339,8 +338,8 @@ aMNLFA.final<-function(input.object){
         eq[1+w,1]<-ifelse(length(predlist2)>0,paste("+l",i,w,"*",predlist2[w],sep="") ,"!")
         start[1+w,1]<-ifelse(length(predlist2)>0,paste(" l",i,w,"*0",sep="") ,"!")
       }
-    round3input[18+3*l+i,1]<-paste(capture.output(cat(noquote(unlist(eq)))),semicolon,sep="")
-    round3input[18+2*l+i,1]<-paste(capture.output(cat(noquote(unlist(start)))),sep="")
+    round3input[18+3*l+i,1]<-paste(utils::capture.output(cat(noquote(unlist(eq)))),semicolon,sep="")
+    round3input[18+2*l+i,1]<-paste(utils::capture.output(cat(noquote(unlist(start)))),sep="")
   }
   round3input[18+2*l+ind,1]<-paste(");")
   
@@ -353,11 +352,11 @@ aMNLFA.final<-function(input.object){
   v<-length(keepvarimpact)
   veq[v+2,1]<-paste("0)")
   
-  round3input[19+2*l+2*ind,1]<-paste(capture.output(cat(noquote(unlist(veq)))),semicolon,sep="")
+  round3input[19+2*l+2*ind,1]<-paste(utils::capture.output(cat(noquote(unlist(veq)))),semicolon,sep="")
   round3input[20+2*l+2*ind,1]<-tech1
   if(is.null(mytime)){round3input[21+2*l+2*ind,1]<-paste("SAVEDATA: SAVE=FSCORES; FILE=scores.dat;")}
   
-  #write.table(round3input,paste(dir,"/round3calibration.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
+  #utils::write.table(round3input,paste(dir,"/round3calibration.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
   write.inp.file(round3input,paste(dir,"/round3calibration.inp",sep=""))
   message("COMPLETE. Check '", dir, "/' for Mplus inp file for round 3 calibration model (run this manually). \nNOTE: After running  your round 3 calibration, there may be some output from output that cannot be read in properly as a result of recent changes within Mplus. This will lead to errors in subsequent steps. \nAs a temporary fix the problem, please delete all output that comes after the 'LOGISTIC REGRESSION ODDS RATIO RESULTS' section after running your round 3 calibration, before proceeding to the next step. \nThis message will appear after all subsequent steps.")  
 }

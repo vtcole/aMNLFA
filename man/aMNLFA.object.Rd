@@ -40,9 +40,18 @@ aMNLFA.object(dir, mrdata, indicators = NULL, catindicators = NULL,
 This function creates an aMNLFA object based on user specifications to pass to aMNLFA functions.
 }
 \examples{
-\dontrun{
- wd <- "./aMNLFA/data"
-}
+
+ wd <- system.file("examplefiles",package="aMNLFA")
+ aMNLFA.object(dir          = wd,
+                           mrdata        = xstudy,
+                           indicators    = paste0("BIN_", 1:12), 
+                           catindicators = paste0("BIN_", 1:12), 
+                           meanimpact    = c("AGE", "GENDER", "STUDY"), 
+                           varimpact     = c("AGE", "GENDER", "STUDY"), 
+                           measinvar     = c("AGE", "GENDER", "STUDY"), 
+                           factors       = c("GENDER", "STUDY"), 
+                           ID            = "ID", 
+                           thresholds    = FALSE)
 }
 \keyword{MNLFA}
 

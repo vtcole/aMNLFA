@@ -5,21 +5,21 @@
 #' @keywords MNLFA
 #' @export
 #' @examples
-#' \dontrun{
-#'  wd <- "./aMNLFA/data"
-#   First create aMNLFA object.
-#   ob <- aMNLFA::aMNLFA.object(dir          = wd,
-#                            mrdata        = xstudy,
-#                            indicators    = paste0("BIN_", 1:12), 
-#                            catindicators = paste0("BIN_", 1:12), 
-#                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
-#                            varimpact     = c("AGE", "GENDER", "STUDY"), 
-#                            measinvar     = c("AGE", "GENDER", "STUDY"), 
-#                            factors       = c("GENDER", "STUDY"), 
-#                            ID            = "ID", 
-#                            thresholds    = FALSE)
+#' 
+#'  wd <- system.file("examplefiles",package="aMNLFA")
+#'  ob <- aMNLFA::aMNLFA.object(dir          = wd,
+#'                            mrdata        = xstudy,
+#'                            indicators    = paste0("BIN_", 1:12), 
+#'                            catindicators = paste0("BIN_", 1:12), 
+#'                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
+#'                            varimpact     = c("AGE", "GENDER", "STUDY"), 
+#'                            measinvar     = c("AGE", "GENDER", "STUDY"), 
+#'                            factors       = c("GENDER", "STUDY"), 
+#'                            ID            = "ID", 
+#'                            thresholds    = FALSE)
 #'  aMNLFA.simultaneous(ob)
-#' }
+#' 
+
 
 aMNLFA.simultaneous<-function(input.object){
 
@@ -44,15 +44,15 @@ aMNLFA.simultaneous<-function(input.object){
   AUXILIARY<-ifelse(length(myauxiliary)>0,paste("AUXILIARY="),paste("!"))
   AUXILIARY<-append(AUXILIARY,myauxiliary)
   AUXILIARY<-noquote(append(AUXILIARY,semicolon))
-  AUXILIARY<-capture.output(cat(AUXILIARY))
+  AUXILIARY<-utils::capture.output(cat(AUXILIARY))
   CATEGORICAL<-paste("CATEGORICAL=")
   CATEGORICAL<-append(CATEGORICAL,mycatindicators)
   CATEGORICAL<-noquote(append(CATEGORICAL,semicolon))
-  CATEGORICAL<-capture.output(cat(CATEGORICAL))
+  CATEGORICAL<-utils::capture.output(cat(CATEGORICAL))
   COUNT<-paste("COUNT=")
   COUNT<-append(COUNT,mycountindicators)
   COUNT<-noquote(append(COUNT,semicolon))
-  COUNT<-capture.output(cat(COUNT))
+  COUNT<-utils::capture.output(cat(COUNT))
   ANALYSIS<-noquote("ANALYSIS: ESTIMATOR=ML;ALGORITHM=INTEGRATION;INTEGRATION=MONTECARLO;PROCESSORS=4;")
   ETA<-paste("ETA BY ")
   l<-length(myindicators)
@@ -227,14 +227,14 @@ aMNLFA.simultaneous<-function(input.object){
   ##Writing script with all parameters with p<.05
   useround2<-c(diflist,keepmeanimpact,keepvarimpact)
   useround2<-noquote(unique(useround2))
-  useround2<-capture.output(cat(useround2))
+  useround2<-utils::capture.output(cat(useround2))
   ETAON2<-paste("ETA ON ",keepmeanimpact,semicolon,sep="")
   uniquelambda<-unique(unlist(alllambdadf[,-1]))
   uniquelambda<-uniquelambda[!is.na(uniquelambda)]
   con<-unique(append(keepvarimpact,uniquelambda))
   CONSTRAINT<-noquote(append(CONSTRAINT,con))
   CONSTRAINT<-append(CONSTRAINT,semicolon)
-  CONSTRAINT<-capture.output(cat(CONSTRAINT))
+  CONSTRAINT<-utils::capture.output(cat(CONSTRAINT))
 
   header<-readLines(paste0(dir,"/header.txt"))
 
@@ -259,7 +259,7 @@ aMNLFA.simultaneous<-function(input.object){
   for (i in 1:l){
     round2input[16+i,1]<-loadings[i]
   }
-  round2input[17+l,1]<-ifelse(length(keepmeanimpact)>0,capture.output(cat(ETAON2)),"!")
+  round2input[17+l,1]<-ifelse(length(keepmeanimpact)>0,utils::capture.output(cat(ETAON2)),"!")
   for (i in 1:dim(allinterceptdf)[1]){
     for (j in 2:dim(allinterceptdf)[2]){
       allinterceptdf[i,j]<-ifelse(is.na(allinterceptdf[i,j]),alllambdadf[i,j],allinterceptdf[i,j])
@@ -268,7 +268,7 @@ aMNLFA.simultaneous<-function(input.object){
   for (i in 1:l){
     predlist<-unlist(allinterceptdf[i,2:l])
     predlist<-predlist[!is.na(predlist)]
-    predlist<-capture.output(cat(predlist))
+    predlist<-utils::capture.output(cat(predlist))
     round2input[17+l+i,1]<-ifelse(length(predlist)>0,paste(myindicators[i]," on ",predlist,";",sep=""),"!")
   }
 
@@ -277,8 +277,8 @@ aMNLFA.simultaneous<-function(input.object){
     for (v in 1:length(keepvarimpact)){
       vstart[v,1]<-paste("v",v,"*0",sep="")
     }
-  vstart<-ifelse(length(keepvarimpact)>0,paste(capture.output(cat(noquote(unlist(vstart)))),sep=""),"!")
-  round2input[18+2*l,1]<-capture.output(cat(append(MODELCONSTRAINT,vstart)) )
+  vstart<-ifelse(length(keepvarimpact)>0,paste(utils::capture.output(cat(noquote(unlist(vstart)))),sep=""),"!")
+  round2input[18+2*l,1]<-utils::capture.output(cat(append(MODELCONSTRAINT,vstart)) )
   m<-length(myMeasInvar)
   ind<-length(myindicators)
   for (i in 1:ind){
@@ -293,8 +293,8 @@ aMNLFA.simultaneous<-function(input.object){
         eq[1+w,1]<-ifelse(length(predlist2)>0,paste("+l",i,w,"*",predlist2[w],sep="") ,"!")
         start[1+w,1]<-ifelse(length(predlist2)>0,paste(" l",i,w,"*0",sep="") ,"!")
       }
-    round2input[19+3*l+i,1]<-paste(capture.output(cat(noquote(unlist(eq)))),semicolon,sep="")
-    round2input[18+2*l+i,1]<-paste(capture.output(cat(noquote(unlist(start)))),sep="")
+    round2input[19+3*l+i,1]<-paste(utils::capture.output(cat(noquote(unlist(eq)))),semicolon,sep="")
+    round2input[18+2*l+i,1]<-paste(utils::capture.output(cat(noquote(unlist(start)))),sep="")
   }
   round2input[19+3*l,1]<-paste(");")
 
@@ -307,7 +307,7 @@ aMNLFA.simultaneous<-function(input.object){
   v<-length(keepvarimpact)
   veq[v+2,1]<-paste("0)")
 
-  round2input[20+3*l+ind,1]<-paste(capture.output(cat(noquote(unlist(veq)))),semicolon,sep="")
+  round2input[20+3*l+ind,1]<-paste(utils::capture.output(cat(noquote(unlist(veq)))),semicolon,sep="")
   round2input[21+3*l+ind,1]<-tech1
 
 

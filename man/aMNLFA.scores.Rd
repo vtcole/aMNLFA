@@ -13,10 +13,20 @@ aMNLFA.scores(input.object)
 This function creates scores generated using aMNLFA. Can only be run after the final model has been fit -- i.e., after the aMNLFA.final function.
 }
 \examples{
-\dontrun{
- wd <- "./aMNLFA/data"
+
+ wd <- system.file("examplefiles",package="aMNLFA")
+ ob <- aMNLFA::aMNLFA.object(dir          = wd,
+                           mrdata        = xstudy,
+                           indicators    = paste0("BIN_", 1:12), 
+                           catindicators = paste0("BIN_", 1:12), 
+                           meanimpact    = c("AGE", "GENDER", "STUDY"), 
+                           varimpact     = c("AGE", "GENDER", "STUDY"), 
+                           measinvar     = c("AGE", "GENDER", "STUDY"), 
+                           factors       = c("GENDER", "STUDY"), 
+                           ID            = "ID", 
+                           thresholds    = FALSE)
  aMNLFA.scores(ob)
-}
+
 }
 \keyword{MNLFA}
 

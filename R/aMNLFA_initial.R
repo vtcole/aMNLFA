@@ -5,21 +5,20 @@
 #' @keywords MNLFA
 #' @export
 #' @examples
-#' \dontrun{
-#'  wd <- "./aMNLFA/data"
-#   First create aMNLFA object.
-#   ob <- aMNLFA::aMNLFA.object(dir          = wd,
-#                            mrdata        = xstudy,
-#                            indicators    = paste0("BIN_", 1:12), 
-#                            catindicators = paste0("BIN_", 1:12), 
-#                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
-#                            varimpact     = c("AGE", "GENDER", "STUDY"), 
-#                            measinvar     = c("AGE", "GENDER", "STUDY"), 
-#                            factors       = c("GENDER", "STUDY"), 
-#                            ID            = "ID", 
-#                            thresholds    = FALSE)
+#' 
+#'  wd <- system.file("examplefiles",package="aMNLFA")
+#'  ob <- aMNLFA::aMNLFA.object(dir          = wd,
+#'                            mrdata        = xstudy,
+#'                            indicators    = paste0("BIN_", 1:12), 
+#'                            catindicators = paste0("BIN_", 1:12), 
+#'                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
+#'                            varimpact     = c("AGE", "GENDER", "STUDY"), 
+#'                            measinvar     = c("AGE", "GENDER", "STUDY"), 
+#'                            factors       = c("GENDER", "STUDY"), 
+#'                            ID            = "ID", 
+#'                            thresholds    = FALSE)
 #'  aMNLFA.initial(ob)
-#' }
+#' 
 
 aMNLFA.initial<-function(input.object){
   
@@ -45,15 +44,15 @@ aMNLFA.initial<-function(input.object){
   AUXILIARY<-paste("AUXILIARY=")
   AUXILIARY<-append(AUXILIARY,myauxiliary)
   AUXILIARY<-noquote(append(AUXILIARY,semicolon))
-  AUXILIARY<-capture.output(cat(AUXILIARY))
+  AUXILIARY<-utils::capture.output(cat(AUXILIARY))
   CATEGORICAL<-paste("CATEGORICAL=")
   CATEGORICAL<-append(CATEGORICAL,mycatindicators)
   CATEGORICAL<-noquote(append(CATEGORICAL,semicolon))
-  CATEGORICAL<-capture.output(cat(CATEGORICAL))
+  CATEGORICAL<-utils::capture.output(cat(CATEGORICAL))
   COUNT<-paste("COUNT=")
   COUNT<-append(COUNT,mycountindicators)
   COUNT<-noquote(append(COUNT,semicolon))
-  COUNT<-capture.output(cat(COUNT))
+  COUNT<-utils::capture.output(cat(COUNT))
   ANALYSIS<-noquote("ANALYSIS: ESTIMATOR=ML;ALGORITHM=INTEGRATION;INTEGRATION=MONTECARLO;PROCESSORS=4;")
   
   ETA<-paste("ETA BY ")
@@ -73,14 +72,14 @@ aMNLFA.initial<-function(input.object){
   USEVARMeanImpact<-append(USEVARIABLES,allmean)
   USEVARMeanImpact<-append(USEVARMeanImpact,semicolon)
   USEVARMeanImpact<-noquote(USEVARMeanImpact)
-  usemean<-capture.output(cat(USEVARMeanImpact))
+  usemean<-utils::capture.output(cat(USEVARMeanImpact))
   ETAON<-paste("ETA ON")
   ETAON<-append(ETAON,myMeanImpact)
   ETAON<-noquote(append(ETAON,semicolon))
-  ETAON<-capture.output(cat(ETAON))
+  ETAON<-utils::capture.output(cat(ETAON))
   ETAON4VAR<-append(ETAON,myVarImpact)
   ETAON4VAR<-noquote(append(ETAON4VAR,semicolon))
-  ETAON4VAR<-capture.output(cat(ETAON4VAR))
+  ETAON4VAR<-utils::capture.output(cat(ETAON4VAR))
   
   
   meaninput<-as.data.frame(NULL)
@@ -120,17 +119,17 @@ aMNLFA.initial<-function(input.object){
   USEVARImpact<-append(USEVARIABLES,allvariance)
   USEVARImpact<-append(USEVARImpact,semicolon)
   USEVARImpact<-noquote(USEVARImpact)
-  usevariance<-capture.output(cat(USEVARImpact))
+  usevariance<-utils::capture.output(cat(USEVARImpact))
   CONSTRAINT<-paste("CONSTRAINT=")
   CONSTRAINT<-append(CONSTRAINT,myVarImpact)
   CONSTRAINT<-append(CONSTRAINT,semicolon)
-  CONSTRAINT<-capture.output(cat(CONSTRAINT))
+  CONSTRAINT<-utils::capture.output(cat(CONSTRAINT))
   varMODEL<-paste("MODEL: [ETA@0];ETA*(veta);")
   
   ETAON2<-paste("ETA ON")
   ETAON2<-append(ETAON2,myVarImpact)
   ETAON2<-noquote(append(ETAON2,semicolon))
-  ETAON2<-capture.output(cat(ETAON2))
+  ETAON2<-utils::capture.output(cat(ETAON2))
   varMODELwETAON<-paste("MODEL: ",ETAON2," ETA*(veta);",sep="")
   MODELCONSTRAINT<-paste("MODEL CONSTRAINT: new(")
   
@@ -196,12 +195,12 @@ aMNLFA.initial<-function(input.object){
       USEMI <- append(USEVARIABLES, allmi)
       USEMI <- append(USEMI, semicolon)
       USEMI <- noquote(USEMI)
-      usemi <- capture.output(cat(USEMI))
+      usemi <- utils::capture.output(cat(USEMI))
       CONSTRAINT <- paste("CONSTRAINT=")
       CONSTRAINT <- append(CONSTRAINT, myMeasInvar)
       CONSTRAINT <- append(CONSTRAINT, semicolon)
-      CONSTRAINT <- capture.output(cat(CONSTRAINT))
-      reg <- capture.output(cat(myMeasInvar))
+      CONSTRAINT <- utils::capture.output(cat(CONSTRAINT))
+      reg <- utils::capture.output(cat(myMeasInvar))
       
       indlength <- length(myindicators)
       for (w in 1:indlength) {
@@ -231,7 +230,7 @@ aMNLFA.initial<-function(input.object){
         }
         # Define the # of thresholds
         # Print the thresholds
-        th <-length(unique(mrdata[complete.cases(mrdata), myindicators[w]]))-1
+        th <-length(unique(mrdata[stats::complete.cases(mrdata), myindicators[w]]))-1
         for (i in seq(th)) {
           miinput[16 + l +i, 1] <- paste("[", myindicators[w], "$",i,
                                          "](T",i,");", sep = "" )
@@ -297,12 +296,12 @@ aMNLFA.initial<-function(input.object){
     USEMI <- append(USEVARIABLES, allmi)
     USEMI <- append(USEMI, semicolon)
     USEMI <- noquote(USEMI)
-    usemi <- capture.output(cat(USEMI))
+    usemi <- utils::capture.output(cat(USEMI))
     CONSTRAINT <- paste("CONSTRAINT=")
     CONSTRAINT <- append(CONSTRAINT, myMeasInvar)
     CONSTRAINT <- append(CONSTRAINT, semicolon)
-    CONSTRAINT <- capture.output(cat(CONSTRAINT))
-    reg <- capture.output(cat(myMeasInvar))
+    CONSTRAINT <- utils::capture.output(cat(CONSTRAINT))
+    reg <- utils::capture.output(cat(myMeasInvar))
     
     indlength <- length(myindicators)
     for (w in 1:indlength) {
