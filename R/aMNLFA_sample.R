@@ -5,20 +5,23 @@
 #' @keywords MNLFA
 #' @export
 #' @examples
-#' 
-#'  wd <- system.file("examplefiles",package="aMNLFA")
-#'  ob <- aMNLFA::aMNLFA.object(dir          = wd,
-#'                            mrdata        = xstudy,
-#'                            indicators    = paste0("BIN_", 1:12), 
-#'                            catindicators = paste0("BIN_", 1:12), 
-#'                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
-#'                            varimpact     = c("AGE", "GENDER", "STUDY"), 
-#'                            measinvar     = c("AGE", "GENDER", "STUDY"), 
-#'                            factors       = c("GENDER", "STUDY"), 
-#'                            ID            = "ID", 
-#'                            thresholds    = FALSE)
+#'  wd <- tempdir()
+#'  first<-paste0(system.file(package='aMNLFA'),"/examplefiles")
+#'  the.list <- list.files(first,full.names=TRUE)
+#'  file.copy(the.list,wd,overwrite=TRUE)
+#'  
+#'  ob <- aMNLFA::aMNLFA.object(dir = wd, 
+#'  mrdata = xstudy, 
+#'  indicators = paste0("BIN_", 1:12),
+#'  catindicators = paste0("BIN_", 1:12), 
+#'  meanimpact = c("AGE", "GENDER", "STUDY"), 
+#'  varimpact = c("AGE", "GENDER", "STUDY"), 
+#'  measinvar = c("AGE", "GENDER", "STUDY"),
+#'  factors = c("GENDER", "STUDY"),
+#'  ID = "ID",
+#'  thresholds = FALSE)
+#'  
 #'  aMNLFA.sample(ob)
-#' 
 
 aMNLFA.sample<-function(input.object){
 
@@ -43,25 +46,25 @@ aMNLFA.sample<-function(input.object){
     srdata<-srdata[varlist]
     srdata <- sapply( srdata, as.numeric )
     srdata<-as.data.frame(srdata)
-    header<-utils::capture.output(MplusAutomation::prepareMplusData(srdata, paste(dir,"/calibration.dat",sep=""), keepCols=c(varlist)))
+    header<-utils::capture.output(MplusAutomation::prepareMplusData(srdata, fixPath(file.path(dir,"calibration.dat",sep="")), keepCols=c(varlist)))
   }
   if (is.null(mytime)){
-    header<-utils::capture.output(MplusAutomation::prepareMplusData(mrdata, paste(dir,"/calibration.dat",sep=""), keepCols=c(varlist)))
+    header<-utils::capture.output(MplusAutomation::prepareMplusData(mrdata, fixPath(file.path(dir,"calibration.dat",sep="")), keepCols=c(varlist)))
   }
   mruse<-mrdata[varlist]
   mruse<-sapply(mruse,as.numeric)
   mruse<-as.data.frame(mruse)
-  if (!is.null(mytime)) utils::write.table(srdata, paste(dir,"/srdata.dat",sep=""),quote=FALSE, sep="\t",col.names=TRUE,row.names=FALSE)
-  if (is.null(mytime)) utils::write.table(mruse, paste(dir,"/srdata.dat",sep=""),quote=FALSE, sep="\t",col.names=TRUE,row.names=FALSE)
-  header2<-utils::capture.output(MplusAutomation::prepareMplusData(mruse, paste(dir,"/full.dat",sep=""), keepCols=c(varlist)))
+  if (!is.null(mytime)) utils::write.table(srdata, fixPath(file.path(dir,"srdata.dat",sep="")),quote=FALSE, sep="\t",col.names=TRUE,row.names=FALSE)
+  if (is.null(mytime)) utils::write.table(mruse, fixPath(file.path(dir,"srdata.dat",sep="")),quote=FALSE, sep="\t",col.names=TRUE,row.names=FALSE)
+  header2<-utils::capture.output(MplusAutomation::prepareMplusData(mruse, fixPath(file.path(dir,"full.dat",sep="")), keepCols=c(varlist)))
 
 
-  h1file<-file(paste0(dir,"/header.txt"))
+  h1file<-fixPath(file.path(dir,"header.txt"))
   writeLines(header, h1file)
-  close(h1file)
-  h2file<-file(paste0(dir,"/header2.txt"))
+  closeAllConnections()
+  h2file<-fixPath(file.path(dir,"header2.txt"))
   writeLines(header2, h2file)
-  close(h2file)
+  closeAllConnections()
 }
 
 
@@ -105,4 +108,13 @@ write.inp.file <- function(df, outfile) {
         append = TRUE)
     }
   }
+}
+
+#Remove final slash to allow for better use of file.path down the line.
+fixPath<-function(somecharacter) {
+  lastcharacter<-base::substring(somecharacter,nchar(somecharacter))
+  newcharacter<-base::substr(somecharacter,1,nchar(somecharacter)-1)
+  outcharacter<-somecharacter
+  if (lastcharacter=="/") {outcharacter<-newcharacter}
+  outcharacter
 }

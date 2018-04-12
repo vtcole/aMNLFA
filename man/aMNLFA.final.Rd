@@ -13,20 +13,21 @@ aMNLFA.final(input.object)
 This function generates the final aMNLFA model on which scores will be based. Can only be run after a model containing all impact and DIF effects -- i.e., after the aMNLFA.simultaneous function.
 }
 \examples{
-
- wd <- system.file("examplefiles",package="aMNLFA")
- ob <- aMNLFA::aMNLFA.object(dir          = wd,
-                           mrdata        = xstudy,
-                           indicators    = paste0("BIN_", 1:12), 
-                           catindicators = paste0("BIN_", 1:12), 
-                           meanimpact    = c("AGE", "GENDER", "STUDY"), 
-                           varimpact     = c("AGE", "GENDER", "STUDY"), 
-                           measinvar     = c("AGE", "GENDER", "STUDY"), 
-                           factors       = c("GENDER", "STUDY"), 
-                           ID            = "ID", 
-                           thresholds    = FALSE)
+ wd <- tempdir()
+ first<-paste0(system.file(package='aMNLFA'),"/examplefiles")
+ the.list <- list.files(first,full.names=TRUE)
+ file.copy(the.list,wd,overwrite=TRUE)
+ ob <- aMNLFA::aMNLFA.object(dir = wd, 
+ mrdata = xstudy, 
+ indicators = paste0("BIN_", 1:12),
+ catindicators = paste0("BIN_", 1:12), 
+ meanimpact = c("AGE", "GENDER", "STUDY"), 
+ varimpact = c("AGE", "GENDER", "STUDY"), 
+ measinvar = c("AGE", "GENDER", "STUDY"),
+ factors = c("GENDER", "STUDY"),
+ ID = "ID",
+ thresholds = FALSE)
+ 
  aMNLFA.final(ob)
-
 }
 \keyword{MNLFA}
-

@@ -50,4 +50,3 @@ Curran et al., 2016 Structural Equation Modeling 23(6), 827-844.
 (\href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5526637/}{PubMed})
 }
 \keyword{datasets}
-

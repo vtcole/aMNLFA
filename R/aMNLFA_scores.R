@@ -5,20 +5,24 @@
 #' @keywords MNLFA
 #' @export
 #' @examples
-#' 
-#'  wd <- system.file("examplefiles",package="aMNLFA")
-#'  ob <- aMNLFA::aMNLFA.object(dir          = wd,
-#'                            mrdata        = xstudy,
-#'                            indicators    = paste0("BIN_", 1:12), 
-#'                            catindicators = paste0("BIN_", 1:12), 
-#'                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
-#'                            varimpact     = c("AGE", "GENDER", "STUDY"), 
-#'                            measinvar     = c("AGE", "GENDER", "STUDY"), 
-#'                            factors       = c("GENDER", "STUDY"), 
-#'                            ID            = "ID", 
-#'                            thresholds    = FALSE)
+#'  wd <- tempdir()
+#'  first<-paste0(system.file(package='aMNLFA'),"/examplefiles")
+#'  the.list <- list.files(first,full.names=TRUE)
+#'  file.copy(the.list,wd,overwrite=TRUE)
+#'  
+#'  ob <- aMNLFA::aMNLFA.object(dir = wd, 
+#'  mrdata = xstudy, 
+#'  indicators = paste0("BIN_", 1:12),
+#'  catindicators = paste0("BIN_", 1:12), 
+#'  meanimpact = c("AGE", "GENDER", "STUDY"), 
+#'  varimpact = c("AGE", "GENDER", "STUDY"), 
+#'  measinvar = c("AGE", "GENDER", "STUDY"),
+#'  factors = c("GENDER", "STUDY"),
+#'  ID = "ID",
+#'  thresholds = FALSE)
+#'  
 #'  aMNLFA.scores(ob)
-#' 
+
 
 aMNLFA.scores<-function(input.object){
   
@@ -39,8 +43,8 @@ aMNLFA.scores<-function(input.object){
   varlist<-c(myID,myauxiliary,myindicators,myMeasInvar,myMeanImpact,myVarImpact)
   varlist<-unique(varlist)
   
-  header<-readLines(paste0(dir,"/header.txt"))
-  header2<-readLines(paste0(dir,"/header2.txt"))
+  header<-readLines(fixPath(file.path(dir,"header.txt")))
+  header2<-readLines(fixPath(file.path(dir,"header2.txt")))
   
   USEVARIABLES<-paste("USEVARIABLES=")
   semicolon<-paste(";")
@@ -78,7 +82,7 @@ aMNLFA.scores<-function(input.object){
   ##############Output scoring model input#####################################
   #############################################################################
   
-  round3output<-MplusAutomation::readModels(paste(dir,"/round3calibration.out",sep=""))
+  round3output<-MplusAutomation::readModels(fixPath(file.path(dir,"round3calibration.out",sep="")))
   round3input<-round3output$input$model.constraint
   
   keepvarimpact<-list()
@@ -241,6 +245,6 @@ aMNLFA.scores<-function(input.object){
   scoringinput[24+2*l+length(ETAON3)+length(intcode)+length(dim(wide)[1]),1]<-paste("SAVEDATA: SAVE=FSCORES; FILE=scores.dat;")
   
   #utils::write.table(scoringinput,paste(dir,"/scoring.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
-  write.inp.file(scoringinput,paste(dir,"/scoring.inp",sep=""))
+  write.inp.file(scoringinput,fixPath(file.path(dir,"scoring.inp",sep="")))
   message("Check '", dir, "/' for Mplus inp file for scoring model (run this manually).")
 }

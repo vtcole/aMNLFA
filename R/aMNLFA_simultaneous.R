@@ -5,20 +5,23 @@
 #' @keywords MNLFA
 #' @export
 #' @examples
-#' 
-#'  wd <- system.file("examplefiles",package="aMNLFA")
-#'  ob <- aMNLFA::aMNLFA.object(dir          = wd,
-#'                            mrdata        = xstudy,
-#'                            indicators    = paste0("BIN_", 1:12), 
-#'                            catindicators = paste0("BIN_", 1:12), 
-#'                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
-#'                            varimpact     = c("AGE", "GENDER", "STUDY"), 
-#'                            measinvar     = c("AGE", "GENDER", "STUDY"), 
-#'                            factors       = c("GENDER", "STUDY"), 
-#'                            ID            = "ID", 
-#'                            thresholds    = FALSE)
+#'  wd <- tempdir()
+#'  first<-paste0(system.file(package='aMNLFA'),"/examplefiles")
+#'  the.list <- list.files(first,full.names=TRUE)
+#'  file.copy(the.list,wd,overwrite=TRUE)
+#'    
+#'  ob <- aMNLFA::aMNLFA.object(dir = wd, 
+#'  mrdata = xstudy, 
+#'  indicators = paste0("BIN_", 1:12),
+#'  catindicators = paste0("BIN_", 1:12), 
+#'  meanimpact = c("AGE", "GENDER", "STUDY"), 
+#'  varimpact = c("AGE", "GENDER", "STUDY"), 
+#'  measinvar = c("AGE", "GENDER", "STUDY"),
+#'  factors = c("GENDER", "STUDY"),
+#'  ID = "ID",
+#'  thresholds = FALSE)
+#'  
 #'  aMNLFA.simultaneous(ob)
-#' 
 
 
 aMNLFA.simultaneous<-function(input.object){
@@ -70,7 +73,7 @@ aMNLFA.simultaneous<-function(input.object){
   ####ROUND 1 USES p<.05 AS GATE TO GET TO ROUND 2 FOR MEAS INV and p<.1 for IMPACT####################
 
   ##Read in mean impact script and test for impact at p<.1
-  meanimpact<-MplusAutomation::readModels(paste(dir,"/meanimpactscript.out",sep=""))
+  meanimpact<-MplusAutomation::readModels(fixPath(file.path(dir,"meanimpactscript.out",sep="")))
   meanimpact<-as.data.frame(meanimpact$parameters$unstandardized)
   meanimpact<-meanimpact[which(meanimpact$paramHeader=="ETA.ON"),]
   meanimpact<-meanimpact[which(meanimpact$pval<.1),]
@@ -93,7 +96,7 @@ aMNLFA.simultaneous<-function(input.object){
   keepmeanimpact<-myMeanImpact[keepmeanimpact2]
 
   ##Read in var impact script and test for impact at p<.1
-  varimpact<-MplusAutomation::readModels(paste(dir,"/varimpactscript.out",sep=""))
+  varimpact<-MplusAutomation::readModels(fixPath(file.path(dir,"varimpactscript.out",sep="")))
   varimpact<-as.data.frame(varimpact$parameters$unstandardized)
 
   varimpact<-varimpact[which(varimpact$paramHeader=="New.Additional.Parameters"&varimpact$pval<.1),]  ######alpha <.1 to trim###########
@@ -126,7 +129,7 @@ aMNLFA.simultaneous<-function(input.object){
   colnames(alllambdadf)=c("items",myMeasInvar)
   alllambdadf$items=myindicators
   for (i in 1:length(myindicators)){
-    dif<-MplusAutomation::readModels(paste(dir,"/measinvarscript_",myindicators[i],".out",sep=""))
+    dif<-MplusAutomation::readModels(fixPath(file.path(dir,paste("measinvarscript_",myindicators[i],".out",sep=""))))
     dif<-dif$parameters$unstandardized
     lambdadif<-dif[which(dif$paramHeader=="New.Additional.Parameters"),]
     lambdadif$param<-noquote(stringr::str_sub(lambdadif$param,-2,-1))
@@ -177,7 +180,7 @@ aMNLFA.simultaneous<-function(input.object){
     colnames(allinterceptdf)=c("items",myMeasInvar)
     allinterceptdf$items=myindicators
     for (i in 1:length(myindicators)){
-      dif<-MplusAutomation::readModels(paste(dir,"/measinvarscript_",myindicators[i],".out",sep=""))
+      dif<-MplusAutomation::readModels(fixPath(file.path(dir,paste("measinvarscript_",myindicators[i],".out",sep=""))))
       dif<-dif$parameters$unstandardized
       keep<-c("param","pval")
       intdif<-dif[grep(".ON",dif$paramHeader),]
@@ -236,7 +239,7 @@ aMNLFA.simultaneous<-function(input.object){
   CONSTRAINT<-append(CONSTRAINT,semicolon)
   CONSTRAINT<-utils::capture.output(cat(CONSTRAINT))
 
-  header<-readLines(paste0(dir,"/header.txt"))
+  header<-readLines(fixPath(file.path(dir,"header.txt")))
 
   round2input<-as.data.frame(NULL)
   round2input[1,1]<-paste("TITLE: Round 2 Calibration Model")
@@ -311,7 +314,7 @@ aMNLFA.simultaneous<-function(input.object){
   round2input[21+3*l+ind,1]<-tech1
 
 
-  #write.table(round2input,paste(dir,"/round2calibration.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
-  write.inp.file(round2input,paste(dir,"/round2calibration.inp",sep=""))
+  #write.table(round2input,file.path(dir,"round2calibration.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
+  write.inp.file(round2input,fixPath(file.path(dir,"round2calibration.inp",sep="")))
   message("COMPLETE. Check '", dir, "/' for Mplus inp file for round 2 calibration model (run this manually). \nNOTE: After running  your round 2 calibration, there may be some output from output that cannot be read in properly as a result of recent changes within Mplus. This will lead to errors in subsequent steps. \nAs a temporary fix the problem, please delete all output that comes after the 'LOGISTIC REGRESSION ODDS RATIO RESULTS' section after running your round 3 calibration, before proceeding to the next step. \nThis message will appear after all subsequent steps.")  
 }

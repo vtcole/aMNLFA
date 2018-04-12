@@ -5,20 +5,23 @@
 #' @keywords MNLFA
 #' @export
 #' @examples
-#' 
-#'  wd <- system.file("examplefiles",package="aMNLFA")
-#'  ob <- aMNLFA::aMNLFA.object(dir          = wd,
-#'                            mrdata        = xstudy,
-#'                            indicators    = paste0("BIN_", 1:12), 
-#'                            catindicators = paste0("BIN_", 1:12), 
-#'                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
-#'                            varimpact     = c("AGE", "GENDER", "STUDY"), 
-#'                            measinvar     = c("AGE", "GENDER", "STUDY"), 
-#'                            factors       = c("GENDER", "STUDY"), 
-#'                            ID            = "ID", 
-#'                            thresholds    = FALSE)
+#'  wd <- tempdir()
+#'  first<-paste0(system.file(package='aMNLFA'),"/examplefiles")
+#'  the.list <- list.files(first,full.names=TRUE)
+#'  file.copy(the.list,wd,overwrite=TRUE)
+#'  ob <- aMNLFA::aMNLFA.object(dir = wd, 
+#'  mrdata = xstudy, 
+#'  indicators = paste0("BIN_", 1:12),
+#'  catindicators = paste0("BIN_", 1:12), 
+#'  meanimpact = c("AGE", "GENDER", "STUDY"), 
+#'  varimpact = c("AGE", "GENDER", "STUDY"), 
+#'  measinvar = c("AGE", "GENDER", "STUDY"),
+#'  factors = c("GENDER", "STUDY"),
+#'  ID = "ID",
+#'  thresholds = FALSE)
+#'  
 #'  aMNLFA.final(ob)
-#' 
+
 
 aMNLFA.final<-function(input.object){
   
@@ -38,7 +41,8 @@ aMNLFA.final<-function(input.object){
   varlist<-c(myID,myauxiliary,myindicators,myMeasInvar,myMeanImpact,myVarImpact)
   varlist<-unique(varlist)
   
-  header<-readLines(paste0(dir,"/header.txt"))
+  #header<-readLines(file.path(dir, "header.txt"))
+  header<-readLines(file.path(dir,"header.txt"))
   
   USEVARIABLES<-paste("USEVARIABLES=")
   semicolon<-paste(";")
@@ -75,7 +79,7 @@ aMNLFA.final<-function(input.object){
   #################################################################################################
   
   ##Read in output and test for sig effects at p<.01
-  round2output<-MplusAutomation::readModels(paste(dir,"/round2calibration.out",sep=""))
+  round2output<-MplusAutomation::readModels(file.path(dir,"round2calibration.out"))
   round2output<-as.data.frame(round2output$parameters$unstandardized)
   
   meanimpact<-round2output[which(round2output$paramHeader=="ETA.ON"),]
@@ -356,7 +360,7 @@ aMNLFA.final<-function(input.object){
   round3input[20+2*l+2*ind,1]<-tech1
   if(is.null(mytime)){round3input[21+2*l+2*ind,1]<-paste("SAVEDATA: SAVE=FSCORES; FILE=scores.dat;")}
   
-  #utils::write.table(round3input,paste(dir,"/round3calibration.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
-  write.inp.file(round3input,paste(dir,"/round3calibration.inp",sep=""))
+  #utils::write.table(round3input,file.path(dir,"round3calibration.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
+  write.inp.file(round3input,fixPath(file.path(dir,"round3calibration.inp",sep="")))
   message("COMPLETE. Check '", dir, "/' for Mplus inp file for round 3 calibration model (run this manually). \nNOTE: After running  your round 3 calibration, there may be some output from output that cannot be read in properly as a result of recent changes within Mplus. This will lead to errors in subsequent steps. \nAs a temporary fix the problem, please delete all output that comes after the 'LOGISTIC REGRESSION ODDS RATIO RESULTS' section after running your round 3 calibration, before proceeding to the next step. \nThis message will appear after all subsequent steps.")  
 }

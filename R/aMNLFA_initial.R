@@ -5,20 +5,23 @@
 #' @keywords MNLFA
 #' @export
 #' @examples
-#' 
-#'  wd <- system.file("examplefiles",package="aMNLFA")
-#'  ob <- aMNLFA::aMNLFA.object(dir          = wd,
-#'                            mrdata        = xstudy,
-#'                            indicators    = paste0("BIN_", 1:12), 
-#'                            catindicators = paste0("BIN_", 1:12), 
-#'                            meanimpact    = c("AGE", "GENDER", "STUDY"), 
-#'                            varimpact     = c("AGE", "GENDER", "STUDY"), 
-#'                            measinvar     = c("AGE", "GENDER", "STUDY"), 
-#'                            factors       = c("GENDER", "STUDY"), 
-#'                            ID            = "ID", 
-#'                            thresholds    = FALSE)
+#'  wd <- tempdir()
+#'  first<-paste0(system.file(package='aMNLFA'),"/examplefiles")
+#'  the.list <- list.files(first,full.names=TRUE)
+#'  file.copy(the.list,wd,overwrite=TRUE)
+#'  ob <- aMNLFA::aMNLFA.object(dir = wd, 
+#'  mrdata = xstudy, 
+#'  indicators = paste0("BIN_", 1:12),
+#'  catindicators = paste0("BIN_", 1:12), 
+#'  meanimpact = c("AGE", "GENDER", "STUDY"), 
+#'  varimpact = c("AGE", "GENDER", "STUDY"), 
+#'  measinvar = c("AGE", "GENDER", "STUDY"),
+#'  factors = c("GENDER", "STUDY"),
+#'  ID = "ID",
+#'  thresholds = FALSE)
+#'  
 #'  aMNLFA.initial(ob)
-#' 
+#'  
 
 aMNLFA.initial<-function(input.object){
   
@@ -84,7 +87,7 @@ aMNLFA.initial<-function(input.object){
   
   meaninput<-as.data.frame(NULL)
   
-  header<-readLines(paste0(dir,"/header.txt"))
+  header<-readLines(fixPath(file.path(dir,"header.txt")))
   
   meaninput[1,1]<-paste("TITLE: Mean Impact Model")
   meaninput[2,1]<-header[2]
@@ -108,9 +111,9 @@ aMNLFA.initial<-function(input.object){
   meaninput[16+l,1]<-ETAON
   meaninput[17+l,1]<-tech1
   
-  #write.table(meaninput,paste(dir,"/meanimpactscript.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
+  #write.table(meaninput,file.path(dir,"meanimpactscript.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
   #need to load the write.inp.file function (found in dropbox folder)
-  write.inp.file(meaninput,paste(dir,"/meanimpactscript.inp",sep=""))
+  write.inp.file(meaninput,fixPath(file.path(dir,"meanimpactscript.inp",sep="")))
   message("Check '", dir, "/' for Mplus inp file for mean impact model (run this manually)")
   
   
@@ -169,8 +172,8 @@ aMNLFA.initial<-function(input.object){
   varinput[20+l+v+v,1]<-tech1
   
   
-  #write.table(varinput,paste(dir,"/varimpactscript.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
-  write.inp.file(varinput,paste(dir,"/varimpactscript.inp",sep=""))
+  #write.table(varinput,file.path(dir,"varimpactscript.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
+  write.inp.file(varinput,fixPath(file.path(dir,"varimpactscript.inp",sep="")))
   message("Check '", dir, "/' for Mplus inp file for variance impact model (run this manually). If you trim the variance model manually, do not change the new parameter labels (e.g., v2 is still v2 if you drop the v1 parameter).")
   
   
@@ -286,7 +289,7 @@ aMNLFA.initial<-function(input.object){
         
         
         # write.table(miinput,paste(dir,'/measinvarscript_',myindicators[w],'.inp',sep=''),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
-        write.inp.file(miinput, paste(dir, "/measinvarscript_", myindicators[w], ".inp", sep = ""))
+        write.inp.file(miinput, fixPath(file.path(dir,"measinvarscript_", myindicators[w], ".inp", sep = "")))
         message("COMPLETE. Check '", dir, "/' for Mplus inp file for measurement invariance model for ", myindicators[w], " (run this manually).")  
       }
     }
@@ -344,7 +347,7 @@ aMNLFA.initial<-function(input.object){
       
       
       # write.table(miinput,paste(dir,'/measinvarscript_',myindicators[w],'.inp',sep=''),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
-      write.inp.file(miinput, paste(dir, "/measinvarscript_", myindicators[w], ".inp", sep = ""))
+      write.inp.file(miinput, fixPath(file.path(dir,paste("measinvarscript_", myindicators[w], ".inp", sep = ""))))
       message("COMPLETE. Check '", dir, "/' for Mplus inp file for measurement invariance model for ", myindicators[w], " (run this manually).")  
     }
   }
