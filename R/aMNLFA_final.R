@@ -134,7 +134,7 @@ aMNLFA.final<-function(input.object){
   #The following line obtains the last 2 characters of each parameter; it uses str_sub rather than stringr to handle names of different length
   lambdaconstraints<-lambdaconstraints[which(stringr::str_sub(lambdaconstraints$param,start=-2)!="00"),]
   lambdaconstraints<-lambdaconstraints[order(lambdaconstraints$pval),]
-  ###FDR correction: BH-crit=(m-rank+1)*.05/(2*m); m=# indicators*# predictors; rank = highest-to-lowest p-value amongst in m
+  ###HERE WE ARE USING AN UNCORRECTED P. VALUE: ALPHA = .05. WE WILL NOT USE IT IN THE FINAL ITERATION OF THIS PROCEDURE.
   m<-length(myindicators)*length(myMeasInvar)
   
   # ----------------------------- seem to be having trouble here
@@ -145,7 +145,10 @@ aMNLFA.final<-function(input.object){
   for (l in 1:dim(lambdaconstraints)[1]){
     lambdaconstraints$rank[l]<-m+1-l
   }
-  lambdaconstraints$BHcrit<-.05*(m-lambdaconstraints$rank+1)/(2*m)
+  #changing this temporarily---------
+  #lambdaconstraints$BHcrit<-.05*(m-lambdaconstraints$rank+1)/(2*m)
+  lambdaconstraints$BHcrit<-.05
+  #----------------------------------
   lambdaconstraints$sig<-ifelse(lambdaconstraints$pval<lambdaconstraints$BHcrit,"TRUE","FALSE")
   lambdaconstraints<-lambdaconstraints[which(lambdaconstraints$sig=="TRUE"),]
   lambdaconstraints<-noquote(substr(lambdaconstraints$param,2,3))
@@ -204,7 +207,6 @@ aMNLFA.final<-function(input.object){
   }
   
   
-  
   interceptconstraints$siglambda<-"FALSE"
   if (length(lambdaconstraints)>0)
     for (i in 1:length(lambdaconstraints)){
@@ -219,7 +221,11 @@ aMNLFA.final<-function(input.object){
   for (l in 1:dim(int_totest)[1]){
     int_totest$rank[l]<-m+1-l
   }
-  int_totest$BHcrit<-.05*(m-int_totest$rank+1)/(2*m)
+  
+  #changing this temporarily---------
+  #int_totest$BHcrit<-.05*(m-int_totest$rank+1)/(2*m)
+  int_totest$BHcrit<-.05
+  #----------------------------------
   int_totest$sig<-ifelse(int_totest$pval<int_totest$BHcrit,"TRUE","FALSE")
   int_totest<-int_totest[which(int_totest$sig=="TRUE"),]
   int<-interceptconstraints[which(interceptconstraints$siglambda=="TRUE"),]
