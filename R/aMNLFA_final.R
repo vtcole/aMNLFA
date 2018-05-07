@@ -196,7 +196,9 @@ aMNLFA.final<-function(input.object){
   
   interceptconstraints$item_k<-utils::read.table(text = interceptconstraints$paramHeader, sep = ".", as.is = TRUE)$V1
   interceptconstraints$itemnum<-match(interceptconstraints$item_k, myindicators)
-  interceptconstraints$prenum<-match(interceptconstraints$param,myMeasInvar)
+  interceptconstraints$prenum<-grep(myMeasInvar,interceptconstraints$param,ignore.case=TRUE,value=TRUE)
+  
+  
   
   interceptconstraints$siglambda<-"FALSE"
   if (length(lambdaconstraints)>0)

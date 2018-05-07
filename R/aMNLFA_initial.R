@@ -289,7 +289,9 @@ aMNLFA.initial<-function(input.object){
         
         
         # write.table(miinput,paste(dir,'/measinvarscript_',myindicators[w],'.inp',sep=''),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
-        write.inp.file(miinput, fixPath(file.path(dir,"measinvarscript_", myindicators[w], ".inp", sep = "")))
+        #write.inp.file(miinput, fixPath(file.path(dir,"measinvarscript_", myindicators[w], ".inp", sep = "")))
+        write.inp.file(miinput, fixPath(file.path(dir,paste("measinvarscript_", myindicators[w], ".inp", sep = ""))))
+        
         message("COMPLETE. Check '", dir, "/' for Mplus inp file for measurement invariance model for ", myindicators[w], " (run this manually).")  
       }
     }
