@@ -141,7 +141,7 @@ aMNLFA.simultaneous<-function(input.object){
     lambdadif<-noquote(t(lambdadif[keep]))
     colnames(lambdadif)=lambdadif[1,]
     lambdadif=t(as.matrix(lambdadif[-1,]))
-    lambda_dif<-rep(NA,length(myMeasInvar))
+    lambda_min<-rep(NA,length(myMeasInvar))
     for (v in 1:length(myMeasInvar)) {lambda_min[v]<-(as.numeric(min(subset(lambdadif,colnames(lambdadif)==myMeasInvar[v]))))}
     #Fix indexing issue with threshold DIF
     lambda_index<-length(myMeasInvar) #Gets the number of covariates there are, regardless of whether we're using thresholds or not.
