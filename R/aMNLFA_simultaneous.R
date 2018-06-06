@@ -134,13 +134,17 @@ aMNLFA.simultaneous<-function(input.object){
     lambdadif<-dif[which(dif$paramHeader=="New.Additional.Parameters"),]
     lambdadif$param<-noquote(stringr::str_sub(lambdadif$param,-2,-1))
     lambdadif<-lambdadif[which(lambdadif$param!="00"),]
-    lambdadif$param<-myMeasInvar[(lambdadif$param)]
+    #New as of 6/5
+    lambdadif$param<-noquote(stringr::str_sub(lambdadif$param,2,length(lambdadif$param)))
+    for (q in 1:length(lambdadif$param)) {lambdadif$param[q]<-myMeasInvar[as.numeric(lambdadif$param[q])]}
     keep<-c("param","pval")
     lambdadif<-noquote(t(lambdadif[keep]))
     colnames(lambdadif)=lambdadif[1,]
     lambdadif=t(as.matrix(lambdadif[-1,]))
-    lambda_min=apply(lambdadif,1,function(x) {as.numeric(min(x))}) #Get the minimum p. value associated with lambda or all of the thresholds. If any are under .05, we retain the covariate.
-    lambda_index<-nrow(lambdadif) #Gets the number of covariates there are, regardless of whether we're using thresholds or not.
+    lambda_dif<-rep(NA,length(myMeasInvar))
+    for (v in 1:length(myMeasInvar)) {lambda_min[v]<-(as.numeric(min(subset(lambdadif,colnames(lambdadif)==myMeasInvar[v]))))}
+    #Fix indexing issue with threshold DIF
+    lambda_index<-length(myMeasInvar) #Gets the number of covariates there are, regardless of whether we're using thresholds or not.
     alllambdadf[i,2:(lambda_index+1)]<-lambda_min
     for (j in 1:length(myMeasInvar)){
       alllambdadf[i,j+1]<-ifelse(alllambdadf[i,j+1]<.05,myMeasInvar[j],NA)
