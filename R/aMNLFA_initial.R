@@ -56,7 +56,7 @@ aMNLFA.initial<-function(input.object){
   COUNT<-append(COUNT,mycountindicators)
   COUNT<-noquote(append(COUNT,semicolon))
   COUNT<-utils::capture.output(cat(COUNT))
-  ANALYSIS<-noquote("ANALYSIS: ESTIMATOR=ML;ALGORITHM=INTEGRATION;INTEGRATION=MONTECARLO;PROCESSORS=4;")
+  ANALYSIS<-noquote("ANALYSIS: ESTIMATOR=ML;ALGORITHM=INTEGRATION;INTEGRATION=MONTECARLO;PROCESSORS=1;")
   
   ETA<-paste("ETA BY ")
   l<-length(myindicators)
@@ -233,7 +233,9 @@ aMNLFA.initial<-function(input.object){
         }
         # Define the # of thresholds
         # Print the thresholds
-        th <-length(unique(mrdata[stats::complete.cases(mrdata), myindicators[w]]))-1
+        #th <-length(unique(mrdata[stats::complete.cases(mrdata), myindicators[w]]))-1 # remove this
+        th <- length(unique(na.exclude(mrdata[,myindicators[w]])))-1
+        
         for (i in seq(th)) {
           miinput[16 + l +i, 1] <- paste("[", myindicators[w], "$",i,
                                          "](T",i,");", sep = "" )
