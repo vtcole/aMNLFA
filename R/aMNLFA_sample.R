@@ -145,11 +145,15 @@ write.inp.file <- function(df, outfile) {
 }
 
 
-#Remove final slash to allow for better use of file.path down the line.
-fixPath<-function(somecharacter) {
-  lastcharacter<-base::substring(somecharacter,nchar(somecharacter))
-  newcharacter<-base::substr(somecharacter,1,nchar(somecharacter)-1)
-  outcharacter<-somecharacter
-  if (lastcharacter=="/") {outcharacter<-newcharacter}
-  outcharacter
+##VC NOTE: FixPath not working; commenting it out in the meantime. 02/14/2019
+fixPath <- function(somecharacter) {
+  somecharacter
 }
+#Remove final slash to allow for better use of file.path down the line.
+#fixPath<-function(somecharacter) {
+#  lastcharacter<-base::substring(somecharacter,nchar(somecharacter))
+#  newcharacter<-base::substr(somecharacter,1,nchar(somecharacter)-1)
+#  outcharacter<-somecharacter
+#  if (lastcharacter=="/") {outcharacter<-newcharacter}
+#  outcharacter
+#}

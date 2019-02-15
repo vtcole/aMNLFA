@@ -233,8 +233,8 @@ aMNLFA.initial<-function(input.object){
         }
         # Define the # of thresholds
         # Print the thresholds
-        #th <-length(unique(mrdata[stats::complete.cases(mrdata), myindicators[w]]))-1 # remove this
-        th <- length(unique(na.exclude(mrdata[,myindicators[w]])))-1
+        th <-length(unique(mrdata[stats::complete.cases(mrdata), myindicators[w]]))-1 # Eric removed this
+        #th <- length(unique(na.exclude(mrdata[,myindicators[w]])))-1 #Veronica removing this on 2/14/2019 because it is temporarily not working
         
         for (i in seq(th)) {
           miinput[16 + l +i, 1] <- paste("[", myindicators[w], "$",i,
