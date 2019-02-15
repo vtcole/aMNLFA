@@ -67,21 +67,8 @@ aMNLFA.sample<-function(input.object){
   closeAllConnections()
 }
 
-# New function used for adding missing data line
-insertRow <- function(existingDF, newrow, r) {
-  existingDF[seq(r+1,nrow(existingDF)+1),] <- existingDF[seq(r,nrow(existingDF)),]
-  existingDF[r,] <- newrow
-  existingDF
-}
 
 write.inp.file <- function(df, outfile) {
-  
-  # debug #############
-  # df <- meaninput
-  # outfile <- "test.inp"
-  #####################
-  
-  
   #checking inputs
   if (!is.data.frame(df))
     stop("df argument needs to be a data.frame")
@@ -92,63 +79,42 @@ write.inp.file <- function(df, outfile) {
   #replace missing values with ""
   df[is.na(df[,1]),1] <- ""
   
-  # Old code
-  # # next we iteratively write the .inp file from our input dataframe.
-  # for (i in seq(nrow(df))){
-  #   # if number of characters is <= 90, write line and move to next loop
-  #   if (nchar(df[i,1])<=90) {
-  #     cat(df[i,1],
-  #         sep = "\n",
-  #         file = outfile,
-  #         append = TRUE)
-  #     # if characters between 90 and 160 we break it into two lines, at a space
-  #     # note this can easily be extended to more than 160, if this solution works
-  #   } else {
-  #     # identify space closest to character limit 90
-  #     # first this locates all spaces in the current line
-  #     sp <- as.matrix(stringr::str_locate_all(df[i,1], " ")[[1]])
-  #     # then we select only spaces prior to the 90th character
-  #     sp <- sp[sp[,1]<=90,1]
-  #     # select the space closest to character limit
-  #     sp <- sp[length(sp)]
-  #     # cut vector at that space, and write as two lines
-  #     cat(
-  #       # write first line from 1 to the space "sp"
-  #       substr(df[i,1], 1, sp),
-  #       # write the second line from "sp" to the length of the vector
-  #       substr(df[i,1], sp, nchar(df[i,1])),
-  #       sep = "\n",
-  #       file = outfile,
-  #       append = TRUE)
-  #   }
-  # }
-  nchar.df <- apply(df,1,nchar)          # get all length of all rows
-  r <- which(apply(df,1,nchar)>80)       # determine which are greater than 89 char
-  #i <- 1
-  for (i in 1:length(r)) {               # start loop for extracting each > 89 row and replace  
-    r.row <- df[r[i],]                     # extract row
-    r.nchar <- as.integer(nchar(r.row)/80) # determine how many sections to break into
-    spaces <- gregexpr(" ",r.row)          # find where all the spaces are at in the row
-    #ii <- 1
-    for(ii in 1:r.nchar) {                 # start loop for identifying the space closest to end of a row
-      n1 <- (ii-1)*80                      # bottom of inequality of character position
-      n2 <- (ii)*80                        # top of inequcality of character position
-      last.loc <- spaces[[1]][tail(which(spaces[[1]]>n1 & spaces[[1]]<n2),1)]  # get last space in a section
-      substr(r.row,last.loc,last.loc) <- "\n"     # change this space to a new line
+  # next we iteratively write the .inp file from our input dataframe.
+  for (i in seq(nrow(df))){
+    # if number of characters is <= 90, write line and move to next loop
+    if (nchar(df[i,1])<=90) {
+      cat(df[i,1],
+          sep = "\n",
+          file = outfile,
+          append = TRUE)
+      # if characters between 90 and 160 we break it into two lines, at a space
+      # note this can easily be extended to more than 160, if this solution works
+    } else {
+      # identify space closest to character limit 90
+      # first this locates all spaces in the current line
+      sp <- as.matrix(stringr::str_locate_all(df[i,1], " ")[[1]])
+      # then we select only spaces prior to the 90th character
+      sp <- sp[sp[,1]<=90,1]
+      # select the space closest to character limit
+      sp <- sp[length(sp)]
+      # cut vector at that space, and write as two lines
+      cat(
+        # write first line from 1 to the space "sp"
+        substr(df[i,1], 1, sp),
+        # write the second line from "sp" to the length of the vector
+        substr(df[i,1], sp, nchar(df[i,1])),
+        sep = "\n",
+        file = outfile,
+        append = TRUE)
     }
-    df[r[i],] <- r.row                     # replace row
   }
-  add.missing.row <- which(df$V1=="!")
-  df <- insertRow(df,"MISSING ARE .;",add.missing.row) 
-  
-  write.table(df,outfile,quote = FALSE,row.names = FALSE,col.names = FALSE) # write table
 }
 
-
-##VC NOTE: FixPath not working; commenting it out in the meantime. 02/14/2019
+#For some reason fixPath isn't working -- temporarily getting rid of it. 2/15/2018
 fixPath <- function(somecharacter) {
-  somecharacter
+   somecharacter
 }
+
 #Remove final slash to allow for better use of file.path down the line.
 #fixPath<-function(somecharacter) {
 #  lastcharacter<-base::substring(somecharacter,nchar(somecharacter))
