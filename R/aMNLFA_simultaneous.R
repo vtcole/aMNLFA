@@ -412,7 +412,6 @@ aMNLFA.simultaneous <- function(input.object){
     
     round2input[current, 1] <- tech1
   }
-  }
   
   #write.table(round2input, file.path(dir, "round2calibration.inp", sep=""), append=F, row.names=FALSE, col.names=FALSE, quote=FALSE)
   write.inp.file(round2input, fixPath(file.path(dir, "round2calibration.inp", sep="")))
