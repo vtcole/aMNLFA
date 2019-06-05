@@ -70,7 +70,7 @@ t.fun <- function(j, params, covslist, alpha, inmat) {
 }
 
 #This is a function which reads in the intercept DIF output and writes the necessary input, similar to the loading DIF functions above. Note that it writes the input if the corresponding loading is significant.
-i.fun <-function(j, params, covslist, alpha, inmat) {
+i.fun <-function(j, params, covslist, alpha, inmat, myindicators, myMeasInvar) {
   mat <- rep(0, length(covslist))
   model.con <- list()
   the.header <- paste0(myindicators[j],".ON")
