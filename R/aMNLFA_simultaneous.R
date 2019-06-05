@@ -9,18 +9,18 @@
 #'  first<-paste0(system.file(package='aMNLFA'), "/examplefiles")
 #'  the.list <- list.files(first, full.names=TRUE)
 #'  file.copy(the.list, wd, overwrite=TRUE)
-#'    
-#'  ob <- aMNLFA::aMNLFA.object(dir = wd,  
-#'  mrdata = xstudy,  
-#'  indicators = paste0("BIN_",  1:12), 
-#'  catindicators = paste0("BIN_",  1:12),  
-#'  meanimpact = c("AGE",  "GENDER",  "STUDY"),  
-#'  varimpact = c("AGE",  "GENDER",  "STUDY"),  
-#'  measinvar = c("AGE",  "GENDER",  "STUDY"), 
-#'  factors = c("GENDER",  "STUDY"), 
-#'  ID = "ID", 
+#'
+#'  ob <- aMNLFA::aMNLFA.object(dir = wd,
+#'  mrdata = xstudy,
+#'  indicators = paste0("BIN_",  1:12),
+#'  catindicators = paste0("BIN_",  1:12),
+#'  meanimpact = c("AGE",  "GENDER",  "STUDY"),
+#'  varimpact = c("AGE",  "GENDER",  "STUDY"),
+#'  measinvar = c("AGE",  "GENDER",  "STUDY"),
+#'  factors = c("GENDER",  "STUDY"),
+#'  ID = "ID",
 #'  thresholds = FALSE)
-#'  
+#'
 #'  aMNLFA.simultaneous(ob)
 
 aMNLFA.simultaneous <- function(input.object){
@@ -69,7 +69,7 @@ aMNLFA.simultaneous <- function(input.object){
   CONSTRAINT <- paste("CONSTRAINT=")
   varMODEL <- paste("MODEL: [ETA@0];ETA*(veta);")
   MODELCONSTRAINT <- paste("MODEL CONSTRAINT: new(")
-  
+
   ####ROUND 1 USES p<.05 AS GATE TO GET TO ROUND 2 FOR MEAS INV and p<.1 for IMPACT####################
 
   ##Read in mean impact script and test for impact at p<.1
@@ -96,8 +96,8 @@ aMNLFA.simultaneous <- function(input.object){
   keepmeanimpact <- myMeanImpact[keepmeanimpact2]
 
   meanimpactmodel <- paste0("ETA ON ", paste0(keepmeanimpact), ";\n", collapse = "")
-  
-  
+
+
   ##Read in var impact script and test for impact at p<.1
   varimpact <- MplusAutomation::readModels(fixPath(file.path(dir,  "varimpactscript.out",  sep="")))
   varimpact <- as.data.frame(varimpact$parameters$unstandardized)
@@ -129,15 +129,15 @@ aMNLFA.simultaneous <- function(input.object){
   keepvarimpact <- myVarImpact[keepvarimpact2]
 
   keepmeanimpact <- unique(append(keepmeanimpact, keepvarimpact))
-  
+
   #MEASUREMENT INVARIANCE
   #START WITH LOADINGS BECAUSE THRESHOLDS AND INTERCEPTS DEPEND ON THEM
-  
+
   dif <- list()
   l.design <- matrix(NA, l, length(myMeasInvar))
   l.string.new <- list()
   l.string.eq <- list()
-  
+
   for (ll in 1:l) {
     dif[[ll]] <- MplusAutomation::readModels(fixPath(file.path(dir, paste("measinvarscript_", myindicators[ll], ".out", sep=""))))$parameters$unstandardized #Note that this dif list will be called later in either the intercept or threshold DIF portion
     l.input <- l.fun(ll, dif[[ll]], myMeasInvar, .05)
@@ -145,12 +145,12 @@ aMNLFA.simultaneous <- function(input.object){
     l.string.new <- append(l.string.new, l.input$new.con)
     l.string.eq <- append(l.string.eq, l.input$eq.con)
   }
-  
+
   l.string.new <- unlist(l.string.new)
   l.string.eq <- unlist(l.string.eq)
-  
+
   uniqueloading <- myMeasInvar[apply(l.design,2,sum) > 0]
-  
+
   #THRESHOLDS
   #Code branches here, because all subsequent steps (i.e., finding threshold DIF, writing output) differ if we have thresholds vs. intercepts
   if (thresholds == TRUE) {
@@ -158,7 +158,7 @@ aMNLFA.simultaneous <- function(input.object){
     t.string.new <- list()
     t.string.eq <- list()
     t.string.model <- list()
-    
+
     #Apply the threshold function to get constraint "new" declarations, constraint equations, and model statements for thresholds
     for (tt in 1:l) {
       t.input <- t.fun(tt, dif[[tt]], myMeasInvar, .05, l.design)
@@ -167,15 +167,15 @@ aMNLFA.simultaneous <- function(input.object){
       t.string.eq <- append(t.string.eq, paste(t.input$eq.con, collapse = ""))
       t.string.model <- append(t.string.model, t.input$model.con)
       }
-      
+
       t.string.new <- unlist(t.string.new)
       t.string.eq <- unlist(t.string.eq)
       t.string.model <- unlist(t.string.model)
-    
+
       uniquethreshold <- myMeasInvar[apply(t.design,2,sum) > 0]
-      
+
       diflist <- unique(uniquethreshold, uniqueloading)
-    
+
       ##Writing script with all parameters with p<.05
       useround2 <- c(diflist, keepmeanimpact, keepvarimpact, myindicators)
       useround2 <- noquote(unique(useround2))
@@ -186,9 +186,9 @@ aMNLFA.simultaneous <- function(input.object){
       CONSTRAINT <- noquote(append(CONSTRAINT, con))
       CONSTRAINT <- append(CONSTRAINT, semicolon)
       CONSTRAINT <- utils::capture.output(cat(CONSTRAINT))
-    
+
       header <- readLines(fixPath(file.path(dir, "header.txt")))
-        
+
       round2input <- as.data.frame(NULL)
       round2input[1, 1] <- paste("TITLE: Round 2 Calibration Model")
       round2input[2, 1] <- header[2]
@@ -208,23 +208,23 @@ aMNLFA.simultaneous <- function(input.object){
       round2input[16, 1] <- varMODEL
       l <- length(loadings)
       current <- 17 #Setting a counter variable
-      
+
       #Define factor loadings
       for (l1 in 1:l){
         round2input[current, 1] <- loadings[l1]
-        current <- current + 1 
+        current <- current + 1
       }
-      
+
       #Define thresholds
       for (t1 in 1:length(t.string.model)) {
         round2input[current, 1] <- t.string.model[t1]
         current <- current + 1
       }
-      
+
       #Add mean impact
       round2input[current, 1] <- meanimpactmodel
       current <- current + 1
-      
+
       #Generate syntax for variance impact
       vstart <- data.frame(NULL)
       if (length(keepvarimpact)>0)
@@ -232,17 +232,17 @@ aMNLFA.simultaneous <- function(input.object){
           vstart[v1, 1] <- paste("v", v1, "*0", sep="")
         }
       vstart <- ifelse(length(keepvarimpact)>0, paste(utils::capture.output(cat(noquote(unlist(vstart)))), sep=""), "!")
-      
+
       #Model constraint statement starts here
       round2input[current, 1] <- utils::capture.output(cat(append(MODELCONSTRAINT, vstart)) )
       current <- current + 1
-      
+
       #Declare new variance parameters
       for (v2 in 1:length(vstart)) {
         round2input[current, 1] <- vstart[v2]
         current <- current + 1
       }
-      
+
       #Declare new threshold parameters
       if(length(t.string.new) > 0) {
         for (t2 in 1:length(t.string.new)) {
@@ -250,7 +250,7 @@ aMNLFA.simultaneous <- function(input.object){
           current <- current + 1
         }
       }
-      
+
       #Declare new loading parameters
       if(length(l.string.new) > 0) {
         for (l2 in 1:length(l.string.new)) {
@@ -258,10 +258,10 @@ aMNLFA.simultaneous <- function(input.object){
           current <- current + 1
         }
       }
-      
+
       round2input[current, 1] <- ");" #This terminates the declaration of new parameters
       current <- current + 1
-      
+
       #Define variance impact
       veq <- as.data.frame(NULL)
       veq[1, 1] <- "veta=1*exp("
@@ -271,10 +271,10 @@ aMNLFA.simultaneous <- function(input.object){
         }
       v <- length(keepvarimpact)
       veq[v+2, 1] <- paste("0)")
-  
+
       round2input[current, 1] <- paste(utils::capture.output(cat(noquote(unlist(veq)))), semicolon, sep="")
       current <- current + nrow(veq)
-      
+
       #Define loading DIF
       if(length(l.string.eq) > 0) {
         for (l3 in 1:length(l.string.eq)) {
@@ -282,7 +282,7 @@ aMNLFA.simultaneous <- function(input.object){
           current <- current + 1
         }
       }
-      
+
       #Define threshold DIF
       if(length(t.string.eq) > 0) {
         for (t3 in 1:length(t.string.eq)) {
@@ -290,27 +290,27 @@ aMNLFA.simultaneous <- function(input.object){
           current <- current + 1
         }
       }
-  
+
       round2input[current, 1] <- tech1
   }
-  
+
   if (thresholds == FALSE) {
     i.design <- matrix(NA, l, length(myMeasInvar))
     i.string.model <- list()
-    
+
     #Apply the threshold function to get constraint "new" declarations, constraint equations, and model statements for thresholds
     for (ii in 1:l) {
-      i.input <- i.fun(ii, dif[[ii]], myMeasInvar, .05, l.design)
+      i.input <- i.fun(ii, dif[[ii]], myMeasInvar, .05, l.design, myindicators = myindicators, myMeasInvar = myMeasInvar)
       i.design[ii,] <- i.input$mat
       i.string.model <- append(i.string.model, i.input$model.con)
     }
 
     i.string.model <- unlist(i.string.model)
-    
+
     uniqueintercept <- myMeasInvar[apply(i.design,2,sum) > 0]
-    
+
     diflist <- unique(uniqueintercept, uniqueloading)
-    
+
     ##Writing script with all parameters with p<.05
     useround2 <- c(diflist, keepmeanimpact, keepvarimpact, myindicators)
     useround2 <- noquote(unique(useround2))
@@ -321,9 +321,9 @@ aMNLFA.simultaneous <- function(input.object){
     CONSTRAINT <- noquote(append(CONSTRAINT, con))
     CONSTRAINT <- append(CONSTRAINT, semicolon)
     CONSTRAINT <- utils::capture.output(cat(CONSTRAINT))
-    
+
     header <- readLines(fixPath(file.path(dir, "header.txt")))
-    
+
     round2input <- as.data.frame(NULL)
     round2input[1, 1] <- paste("TITLE: Round 2 Calibration Model")
     round2input[2, 1] <- header[2]
@@ -343,23 +343,23 @@ aMNLFA.simultaneous <- function(input.object){
     round2input[16, 1] <- varMODEL
     l <- length(loadings)
     current <- 17 #Setting a counter variable
-    
+
     #Define factor loadings
     for (l1 in 1:l){
       round2input[current, 1] <- loadings[l1]
-      current <- current + 1 
+      current <- current + 1
     }
-    
+
     #Add intercept DIF
     for (i1 in 1:length(i.string.model)) {
       round2input[current, 1] <- i.string.model[i1]
       current <- current + 1
     }
-    
+
     #Add mean impact
     round2input[current, 1] <- meanimpactmodel
     current <- current + 1
-    
+
     #Generate syntax for variance impact
     vstart <- data.frame(NULL)
     if (length(keepvarimpact)>0)
@@ -367,17 +367,17 @@ aMNLFA.simultaneous <- function(input.object){
         vstart[v1, 1] <- paste("v", v1, "*0", sep="")
       }
     vstart <- ifelse(length(keepvarimpact)>0, paste(utils::capture.output(cat(noquote(unlist(vstart)))), sep=""), "!")
-    
+
     #Model constraints statement begins here
-    round2input[current, 1] <- utils::capture.output(cat(append(MODELCONSTRAINT, vstart)) )
+    round2input[current, 1] <- utils::capture.output(cat(append(MODELCONSTRAINT)) )
     current <- current + 1
-    
+
     #Declare the new variance parameters
     for (v2 in 1:length(vstart)) {
       round2input[current, 1] <- vstart[v2]
       current <- current + 1
     }
-        
+
     #Declare the new loading parameters
     if(length(l.string.new) > 0) {
       for (l2 in 1:length(l.string.new)) {
@@ -385,10 +385,10 @@ aMNLFA.simultaneous <- function(input.object){
         current <- current + 1
       }
     }
-    
+
     round2input[current, 1] <- ");" #This terminates the declaration of new parameters
     current <- current + 1
-    
+
     #Define variance impact
     veq <- as.data.frame(NULL)
     veq[1, 1] <- "veta=1*exp("
@@ -398,10 +398,10 @@ aMNLFA.simultaneous <- function(input.object){
       }
     v <- length(keepvarimpact)
     veq[v+2, 1] <- paste("0)")
-    
+
     round2input[current, 1] <- paste(utils::capture.output(cat(noquote(unlist(veq)))), semicolon, sep="")
     current <- current + nrow(veq)
-    
+
     #Define loading DIF
     if(length(l.string.eq) > 0) {
       for (l3 in 1:length(l.string.eq)) {
@@ -409,11 +409,11 @@ aMNLFA.simultaneous <- function(input.object){
         current <- current + 1
       }
     }
-    
+
     round2input[current, 1] <- tech1
   }
-  
+
   #write.table(round2input, file.path(dir, "round2calibration.inp", sep=""), append=F, row.names=FALSE, col.names=FALSE, quote=FALSE)
   write.inp.file(round2input, fixPath(file.path(dir, "round2calibration.inp", sep="")))
-  message("COMPLETE. Check '",  dir,  "/' for Mplus inp file for round 2 calibration model (run this manually). \nNOTE: After running  your round 2 calibration,  there may be some output that cannot be read in properly as a result of recent changes within Mplus. This will lead to errors in subsequent steps. \nAs a temporary fix the problem,  please delete all output that comes after the 'LOGISTIC REGRESSION ODDS RATIO RESULTS' section after running your round 3 calibration,  before proceeding to the next step. \nThis message will appear after all subsequent steps.")  
+  message("COMPLETE. Check '",  dir,  "/' for Mplus inp file for round 2 calibration model (run this manually). \nNOTE: After running  your round 2 calibration,  there may be some output that cannot be read in properly as a result of recent changes within Mplus. This will lead to errors in subsequent steps. \nAs a temporary fix the problem,  please delete all output that comes after the 'LOGISTIC REGRESSION ODDS RATIO RESULTS' section after running your round 3 calibration,  before proceeding to the next step. \nThis message will appear after all subsequent steps.")
 }
