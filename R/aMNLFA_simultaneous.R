@@ -367,17 +367,17 @@ aMNLFA.simultaneous <- function(input.object){
         vstart[v1, 1] <- paste("v", v1, "*0", sep="")
       }
     vstart <- ifelse(length(keepvarimpact)>0, paste(utils::capture.output(cat(noquote(unlist(vstart)))), sep=""), "!")
-    
+
     #Model constraints statement begins here
-    round2input[current, 1] <- utils::capture.output(cat(append(MODELCONSTRAINT, vstart)) )
+    round2input[current, 1] <- utils::capture.output(cat(append(MODELCONSTRAINT)) )
     current <- current + 1
-    
+
     #Declare the new variance parameters
     for (v2 in 1:length(vstart)) {
       round2input[current, 1] <- vstart[v2]
       current <- current + 1
     }
-        
+
     #Declare the new loading parameters
     if(length(l.string.new) > 0) {
       for (l2 in 1:length(l.string.new)) {
