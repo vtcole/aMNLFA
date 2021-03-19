@@ -9,18 +9,18 @@
 #'  first<-paste0(system.file(package='aMNLFA'),"/examplefiles")
 #'  the.list <- list.files(first,full.names=TRUE)
 #'  file.copy(the.list,wd,overwrite=TRUE)
-#'  
-#'  ob <- aMNLFA::aMNLFA.object(dir = wd, 
-#'  mrdata = xstudy, 
+#'
+#'  ob <- aMNLFA::aMNLFA.object(dir = wd,
+#'  mrdata = xstudy,
 #'  indicators = paste0("BIN_", 1:12),
-#'  catindicators = paste0("BIN_", 1:12), 
-#'  meanimpact = c("AGE", "GENDER", "STUDY"), 
-#'  varimpact = c("AGE", "GENDER", "STUDY"), 
+#'  catindicators = paste0("BIN_", 1:12),
+#'  meanimpact = c("AGE", "GENDER", "STUDY"),
+#'  varimpact = c("AGE", "GENDER", "STUDY"),
 #'  measinvar = c("AGE", "GENDER", "STUDY"),
 #'  factors = c("GENDER", "STUDY"),
 #'  ID = "ID",
 #'  thresholds = FALSE)
-#'  
+#'
 #'  aMNLFA.sample(ob)
 
 aMNLFA.sample<-function(input.object){
@@ -36,7 +36,7 @@ aMNLFA.sample<-function(input.object){
   myID = input.object$ID
 
   varlist<-c(myID,myauxiliary,myindicators,myMeasInvar,myMeanImpact,myVarImpact)
-  
+
   varlist<-unique(varlist)
   #Draw a calibration sample
   if (!is.null(mytime)){
@@ -78,7 +78,7 @@ write.inp.file <- function(df, outfile) {
   if (file.exists(outfile)) file.remove(outfile)
   #replace missing values with ""
   df[is.na(df[,1]),1] <- ""
-  
+
   # next we iteratively write the .inp file from our input dataframe.
   for (i in seq(nrow(df))){
     # if number of characters is <= 90, write line and move to next loop
@@ -109,6 +109,8 @@ write.inp.file <- function(df, outfile) {
     }
   }
 }
+
+
 
 #Remove final slash to allow for better use of file.path down the line.
 fixPath<-function(somecharacter) {
