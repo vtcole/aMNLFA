@@ -1,0 +1,469 @@
+Hmm ... looks like a package
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+(./Rd2.tex
+LaTeX2e <2020-10-01> patch level 4
+L3 programming layer <2021-02-18>
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2020/04/10 v1.4m Standard LaTeX document class
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/bk10.clo))
+(c:/Program Files/R/R-4.0.0/share/texmf/tex/latex/Rd.sty
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/ifthen.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/longtable.st
+y) (c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/bm.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/alltt.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/verbatim.sty
+) (c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/url/url.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/textcomp.sty)
+
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/inconsolata/zi4.st
+y `inconsolata-zi4' v1.12, 2019/05/17 Text macros for Inconsolata (msharpe)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xkeyval/xkeyval.st
+y
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/xkeyval.
+tex
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/xkvutils
+.tex
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/keyval.t
+ex)))))
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/color.sty
+
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/color
+.cfg)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-def/pdfte
+x.def))
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.
+sty
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/ltxcmds/ltxcmds.
+sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/iftex.sty)
+
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/oberdiek/pdftexc
+mds.sty
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/infwarerr/infwar
+err.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/ifluatex.s
+ty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/ifpdf.sty)
+)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/kvsetkeys/kvsetk
+eys.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/kvdefinekeys/kvd
+efinekeys.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/oberdiek/pdfesca
+pe.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hycolor/hycolor.st
+y)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/letltxmacro/letltx
+macro.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/auxhook/auxhook.st
+y)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/kvoptions/kvoption
+s.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.de
+f)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref-
+langpatches.def)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/intcalc/intcalc.
+sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/etexcmds/etexcmd
+s.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def
+)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/latexconfig/hyperr
+ef.cfg)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bitset/bitset.st
+y
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bigintcalc/bigin
+tcalc.sty))
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/atbegshi-ltx.
+sty))
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hpdftex.d
+ef
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/atveryend-ltx
+.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/oberdiek/rerunfile
+check.sty
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/oberdiek/uniquec
+ounter.sty)))
+
+Package hyperref Warning: Option `hyperindex' has already been used,
+(hyperref)                setting the option has no effect on input line 377.
+
+
+Package hyperref Warning: Option `pagebackref' has already been used,
+(hyperref)                setting the option has no effect on input line 377.
+
+) (c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/makeidx.sty
+)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/inputenc.sty)
+Writing index file Rd2.idx
+
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backen
+d-pdftex.def)
+No file Rd2.aux.
+
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.s
+ty
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/oberdiek/refcount.
+sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/gettitlestring/g
+ettitlestring.sty))
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/inconsolata/ot1zi4
+.fd)
+
+LaTeX Font Warning: Font shape `OML/zi4/m/n' undefined
+(Font)              using `OML/cmm/m/it' instead
+(Font)              for symbol `textless' on input line 41.
+
+
+Overfull \hbox (4.41942pt too wide) in paragraph at lines 49--50
+\OT1/cmr/m/n/10 run af-ter a model con-tain-ing all im-pact and DIF ef-fects --
+ i.e., af-ter the aMNLFA.simultaneous
+[1{c:/Users/colev/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdf
+tex.map}]
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/inconsolata/ts1zi4
+.fd) [2] [3] [4] [5] [6] [7] [8]
+No file Rd2.ind.
+[9] (./Rd2.aux)
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+
+Package rerunfilecheck Warning: File `Rd2.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+ )
+(see the transcript file for additional information){c:/Users/colev/AppData/Roa
+ming/TinyTeX/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{c:/Users/colev/
+AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/inconsolata/i4-ot1-0.enc} <c
+:/Users/colev/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tcr
+m1000.600pk><c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/publ
+ic/inconsolata/Inconsolata-zi4r.pfb><c:/Users/colev/AppData/Roaming/TinyTeX/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/Users/colev/AppData/Roami
+ng/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/Users/colev
+/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><
+c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmr10.pfb><c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmr12.pfb><c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmsl10.pfb><c:/Users/colev/AppData/Roaming/TinyTeX/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb><c:/Users/colev/AppData/Ro
+aming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on Rd2.pdf (9 pages, 132747 bytes).
+Transcript written on Rd2.log.
+This is makeindex, version 2.15 [TeX Live 2019/W32TeX] (kpathsea + Thai support).
+Scanning input file Rd2.idx....done (18 entries accepted, 0 rejected).
+Sorting entries....done (77 comparisons).
+Generating output file Rd2.ind....done (30 lines written, 0 warnings).
+Output written in Rd2.ind.
+Transcript written in Rd2.ilg.
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+(./Rd2.tex
+LaTeX2e <2020-10-01> patch level 4
+L3 programming layer <2021-02-18>
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2020/04/10 v1.4m Standard LaTeX document class
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/bk10.clo))
+(c:/Program Files/R/R-4.0.0/share/texmf/tex/latex/Rd.sty
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/ifthen.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/longtable.st
+y) (c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/bm.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/alltt.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/verbatim.sty
+) (c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/url/url.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/textcomp.sty)
+
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/inconsolata/zi4.st
+y `inconsolata-zi4' v1.12, 2019/05/17 Text macros for Inconsolata (msharpe)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xkeyval/xkeyval.st
+y
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/xkeyval.
+tex
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/xkvutils
+.tex
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/keyval.t
+ex)))))
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/color.sty
+
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/color
+.cfg)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-def/pdfte
+x.def))
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.
+sty
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/ltxcmds/ltxcmds.
+sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/iftex.sty)
+
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/oberdiek/pdftexc
+mds.sty
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/infwarerr/infwar
+err.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/ifluatex.s
+ty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/ifpdf.sty)
+)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/kvsetkeys/kvsetk
+eys.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/kvdefinekeys/kvd
+efinekeys.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/oberdiek/pdfesca
+pe.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hycolor/hycolor.st
+y)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/letltxmacro/letltx
+macro.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/auxhook/auxhook.st
+y)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/kvoptions/kvoption
+s.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.de
+f)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref-
+langpatches.def)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/intcalc/intcalc.
+sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/etexcmds/etexcmd
+s.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def
+)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/latexconfig/hyperr
+ef.cfg)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bitset/bitset.st
+y
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bigintcalc/bigin
+tcalc.sty))
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/atbegshi-ltx.
+sty))
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hpdftex.d
+ef
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/atveryend-ltx
+.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/oberdiek/rerunfile
+check.sty
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/oberdiek/uniquec
+ounter.sty)))
+
+Package hyperref Warning: Option `hyperindex' has already been used,
+(hyperref)                setting the option has no effect on input line 377.
+
+
+Package hyperref Warning: Option `pagebackref' has already been used,
+(hyperref)                setting the option has no effect on input line 377.
+
+) (c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/makeidx.sty
+)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/inputenc.sty)
+Writing index file Rd2.idx
+
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backen
+d-pdftex.def) (./Rd2.aux)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.s
+ty
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/oberdiek/refcount.
+sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/gettitlestring/g
+ettitlestring.sty)) (./Rd2.out) (./Rd2.out)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/inconsolata/ot1zi4
+.fd)
+
+LaTeX Font Warning: Font shape `OML/zi4/m/n' undefined
+(Font)              using `OML/cmm/m/it' instead
+(Font)              for symbol `textless' on input line 41.
+
+(./Rd2.toc) [1{c:/Users/colev/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdfte
+x/updmap/pdftex.map}]
+Overfull \hbox (4.41942pt too wide) in paragraph at lines 49--50
+\OT1/cmr/m/n/10 run af-ter a model con-tain-ing all im-pact and DIF ef-fects --
+ i.e., af-ter the aMNLFA.simultaneous
+
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/inconsolata/ts1zi4
+.fd) [2] [3] [4] [5] [6] [7] [8] (./Rd2.ind [9] [10]) (./Rd2.aux)
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+
+Package rerunfilecheck Warning: File `Rd2.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+ )
+(see the transcript file for additional information){c:/Users/colev/AppData/Roa
+ming/TinyTeX/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{c:/Users/colev/
+AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/inconsolata/i4-ot1-0.enc} <c
+:/Users/colev/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tcr
+m1000.600pk><c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/publ
+ic/inconsolata/Inconsolata-zi4r.pfb><c:/Users/colev/AppData/Roaming/TinyTeX/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/Users/colev/AppData/Roami
+ng/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/Users/colev
+/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><
+c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmr10.pfb><c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmr12.pfb><c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmsl10.pfb><c:/Users/colev/AppData/Roaming/TinyTeX/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb><c:/Users/colev/AppData/Ro
+aming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/Users/co
+lev/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pf
+b>
+Output written on Rd2.pdf (10 pages, 142871 bytes).
+Transcript written on Rd2.log.
+This is makeindex, version 2.15 [TeX Live 2019/W32TeX] (kpathsea + Thai support).
+Scanning input file Rd2.idx....done (18 entries accepted, 0 rejected).
+Sorting entries....done (77 comparisons).
+Generating output file Rd2.ind....done (30 lines written, 0 warnings).
+Output written in Rd2.ind.
+Transcript written in Rd2.ilg.
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+(./Rd2.tex
+LaTeX2e <2020-10-01> patch level 4
+L3 programming layer <2021-02-18>
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2020/04/10 v1.4m Standard LaTeX document class
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/bk10.clo))
+(c:/Program Files/R/R-4.0.0/share/texmf/tex/latex/Rd.sty
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/ifthen.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/longtable.st
+y) (c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/bm.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/alltt.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/verbatim.sty
+) (c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/url/url.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/textcomp.sty)
+
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/inconsolata/zi4.st
+y `inconsolata-zi4' v1.12, 2019/05/17 Text macros for Inconsolata (msharpe)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xkeyval/xkeyval.st
+y
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/xkeyval.
+tex
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/xkvutils
+.tex
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/keyval.t
+ex)))))
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/color.sty
+
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/color
+.cfg)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-def/pdfte
+x.def))
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.
+sty
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/ltxcmds/ltxcmds.
+sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/iftex.sty)
+
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/oberdiek/pdftexc
+mds.sty
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/infwarerr/infwar
+err.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/ifluatex.s
+ty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/ifpdf.sty)
+)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/kvsetkeys/kvsetk
+eys.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/kvdefinekeys/kvd
+efinekeys.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/oberdiek/pdfesca
+pe.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hycolor/hycolor.st
+y)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/letltxmacro/letltx
+macro.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/auxhook/auxhook.st
+y)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/kvoptions/kvoption
+s.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.de
+f)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref-
+langpatches.def)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/intcalc/intcalc.
+sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/etexcmds/etexcmd
+s.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def
+)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/latexconfig/hyperr
+ef.cfg)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bitset/bitset.st
+y
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bigintcalc/bigin
+tcalc.sty))
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/atbegshi-ltx.
+sty))
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hpdftex.d
+ef
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/atveryend-ltx
+.sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/oberdiek/rerunfile
+check.sty
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/oberdiek/uniquec
+ounter.sty)))
+
+Package hyperref Warning: Option `hyperindex' has already been used,
+(hyperref)                setting the option has no effect on input line 377.
+
+
+Package hyperref Warning: Option `pagebackref' has already been used,
+(hyperref)                setting the option has no effect on input line 377.
+
+) (c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/makeidx.sty
+)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/inputenc.sty)
+Writing index file Rd2.idx
+
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backen
+d-pdftex.def) (./Rd2.aux)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.s
+ty
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/oberdiek/refcount.
+sty)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/gettitlestring/g
+ettitlestring.sty)) (./Rd2.out) (./Rd2.out)
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/inconsolata/ot1zi4
+.fd)
+
+LaTeX Font Warning: Font shape `OML/zi4/m/n' undefined
+(Font)              using `OML/cmm/m/it' instead
+(Font)              for symbol `textless' on input line 41.
+
+(./Rd2.toc [1{c:/Users/colev/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex
+/updmap/pdftex.map}])
+Overfull \hbox (4.41942pt too wide) in paragraph at lines 49--50
+\OT1/cmr/m/n/10 run af-ter a model con-tain-ing all im-pact and DIF ef-fects --
+ i.e., af-ter the aMNLFA.simultaneous
+
+(c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/inconsolata/ts1zi4
+.fd) [2] [3] [4] [5] [6] [7] [8] (./Rd2.ind [9] [10]) (./Rd2.aux)
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+ )
+(see the transcript file for additional information){c:/Users/colev/AppData/Roa
+ming/TinyTeX/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{c:/Users/colev/
+AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/inconsolata/i4-ot1-0.enc} <c
+:/Users/colev/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tcr
+m1000.600pk><c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/publ
+ic/inconsolata/Inconsolata-zi4r.pfb><c:/Users/colev/AppData/Roaming/TinyTeX/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/Users/colev/AppData/Roami
+ng/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/Users/colev
+/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><
+c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmr10.pfb><c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmr12.pfb><c:/Users/colev/AppData/Roaming/TinyTeX/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmsl10.pfb><c:/Users/colev/AppData/Roaming/TinyTeX/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb><c:/Users/colev/AppData/Ro
+aming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/Users/co
+lev/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pf
+b>
+Output written on Rd2.pdf (10 pages, 143001 bytes).
+Transcript written on Rd2.log.
+Saving output to 'aMNLFA-manual.pdf' ...
+Done
+You may want to clean up by 'rm -Rf C:/Users/colev/AppData/Local/Temp/Rtmp0c2FRx/Rd2pdf12d6027f0664b'
