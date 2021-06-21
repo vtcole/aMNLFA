@@ -95,8 +95,19 @@ aMNLFA.scores<-function(input.object){
   foo<-unlist(foo)
   foo<-foo[!is.na(match(foo,myVarImpact))]
   keepvarimpact<-utils::capture.output(cat(foo))
-  round3output<-as.data.frame(round3output$parameters$unstandardized)
+  round3model <- round3output$input$model
   
+  threshold.string <- round3model[which(grepl("\\$", round3model))]
+  
+  round3constraints <- round3output$input$model.constraint
+  #slightly hackish way to only get the portion after the declaration of new constraints
+  end.new <- grep(");", round3constraints)
+  end.new <- min(end.new)
+  round3constraints <- round3constraints[(end.new+1):length(round3constraints)]
+  
+  round3output<-as.data.frame(round3output$parameters$unstandardized)
+
+    
   ETAPREDLIST<-round3output[which(round3output$paramHeader=="ETA.ON"),]
   
   
@@ -105,7 +116,7 @@ aMNLFA.scores<-function(input.object){
   lambdaconstraints$itemnum<-substr(lambdaconstraints$param,2,2)
   lambdaconstraints$item<-myindicators[as.numeric(lambdaconstraints$itemnum)]
   lambdaconstraints$predictornum<-substr(lambdaconstraints$param,3,4)
-  lambdaconstraints$predictor<-ifelse(lambdaconstraints$predictornum=="00","intercept",myMeasInvar[as.numeric(substr(lambdaconstraints$param,3,3))])
+  lambdaconstraints$predictor<-ifelse(lambdaconstraints$predictornum=="_0","intercept",myMeasInvar[as.numeric(sub("_","",lambdaconstraints$predictornum))])
   
   lambdainvlist<-unique(unlist(lambdaconstraints$item))
   
@@ -163,86 +174,84 @@ aMNLFA.scores<-function(input.object){
   scoringinput[15,1]<-CONSTRAINT
   scAN<-paste(ANALYSIS,"type=complex;",sep="")
   scoringinput[16,1]<-ifelse(is.null(mytime),ANALYSIS,scAN)
-  scoringinput[17,1]<-ifelse(length(keepvarimpact)>0,varMODEL,fixvarMODEL)
+  scoringinput[17,1]<-varMODEL
   
+  the.row <- nrow(scoringinput) + 1
   
   l<-length(myindicators)
   scoreloadings<-list()
   for (i in 1:l){
     scoreloadings[i]<-paste(ETA,myindicators[i],sep="")
-    scoreloadings[i]<-ifelse(lambda$pval[i] !=999,paste(" @",lambda$est[i],semicolon,sep=""),paste("*(l",i,")",semicolon,sep=""))
+    scoreloadings[i]<-ifelse(lambda$pval[i] !=999,paste(" @",lambda$est[i],semicolon,sep=""),paste("*(l_",i,")",semicolon,sep=""))
     scoreloadings[i]<-paste(ETA,myindicators[i],scoreloadings[i],sep="")
   }
   
   for (i in 1:l){
-    scoringinput[17+i,1]<-scoreloadings[i]
+    scoringinput[the.row,1]<-scoreloadings[i]
+    the.row <- the.row + 1
   }
   for (i in 1:length(ETAON3)){
-    scoringinput[17+l+i,1]<-paste(ETAON3[i],ETAPREDLIST$est[i],semicolon,sep="")
+    scoringinput[the.row,1]<-paste(ETAON3[i],ETAPREDLIST$est[i],semicolon,sep="")
+    the.row <- the.row + 1
   }
   
   
   intdif<-round3output[grep(".ON",round3output$paramHeader),]
+  intdif<-intdif[which(intdif$item!="ETA"),]
+  
   intcode<-character(0)
-  if (nrow(intdif)>0)
-    {
+  if (nrow(intdif)>0) {
     intdif$item<-utils::read.table(text = intdif$paramHeader, sep = ".", as.is = TRUE)$V1
-    intdif<-intdif[which(intdif$item!="ETA"),]
     keepcols<-c("param","est","item")
     intdif<-intdif[,keepcols]
     intcode<-paste(intdif$item," ON ",intdif$param,"@",intdif$est,semicolon,sep="")
     
     for (i in 1:length(intcode)){
-      scoringinput[17+l+length(ETAON3)+i,1]<-intcode[i]
+      scoringinput[the.row,1]<-intcode[i]
+      the.row <- the.row + 1
     }
   }
   
-    
-  
-  thresh<-round3output[which(round3output$paramHeader=="Thresholds"|round3output$paramHeader=="Intercepts"&round3output$param!="ETA"),]
-  for (i in 1:length(myindicators)){
-    scoringinput[17+l+length(ETAON3)+length(intcode)+i,1]<-paste("[",thresh$param[i],"@",thresh$est[i],"];",sep="")
+  thresh<-round3output[which(round3output$paramHeader=="Thresholds"|round3output$paramHeader=="Intercepts"&round3output$param!="ETA"),] 
+  thresh <- subset(thresh, thresh$est != 999) 
+  for (i in 1:nrow(thresh)){
+    scoringinput[the.row,1]<-paste("[",thresh$param[i],"@",thresh$est[i],"];",sep="")
+    the.row <- the.row + 1
   }
+  
+  if (length(threshold.string > 0)) {
+    thresh.dataframe <- as.data.frame(NULL)
+    for (t in 1:length(threshold.string)) {
+      thresh.dataframe[t,1] <- threshold.string[t]
+    }
+    scoringinput <- rbind(scoringinput, thresh.dataframe)
+  }
+  
+  
+  the.row <- nrow(scoringinput)
+  
+  constraint.section <- as.data.frame(NULL)
   MODELCON<-paste("MODEL CONSTRAINT:")
-  scoringinput[18+l+length(ETAON3)+length(intcode)+length(myindicators),1]<-ifelse(length(con)>0,MODELCON,"!")
-  varval<-round3output[which(round3output$paramHeader=="New.Additional.Parameters"&substr(round3output$param,1,1)=="V"),]
-  vstart<-data.frame(NULL)
-  for (v in 1:length(keepvarimpact)){
-    vstart[v,1]<-utils::capture.output(cat(paste(varval$est[v],"*",keepvarimpact[v],"+",sep="")))
+  constraint.section[1,1] <- MODELCON
+  constraint.row <- 2
+  constraint.replaced <- round3constraints
+  
+  for (c in 1:length(round3constraints)) {
+    for (d in 1:nrow(constraints)) {
+      if (grepl(constraints$param[d], round3constraints[c], ignore.case = TRUE) == TRUE) {
+        constraint.replaced[c] <- sub(constraints$param[d], constraints$est[d], constraint.replaced[c], ignore.case = TRUE)
+        constraint.replaced[c] <- sub("\\+\\-", "\\-", constraint.replaced[c])
+        }
+      }
+    constraint.section[constraint.row,1] <- constraint.replaced[c]
+    constraint.row <- constraint.row + 1
   }
-  vstart<-paste(utils::capture.output(cat(noquote(unlist(vstart)))),sep="")
   
-  scoringinput[19+2*l+length(ETAON3)+length(intcode),1]<-ifelse(length(keepvarimpact)>0,paste("veta=1*exp("),"!")
-  scoringinput[20+2*l+length(ETAON3)+length(intcode),1]<-ifelse(length(keepvarimpact)>0,vstart ,"!")
-  scoringinput[21+2*l+length(ETAON3)+length(intcode),1]<-ifelse(length(keepvarimpact)>0,paste("0);"),"!")
+  scoringinput <- rbind(scoringinput, constraint.section)
   
-  #lambda constraints
-  lval<-round3output[which(round3output$paramHeader=="New.Additional.Parameters"&substr(round3output$param,1,1)=="L"),]
-  #reorg so that all params for same item on same row
-  lval$item<-substr(lval$param,2,3)
-  lval$predictor<-as.numeric(substr(lval$param,3,4))
-  lval$eq<-numeric(0)
-  
-  if ((dim(lval)[1])>0){
-  for (i in 1:dim(lval)[1]){
-    if (lval$predictor[i]==0) lval$eq[i]<-paste("l",lval$item[i],"=",lval$est[i],sep="")
-    for (j in 1:length(myMeasInvar)){
-      if (lval$predictor[i]==j) lval$eq[i]<-paste("+",lval$est[i],"*",myMeasInvar[j],sep="")
-    }}}
-  keep<-c("item","predictor","eq")
-  lval<-lval[keep]
-  wide<-stats::reshape(lval, idvar = "item", timevar = "predictor", direction = "wide")
-  wide<-wide[,-1]
-  for (i in 1:dim(wide)[1]){
-    line<-wide[i,]
-    line<-line[!is.na(line)]
-    line<-utils::capture.output(cat(line))
-    line<-append(line,semicolon)
-    line<-utils::capture.output(cat(line))
-    scoringinput[22+2*l+length(ETAON3)+length(intcode)+i,1]<-ifelse(dim(lval)[1]>0,line,"!")
-  }
-  scoringinput[23+2*l+length(ETAON3)+length(intcode)+length(dim(wide)[1]),1]<-tech1
-  scoringinput[24+2*l+length(ETAON3)+length(intcode)+length(dim(wide)[1]),1]<-paste("SAVEDATA: SAVE=FSCORES; FILE=scores.dat;")
+  the.row <- nrow(scoringinput)
+  scoringinput[(the.row + 1),1]<-tech1
+  scoringinput[(the.row + 2),1]<-paste("SAVEDATA: SAVE=FSCORES; FILE=scores.dat;")
   
   #utils::write.table(scoringinput,paste(dir,"/scoring.inp",sep=""),append=F,row.names=FALSE,col.names=FALSE,quote=FALSE)
   write.inp.file(scoringinput,fixPath(file.path(dir,"scoring.inp",sep="")))

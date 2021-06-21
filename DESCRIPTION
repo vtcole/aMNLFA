@@ -2,7 +2,7 @@ Package: aMNLFA
 Title: Automated Fitting of Moderated Nonlinear Factor Analysis Through the 'Mplus' Program
 Version: 0.1
 Authors@R: c(
-  person("Veronica", "Cole", email = "vcole@email.unc.edu", role = c("aut","cre")),
+  person("Veronica", "Cole", email = "colev@wfu.edu", role = c("aut","cre")),
   person("Nisha", "Gottfredson", email = "gottfredson@email.unc.edu", role = c("aut")),
   person("Michael", "Giordano", email = "mgiordano@email.unc.edu", role = c("aut")),
   person("Tim", "Janssen", email = "tim_janssen@brown.edu", role = c("ctb")))
@@ -28,8 +28,9 @@ Imports:
     gridExtra,
     stringr,
     plyr,
-    devtools
+    devtools,
+    dplyr
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 7.1.1

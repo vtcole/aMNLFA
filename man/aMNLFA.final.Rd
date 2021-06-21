@@ -2,22 +2,34 @@
 % Please edit documentation in R/aMNLFA_final.R
 \name{aMNLFA.final}
 \alias{aMNLFA.final}
-\title{aMNLFA final model fitting function}
+\title{aMNLFA simultaneous model fitting function}
 \usage{
-aMNLFA.final(input.object)
+aMNLFA.final(
+  input.object,
+  mchoice = "actual",
+  method = "BH",
+  highest.category = TRUE
+)
 }
 \arguments{
 \item{input.object}{The aMNLFA object (created using the aMNLFA.object function) which provides instructions for the function.}
+
+\item{mchoice}{String representing the method of determining the number of tests, denoted m. Options include "actual", which uses the number of effects actually tested in the round 2 model as m, and "ibc", which uses the maximum number of all possible tests -- i.e., the number of items times the number of covariates. Defaults to "actual".}
+
+\item{method}{String representing the method of adjusting for multiple comparisons. Options include "bh", which invokes Benjamini-Hochberg correction with m defined using the mchoice parameter, and "bonferroni", which invokes a Bonferroni correction with m defined using the mchoice parameter.  Defaults to "bh".}
+
+\item{highest.category}{Boolean. If threshold DIF is tested, should only the category with the highest value of the test statistic be used when adjusting p. values? Defaults to TRUE, which corresponds to the results from "threshold.highest" in the aMNLFA.prune() step. If FALSE, all threshold effects will be considered, even those below the maximum value for a given item, which corresponds to the "thresholds.all" option in the aMNLFA.prune() step.}
 }
 \description{
-This function generates the final aMNLFA model on which scores will be based. Can only be run after a model containing all impact and DIF effects -- i.e., after the aMNLFA.simultaneous function.
+This function generates the simultaneous aMNLFA model from all the initial inputs.
 }
 \examples{
- wd <- tempdir()
- first<-paste0(system.file(package='aMNLFA'),"/examplefiles")
- the.list <- list.files(first,full.names=TRUE)
+ wd  <-  tempdir()
+ first <- paste0(system.file(package='aMNLFA'),"/examplefiles")
+ the.list  <-  list.files(first,full.names=TRUE)
  file.copy(the.list,wd,overwrite=TRUE)
- ob <- aMNLFA::aMNLFA.object(dir = wd, 
+   
+ ob  <-  aMNLFA::aMNLFA.object(dir = wd, 
  mrdata = xstudy, 
  indicators = paste0("BIN_", 1:12),
  catindicators = paste0("BIN_", 1:12), 
@@ -28,6 +40,6 @@ This function generates the final aMNLFA model on which scores will be based. Ca
  ID = "ID",
  thresholds = FALSE)
  
- aMNLFA.final(ob)
+ aMNLFA.simultaneous(ob)
 }
 \keyword{MNLFA}
