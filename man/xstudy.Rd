@@ -4,7 +4,8 @@
 \name{xstudy}
 \alias{xstudy}
 \title{Simulated cross-study data}
-\format{A data frame with 500 rows and 25 columns. The 25 variables are:
+\format{
+A data frame with 500 rows and 25 columns. The 25 variables are:
 \describe{
 \item{ID}{Unique identifier}
 \item{AGE}{Age in years, centered around age 13}
@@ -31,7 +32,8 @@
 \item{BIN_10}{Binary item 10}
 \item{BIN_11}{Binary item 11}
 \item{BIN_12}{Binary item 12}
-}}
+}
+}
 \source{
 Curran et al., 2016 (\href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5526637/}{PubMed})
 }

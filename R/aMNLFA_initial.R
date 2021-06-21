@@ -193,8 +193,12 @@ aMNLFA.initial<-function(input.object){
       #Perform threshold invariance testing
       ## Noninvariance with thresholds (intercepts below)
       mycontindicators <- myindicators[!(myindicators %in% mycatindicators)]
-      
-      allmi <- append(myindicators, myMeasInvar)
+      #As of 6/12/2021, allmi no longer contains MyMeasInvar
+      #Used to be:
+      #allmi <- append(myindicators, myMeasInvar)
+      #But now we don't put myMeasInvar in there because those variables are just in the cosntraints, and CONSTRAINTS can absorb it
+      #Results don't really change if you use CONSTRAINTS or put it in USEVARIABLES
+      allmi <- myindicators #So this is the new part
       USEMI <- append(USEVARIABLES, allmi)
       USEMI <- append(USEMI, semicolon)
       USEMI <- noquote(USEMI)

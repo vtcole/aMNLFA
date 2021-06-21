@@ -4,10 +4,21 @@
 \alias{aMNLFA.object}
 \title{aMNLFA object function}
 \usage{
-aMNLFA.object(dir, mrdata, indicators = NULL, catindicators = NULL,
-  countindicators = NULL, meanimpact = NULL, varimpact = NULL,
-  measinvar = NULL, factors = NULL, time = NULL, auxiliary = NULL,
-  ID = NULL, thresholds = NULL)
+aMNLFA.object(
+  dir,
+  mrdata,
+  indicators = NULL,
+  catindicators = NULL,
+  countindicators = NULL,
+  meanimpact = NULL,
+  varimpact = NULL,
+  measinvar = NULL,
+  factors = NULL,
+  time = NULL,
+  auxiliary = NULL,
+  ID = NULL,
+  thresholds = NULL
+)
 }
 \arguments{
 \item{dir}{The directory in which data, inputs, and outputs are to be stored. Must be supplied.}
