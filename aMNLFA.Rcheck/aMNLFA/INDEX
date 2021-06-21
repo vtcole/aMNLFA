@@ -1,0 +1,9 @@
+aMNLFA.final            aMNLFA final model fitting function
+aMNLFA.initial          aMNLFA initial model fitting function
+aMNLFA.itemplots        aMNLFA item plotting function
+aMNLFA.object           aMNLFA object function
+aMNLFA.sample           aMNLFA sampling function
+aMNLFA.scoreplots       aMNLFA score plotting function
+aMNLFA.scores           aMNLFA score generating function
+aMNLFA.simultaneous     aMNLFA simultaneous model fitting function
+xstudy                  Simulated cross-study data

@@ -1,0 +1,102 @@
+VERSION 1.1.0
+INPUT
+TITLE:
+ Round 2 Calibration Model
+DATA:
+ FILE = "c:/users/mgiordan/desktop/testing/calibration.dat";
+VARIABLE:
+NAMES = ID BIN_1 BIN_2 BIN_3 BIN_4 BIN_5 BIN_6 BIN_7 BIN_8 BIN_9 BIN_10 BIN_11
+     BIN_12 AGE GENDER STUDY;
+MISSING=.;
+USEVARIABLES= BIN_1 AGE STUDY BIN_2 GENDER BIN_3 BIN_4 BIN_5 BIN_6 BIN_7 BIN_8 BIN_9
+ BIN_10 BIN_11 BIN_12;
+CATEGORICAL= BIN_1 BIN_2 BIN_3 BIN_4 BIN_5 BIN_6 BIN_7 BIN_8 BIN_9 BIN_10 BIN_11 BIN_12 ;
+CONSTRAINT= AGE ;
+ANALYSIS:
+ ESTIMATOR=ML;ALGORITHM=INTEGRATION;INTEGRATION=MONTECARLO;PROCESSORS=4;
+OUTPUT:
+ tech1;
+MODEL:
+ [ETA@0];ETA*(veta);
+ETA BY BIN_1*(l_1);
+ETA BY BIN_2*(l_2);
+ETA BY BIN_3*(l_3);
+ETA BY BIN_4*(l_4);
+ETA BY BIN_5*(l_5);
+ETA BY BIN_6*(l_6);
+ETA BY BIN_7*(l_7);
+ETA BY BIN_8*(l_8);
+ETA BY BIN_9*(l_9);
+ETA BY BIN_10*(l_10);
+ETA BY BIN_11*(l_11);
+ETA BY BIN_12*(l_12);
+ETA ON AGE;
+BIN_1 on AGE STUDY;
+BIN_2 on AGE GENDER STUDY;
+BIN_3 on GENDER STUDY;
+BIN_4 on AGE;
+BIN_5 on GENDER STUDY;
+BIN_8 on AGE GENDER;
+BIN_11 on AGE;
+INPUT_END
+2
+0
+0
+0
+ML
+1
+GENERAL
+0
+12
+1
+3
+bin_1 bin_2 bin_3 bin_4 bin_5 bin_6 bin_7 bin_8 bin_9 bin_10 bin_11 bin_12 eta age study gender
+2
+-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 1 0 0 0
+0
+1
+eta
+bin_1 bin_2 bin_3 bin_4 bin_5 bin_6 bin_7 bin_8 bin_9 bin_10 bin_11 bin_12
+1 1 eta bin_1    0.772    0.144
+91 1 eta bin_1 l_1
+1 1 eta bin_2    1.422    0.207
+91 1 eta bin_2 l_2
+1 1 eta bin_3    1.379    0.207
+91 1 eta bin_3 l_3
+1 1 eta bin_4    2.109    0.277
+91 1 eta bin_4 l_4
+1 1 eta bin_5    2.144    0.289
+91 1 eta bin_5 l_5
+1 1 eta bin_6    2.334    0.314
+91 1 eta bin_6 l_6
+1 1 eta bin_7    0.844    0.128
+91 1 eta bin_7 l_7
+1 1 eta bin_8    1.254    0.174
+91 1 eta bin_8 l_8
+1 1 eta bin_9    1.484    0.187
+91 1 eta bin_9 l_9
+1 1 eta bin_10    1.772    0.221
+91 1 eta bin_10 l_10
+1 1 eta bin_11    2.077    0.276
+91 1 eta bin_11 l_11
+1 1 eta bin_12    2.501    0.339
+91 1 eta bin_12 l_12
+1 1 age eta    0.197    0.046
+1 1 age bin_1    0.225    0.092
+1 1 study bin_1    0.378    0.129
+1 1 age bin_2    0.199    0.118
+1 1 gender bin_2   -1.015    0.156
+1 1 study bin_2    1.189    0.187
+1 1 gender bin_3    1.059    0.161
+1 1 study bin_3    1.643    0.182
+1 1 age bin_4    0.185    0.106
+1 1 gender bin_5   -1.270    0.202
+1 1 study bin_5    1.648    0.227
+1 1 age bin_8    0.108    0.085
+1 1 gender bin_8    0.286    0.118
+1 1 age bin_11    0.162    0.107
+4 1 eta  999.000    0.000
+94 1 eta veta
+2 1 age study  999.000  999.000
+2 1 age gender  999.000  999.000
+2 1 study gender  999.000  999.000
