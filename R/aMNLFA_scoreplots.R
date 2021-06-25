@@ -2,11 +2,12 @@
 #'
 #' This function creates plots of scores generated using aMNLFA. Can only be run after the aMNLFA.scores function.
 #' @param input.object The aMNLFA object (created using the aMNLFA.object function) which provides instructions for the function.
+#' @return No return value. Generates a PNG file with the plot, as well as a merged data file, in the directory specified in the aMNLFA.object. 
 #' @keywords MNLFA
 #' @export
 #' @examples
 #'  wd <- tempdir()
-#'  first<-paste0(system.file(package='aMNLFA'),"/examplefiles")
+#'  first<-paste0(system.file(package='aMNLFA'),"/extdata")
 #'  the.list <- list.files(first,full.names=TRUE)
 #'  file.copy(the.list,wd,overwrite=TRUE)
 #'  
@@ -37,7 +38,7 @@ aMNLFA.scoreplots<-function(input.object){
   MplusOutput<-fixPath(file.path(dir,"scoring.out",sep=""))
   modelResults <- MplusAutomation::readModels(MplusOutput)
   varorder<-modelResults$savedata_info$fileVarNames
-  factorscores<-utils::read.table(fixPath(file.path(dir,"scores.dat",sep="")),header=FALSE)
+  factorscores<-utils::read.table(fixPath(file.path(dir,"scores.dat")),header=FALSE)
   colnames(factorscores)<-varorder
   keep<-c(myID,"ETA")
   factorscores<-factorscores[keep]
@@ -69,7 +70,7 @@ aMNLFA.scoreplots<-function(input.object){
   if (is.null(mytime) == 0) etalong$time<-as.numeric(etalong$time)
   if (is.null(mytime) == 0) etalong$time<-round(etalong$time,.1)
   if (is.null(mytime) == 0) etalong$time<-as.factor(etalong$time)
-  mrdata<-mrdata[order(mrdata[myID]),]
+  mrdata <- sort.data.frame(mrdata, by = "ID")
   srdatacheck<-mrdata[!duplicated(mrdata[myID]),]
   N<-dim(srdatacheck)[1]
   min<-.01*N

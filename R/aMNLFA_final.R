@@ -5,11 +5,12 @@
 #' @param mchoice String representing the method of determining the number of tests, denoted m. Options include "actual", which uses the number of effects actually tested in the round 2 model as m, and "ibc", which uses the maximum number of all possible tests -- i.e., the number of items times the number of covariates. Defaults to "actual".
 #' @param method String representing the method of adjusting for multiple comparisons. Options include "bh", which invokes Benjamini-Hochberg correction with m defined using the mchoice parameter, and "bonferroni", which invokes a Bonferroni correction with m defined using the mchoice parameter.  Defaults to "bh".
 #' @param highest.category Boolean. If threshold DIF is tested, should only the category with the highest value of the test statistic be used when adjusting p. values? Defaults to TRUE, which corresponds to the results from "threshold.highest" in the aMNLFA.prune() step. If FALSE, all threshold effects will be considered, even those below the maximum value for a given item, which corresponds to the "thresholds.all" option in the aMNLFA.prune() step.
+#' @return No return value. Generates a file entitled "round3calibration.inp", to be run in \emph{Mplus}, in the directory specified in the aMNLFA.object. 
 #' @keywords MNLFA
 #' @export
 #' @examples
 #'  wd  <-  tempdir()
-#'  first <- paste0(system.file(package='aMNLFA'),"/examplefiles")
+#'  first <- paste0(system.file(package='aMNLFA'),"/extdata")
 #'  the.list  <-  list.files(first,full.names=TRUE)
 #'  file.copy(the.list,wd,overwrite=TRUE)
 #'    

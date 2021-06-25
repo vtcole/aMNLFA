@@ -47,12 +47,15 @@ aMNLFA.object(
 
 \item{thresholds}{A Boolean operator indicating whether to test for threshold DIF.}
 }
+\value{
+A object of type aMNLFA.object, which is a list of all the above arguments that can be passed to each aMNLFA function (except aMNLFA_DIFplot, which takes the output from aMNLFA.prune()).
+}
 \description{
 This function creates an aMNLFA object based on user specifications to pass to aMNLFA functions.
 }
 \examples{
  wd <- tempdir()
- first<-paste0(system.file(package='aMNLFA'),"/examplefiles")
+ first<-paste0(system.file(package='aMNLFA'),"/extdata")
  the.list <- list.files(first,full.names=TRUE)
  file.copy(the.list,wd,overwrite=TRUE)
  

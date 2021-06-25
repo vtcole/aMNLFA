@@ -2,11 +2,12 @@
 #'
 #' This function creates scores generated using aMNLFA. Can only be run after the final model has been fit -- i.e., after the aMNLFA.final function.
 #' @param input.object The aMNLFA object (created using the aMNLFA.object function) which provides instructions for the function.
+#' @return No return value. Generates an INP file to be run in \emph{Mplus} to generate scores in the directory specified in the aMNLFA.object. 
 #' @keywords MNLFA
 #' @export
 #' @examples
 #'  wd <- tempdir()
-#'  first<-paste0(system.file(package='aMNLFA'),"/examplefiles")
+#'  first<-paste0(system.file(package='aMNLFA'),"/extdata")
 #'  the.list <- list.files(first,full.names=TRUE)
 #'  file.copy(the.list,wd,overwrite=TRUE)
 #'  

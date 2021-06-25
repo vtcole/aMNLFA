@@ -3,10 +3,11 @@
 #' This function generates a single-record dataset using a random sample of time points from the multiple-record sample.
 #' @param input.object The aMNLFA object (created using the aMNLFA.object function) which provides instructions for the function.
 #' @keywords MNLFA
+#' @return No return value. Generates a calibration data file in the directory specified in the aMNLFA.object. 
 #' @export
 #' @examples
 #'  wd <- tempdir()
-#'  first<-paste0(system.file(package='aMNLFA'),"/examplefiles")
+#'  first<-paste0(system.file(package='aMNLFA'),"/extdata")
 #'  the.list <- list.files(first,full.names=TRUE)
 #'  file.copy(the.list,wd,overwrite=TRUE)
 #'  
@@ -117,4 +118,13 @@ fixPath<-function(somecharacter) {
   outcharacter<-somecharacter
   if (lastcharacter=="/") {outcharacter<-newcharacter}
   outcharacter
+}
+
+
+#A sorting function for data frames
+#Taken directly from http://www.markvanderloo.eu/yaRb/2014/08/15/sort-data-frame/
+sort.data.frame <- function(x, decreasing=FALSE, by=1, ... ){
+  f <- function(...) order(...,decreasing=decreasing)
+  i <- do.call(f,x[by])
+  x[i,,drop=FALSE]
 }

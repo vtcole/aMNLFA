@@ -2,11 +2,12 @@
 #'
 #' This function generates plots of item endorsement by time, and by each covariate. This is necessary for determining which covariates to use in the MNLFA.
 #' @param input.object The aMNLFA object (created using the aMNLFA.object function) which provides instructions for the function.
+#' @return No return value. Generates PNG files with each plot in the directory specified in the aMNLFA.object. 
 #' @keywords MNLFA
 #' @export
 #' @examples
 #'  wd <- tempdir()
-#'  first<-paste0(system.file(package='aMNLFA'),"/examplefiles")
+#'  first<-paste0(system.file(package='aMNLFA'),"/extdata")
 #'  the.list <- list.files(first,full.names=TRUE)
 #'  file.copy(the.list,wd,overwrite=TRUE)
 #'  ob <- aMNLFA::aMNLFA.object(dir = wd, 
@@ -42,7 +43,7 @@ aMNLFA.itemplots<-function(input.object){
   indlong$AvgItemResponse<-as.numeric(indlong$AvgItemResponse)
   if (!is.null(mytime)) indlong$time<-as.numeric(unlist(indlong[mytime]))
   if (!is.null(mytime)) indlong$time<-round(indlong$time,.1)
-  mrdata<-mrdata[order(mrdata[myID]),]
+  mrdata <- sort.data.frame(mrdata, by = "ID")
   srdatacheck<-mrdata[!duplicated(mrdata[myID]),]
   N<-dim(srdatacheck)[1]
   min<-.01*N

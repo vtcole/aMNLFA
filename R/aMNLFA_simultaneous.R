@@ -2,18 +2,19 @@
 #'
 #' This function generates the simultaneous aMNLFA model from all the initial inputs.
 #' @param input.object The aMNLFA object (created using the aMNLFA.object function) which provides instructions for the function.
+#' @return No return value. Generates a file entitled "round3calibration.inp", to be run in \emph{Mplus}, in the directory specified in the aMNLFA.object. 
 #' @keywords MNLFA
 #' @export
 #' @examples
 #'  wd  <-  tempdir()
-#'  first <- paste0(system.file(package='aMNLFA'),"/examplefiles")
+#'  first <- paste0(system.file(package='aMNLFA'),"/extdata")
 #'  the.list  <-  list.files(first,full.names=TRUE)
 #'  file.copy(the.list,wd,overwrite=TRUE)
 #'    
 #'  ob  <-  aMNLFA::aMNLFA.object(dir = wd, 
 #'  mrdata = xstudy, 
-#'  indicators = paste0("BIN_", 1:12),
-#'  catindicators = paste0("BIN_", 1:12), 
+#'  indicators = paste0("bin_", 1:12),
+#'  catindicators = paste0("bin_", 1:12), 
 #'  meanimpact = c("AGE", "GENDER", "STUDY"), 
 #'  varimpact = c("AGE", "GENDER", "STUDY"), 
 #'  measinvar = c("AGE", "GENDER", "STUDY"),
@@ -129,7 +130,7 @@ aMNLFA.simultaneous <- function(input.object){
   colnames(alllambdadf)=c("items",myMeasInvar)
   alllambdadf$items=myindicators
   for (i in 1:length(myindicators)){
-    dif <- MplusAutomation::readModels(fixPath(file.path(dir,paste("measinvarscript_",myindicators[i],".out",sep=""))))
+    dif <- MplusAutomation::readModels(fixPath(file.path(dir,base::tolower(paste("measinvarscript_",myindicators[i],".out",sep="")))))
     dif <- dif$parameters$unstandardized
     lambdadif <- dif[which(dif$paramHeader=="New.Additional.Parameters"),]
     lambdadif <- lambdadif[(grep("L",lambdadif$param)),] #Addition, 6/15: This gets rid of threshold parameters if they are present
@@ -185,7 +186,7 @@ aMNLFA.simultaneous <- function(input.object){
     colnames(allinterceptdf)=c("items",myMeasInvar)
     allinterceptdf$items=myindicators
     for (i in 1:length(myindicators)){
-      dif <- MplusAutomation::readModels(fixPath(file.path(dir,paste("measinvarscript_",myindicators[i],".out",sep=""))))
+      dif <- MplusAutomation::readModels(fixPath(file.path(dir,base::tolower(paste("measinvarscript_",myindicators[i],".out",sep="")))))
       dif <- dif$parameters$unstandardized
       keep <- c("param","pval") #headers we'll keep -- change for threshold 
       intdif <- dif[grep(".ON",dif$paramHeader),] #subset to just mean effects for each item (don't have to worry about ETA here)
@@ -225,7 +226,7 @@ aMNLFA.simultaneous <- function(input.object){
     colnames(allinterceptdf)=c("items",myMeasInvar)
     allinterceptdf$items=myindicators
     for (i in 1:length(myindicators)){
-      dif <- MplusAutomation::readModels(fixPath(file.path(dir,paste("measinvarscript_",myindicators[i],".out",sep=""))))
+      dif <- MplusAutomation::readModels(fixPath(file.path(dir,base::tolower(paste("measinvarscript_",myindicators[i],".out",sep="")))))
       dif <- dif$parameters$unstandardized
       keep <- c("param","pval") #headers we'll keep -- change for threshold 
       thrdif <-  dif[-grep("L|00",dif$param),] #combine the param condition (don't contain L or 00) to get thresholds

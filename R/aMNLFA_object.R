@@ -14,11 +14,12 @@
 #' @param auxiliary The list of variables to be considered as auxiliary (i.e., retained in the dataset but not used in the analysis). Defaults to NULL.
 #' @param ID The variable which identifies cases. Defaults to NULL.
 #' @param thresholds A Boolean operator indicating whether to test for threshold DIF.
+#' @return A object of type aMNLFA.object, which is a list of all the above arguments that can be passed to each aMNLFA function (except aMNLFA_DIFplot, which takes the output from aMNLFA.prune()).
 #' @keywords MNLFA
 #' @export
 #' @examples
 #'  wd <- tempdir()
-#'  first<-paste0(system.file(package='aMNLFA'),"/examplefiles")
+#'  first<-paste0(system.file(package='aMNLFA'),"/extdata")
 #'  the.list <- list.files(first,full.names=TRUE)
 #'  file.copy(the.list,wd,overwrite=TRUE)
 #'  

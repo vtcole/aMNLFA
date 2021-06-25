@@ -3,12 +3,13 @@
 #' This function gives the user a plot corresponding to loading, intercept, or threshold DIF from the aMNLFA.prune() function
 #' @param diflist The listing of results from aMNLFA.prune(), which contains the DIF tables (as well as impact tables, which aren't used here)
 #' @param diftype The type of DIF the user wants plot for. Options include "loading" (for loading DIF), "intercept" (for intercept DIF when threshold DIF is not tested), "threshold.highest" (which uses only the largest test statistic across all categories when threshold DIF is tested), and "threshold.all" (which uses the test statistic for all categories when threshold DIF is tested)
-#' @param log Logical. If TRUE, plot the y graphics::axis on a log scale. Defaults to FALSE.
+#' @param log Logical. If TRUE, plot the y axis on a log scale. Defaults to FALSE.
+#' @return No return value; generates a plot using base R.
 #' @keywords MNLFA
 #' @export
 #' @examples
 #'  wd <- tempdir()
-#'  first<-paste0(system.file(package='aMNLFA'),"/examplefiles")
+#'  first<-paste0(system.file(package='aMNLFA'),"/extdata")
 #'  the.list <- list.files(first,full.names=TRUE)
 #'  file.copy(the.list,wd,overwrite=TRUE)
 #'    
@@ -27,22 +28,25 @@
 #'  aMNLFA.DIFplot(prune.object, "loading", log = FALSE)
 
 aMNLFA.DIFplot <- function(diflist, diftype, log = FALSE) {
-  
-  myMeasInvar <- diflist$`Summary of Effects`$`Measurement Invariance Variables`
-  myindicators <- diflist$`Summary of Effects`$Indicators
+
+  oldpar <- graphics::par(no.readonly = TRUE)
+  on.exit(graphics::par(oldpar))
+    
+  myMeasInvar <- diflist$summary$measinvar
+  myindicators <- diflist$summary$indicators
   
   
   if (diftype == "loading") {
-    difobject <- diflist$`Summary of Effects`$`Loading DIF`
+    difobject <- diflist$summary$loadingDIF
     difstring <- "loading"}
   if (diftype == "intercept") {
-    difobject <- diflist$`Summary of Effects`$`Intercept DIF`
+    difobject <- diflist$summary$interceptDIF
     difstring <- "intercept"}
   if (diftype == "threshold.highest") {
-    difobject <- diflist$`Summary of Effects`$`Threshold DIF - Highest Category Used`
+    difobject <- diflist$summary$tDIF_highest
     difstring <- "threshold"}
   if (diftype == "threshold.all") {
-    difobject <- diflist$`Summary of Effects`$`Threshold DIF - All Categories Used`
+    difobject <- diflist$summary$tDIF_all
     difstring = "threshold"}
   
   graphics::par(mar=c(10,4,4,2))

@@ -11,14 +11,17 @@ aMNLFA.DIFplot(diflist, diftype, log = FALSE)
 
 \item{diftype}{The type of DIF the user wants plot for. Options include "loading" (for loading DIF), "intercept" (for intercept DIF when threshold DIF is not tested), "threshold.highest" (which uses only the largest test statistic across all categories when threshold DIF is tested), and "threshold.all" (which uses the test statistic for all categories when threshold DIF is tested)}
 
-\item{log}{Logical. If TRUE, plot the y graphics::axis on a log scale. Defaults to FALSE.}
+\item{log}{Logical. If TRUE, plot the y axis on a log scale. Defaults to FALSE.}
+}
+\value{
+No return value; generates a plot using base R.
 }
 \description{
 This function gives the user a plot corresponding to loading, intercept, or threshold DIF from the aMNLFA.prune() function
 }
 \examples{
  wd <- tempdir()
- first<-paste0(system.file(package='aMNLFA'),"/examplefiles")
+ first<-paste0(system.file(package='aMNLFA'),"/extdata")
  the.list <- list.files(first,full.names=TRUE)
  file.copy(the.list,wd,overwrite=TRUE)
    

@@ -9,12 +9,15 @@ aMNLFA.scoreplots(input.object)
 \arguments{
 \item{input.object}{The aMNLFA object (created using the aMNLFA.object function) which provides instructions for the function.}
 }
+\value{
+No return value. Generates a PNG file with the plot, as well as a merged data file, in the directory specified in the aMNLFA.object.
+}
 \description{
 This function creates plots of scores generated using aMNLFA. Can only be run after the aMNLFA.scores function.
 }
 \examples{
  wd <- tempdir()
- first<-paste0(system.file(package='aMNLFA'),"/examplefiles")
+ first<-paste0(system.file(package='aMNLFA'),"/extdata")
  the.list <- list.files(first,full.names=TRUE)
  file.copy(the.list,wd,overwrite=TRUE)
  

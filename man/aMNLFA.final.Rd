@@ -20,12 +20,15 @@ aMNLFA.final(
 
 \item{highest.category}{Boolean. If threshold DIF is tested, should only the category with the highest value of the test statistic be used when adjusting p. values? Defaults to TRUE, which corresponds to the results from "threshold.highest" in the aMNLFA.prune() step. If FALSE, all threshold effects will be considered, even those below the maximum value for a given item, which corresponds to the "thresholds.all" option in the aMNLFA.prune() step.}
 }
+\value{
+No return value. Generates a file entitled "round3calibration.inp", to be run in \emph{Mplus}, in the directory specified in the aMNLFA.object.
+}
 \description{
 This function generates the simultaneous aMNLFA model from all the initial inputs.
 }
 \examples{
  wd  <-  tempdir()
- first <- paste0(system.file(package='aMNLFA'),"/examplefiles")
+ first <- paste0(system.file(package='aMNLFA'),"/extdata")
  the.list  <-  list.files(first,full.names=TRUE)
  file.copy(the.list,wd,overwrite=TRUE)
    

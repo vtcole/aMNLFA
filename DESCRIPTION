@@ -1,6 +1,6 @@
 Package: aMNLFA
-Title: Automated Fitting of Moderated Nonlinear Factor Analysis Through the 'Mplus' Program
-Version: 0.1
+Title: Automated Moderated Nonlinear Factor Analysis Using 'Mplus'
+Version: 1.0.0
 Authors@R: c(
   person("Veronica", "Cole", email = "colev@wfu.edu", role = c("aut","cre")),
   person("Nisha", "Gottfredson", email = "gottfredson@email.unc.edu", role = c("aut")),
@@ -8,7 +8,8 @@ Authors@R: c(
   person("Tim", "Janssen", email = "tim_janssen@brown.edu", role = c("ctb")))
 Description: Automated generation, running, and interpretation of moderated
     nonlinear factor analysis models for obtaining scores from observed
-    variables. This package creates 'Mplus' input files which may be run iteratively
+    variables, using the method described by Gottfredson and colleagues (2019) <doi:10.1016/j.addbeh.2018.10.031>. 
+    This package creates 'Mplus' input files which may be run iteratively
     to test two different types of covariate effects on items: 
     (1) latent variable impact (both mean and variance); and (2) differential 
     item functioning. After sequentially testing for all effects, it also creates a final

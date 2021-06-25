@@ -9,12 +9,25 @@ aMNLFA.prune(input.object)
 \arguments{
 \item{input.object}{The aMNLFA object (created using the aMNLFA.object function) which provides instructions for the function.}
 }
+\value{
+A list (entitled summary) with the following elements:
+\itemize{
+\item {indicators} {a list of indicators as specified by the user in the aMNLFA.object()}
+\item {measinvar} {a list of measurement invariance variables as specified by the user in the aMNLFA.object()}
+\item {meanimpact} {parameter values, standard errors, test statistics, and p. values for all mean impact effects tested in the simultaneous model}
+\item {varimpact} {parameter values, standard errors, test statistics, and p. values for all variance impact effects tested in the simultaneous model}
+\item {loadingDIF} {parameter values, standard errors, test statistics, and p. values for all loading DIF effects tested in the simultaneous model. Also includes critical values for different corrections according to the number of tests, \emph{m}: Benjamini-Hochberg or Bonferroni with \emph{m} defined as the actual number of tests included in the model (BH.actual and bon.actual, respectively); Benjamini-Hochberg or Bonferroni with \emph{m} defined as the number of items times the number of covariates (BH.ibc and bon.ibc, respectively).}  
+\item {interceptDIF} {If thresholds = FALSE in the corresponding aMNLFA.object: parameter values, standard errors, test statistics, and p. values for all intercept DIF effects tested in the simultaneous model. Also includes critical values for different corrections according to the number of tests, \emph{m}: Benjamini-Hochberg or Bonferroni with \emph{m} defined as the actual number of tests included in the model (BH.actual and bon.actual, respectively); Benjamini-Hochberg or Bonferroni with \emph{m} defined as the number of items times the number of covariates (BH.ibc and bon.ibc, respectively).}  
+\item {tDIF_highest} {If thresholds = TRUE in the corresponding aMNLFA.object: parameter values, standard errors, test statistics, and p. values for all threshold DIF effects tested in the simultaneous model, with tests performed only on the category with the largest test statistic for each item. Also includes critical values for different corrections according to the number of tests, \emph{m}: Benjamini-Hochberg or Bonferroni with \emph{m} defined as the actual number of tests included in the model (BH.actual and bon.actual, respectively); Benjamini-Hochberg or Bonferroni with \emph{m} defined as the number of items times the number of covariates (BH.ibc and bon.ibc, respectively).}  
+\item {tDIF_all} {If thresholds = TRUE in the corresponding aMNLFA.object: parameter values, standard errors, test statistics, and p. values for all threshold DIF effects tested in the simultaneous model, with tests performed on all categories for each item. Also includes critical values for different corrections according to the number of tests, \emph{m}: Benjamini-Hochberg or Bonferroni with \emph{m} defined as the actual number of tests included in the model (BH.actual and bon.actual, respectively); Benjamini-Hochberg or Bonferroni with \emph{m} defined as the number of items times the number of covariates (BH.ibc and bon.ibc, respectively).}  
+}
+}
 \description{
 This function generates the simultaneous aMNLFA model from all the initial inputs.
 }
 \examples{
  wd <- tempdir()
- first<-paste0(system.file(package='aMNLFA'),"/examplefiles")
+ first<-paste0(system.file(package='aMNLFA'),"/extdata")
  the.list <- list.files(first,full.names=TRUE)
  file.copy(the.list,wd,overwrite=TRUE)
    

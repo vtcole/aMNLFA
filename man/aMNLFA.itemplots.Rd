@@ -9,12 +9,15 @@ aMNLFA.itemplots(input.object)
 \arguments{
 \item{input.object}{The aMNLFA object (created using the aMNLFA.object function) which provides instructions for the function.}
 }
+\value{
+No return value. Generates PNG files with each plot in the directory specified in the aMNLFA.object.
+}
 \description{
 This function generates plots of item endorsement by time, and by each covariate. This is necessary for determining which covariates to use in the MNLFA.
 }
 \examples{
  wd <- tempdir()
- first<-paste0(system.file(package='aMNLFA'),"/examplefiles")
+ first<-paste0(system.file(package='aMNLFA'),"/extdata")
  the.list <- list.files(first,full.names=TRUE)
  file.copy(the.list,wd,overwrite=TRUE)
  ob <- aMNLFA::aMNLFA.object(dir = wd, 
