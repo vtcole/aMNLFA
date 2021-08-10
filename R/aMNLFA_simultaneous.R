@@ -436,24 +436,25 @@ aMNLFA.simultaneous <- function(input.object){
   
   if (thresholds == FALSE) {
     for (i in 1:l){
-      predlist <- unlist(allinterceptdf[i,2:l])
+      #predlist <- unlist(allinterceptdf[i,2:l])
+      predlist <- unlist(allinterceptdf[i,1:length(myMeasInvar)+1])  #changed by IS to get all possible intercept DIF --should go thru length(myMeasInvar)+1
       predlist <- predlist[!is.na(predlist)]
       predlist <- utils::capture.output(cat(predlist))
       round2input[the.row+i,1] <- ifelse(length(predlist)>0,paste(myindicators[i]," on ",predlist,";",sep=""),"!") #VC: check this
       the.row <- nrow(round2input)
     }
   } else {
-    for (i in 1:l) {
+    for (i in 1:l) { #IS not sure if this needs to be or what to do for this section when thresholds=TRUE?? 
       th <-length(unique(mrdata[stats::complete.cases(mrdata), myindicators[l]]))-1
       if (sum(is.na(allinterceptdf[i,])) > 0) {
         for (k in 1:th) {
-        round2input[the.row + 1,1] <- paste0("[",myindicators[i], "$", k, "](T", i, "_", k, ");")
-        the.row <- nrow(round2input)
+          round2input[the.row + 1,1] <- paste0("[",myindicators[i], "$", k, "](T", i, "_", k, ");")
+          the.row <- nrow(round2input)
         }
       }
     }
   }
-
+  
   round2input <- rbind(round2input, new.constraint.section, constraint.section)
   the.row <- nrow(round2input)  
   
