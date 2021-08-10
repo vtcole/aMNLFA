@@ -173,6 +173,7 @@ write.inp.file <- function(df, outfile) {
   
 }
 
+
 #Remove final slash to allow for better use of file.path down the line.
 fixPath<-function(somecharacter) {
   lastcharacter<-base::substring(somecharacter,nchar(somecharacter))
