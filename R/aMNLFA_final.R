@@ -156,12 +156,12 @@ aMNLFA.final <- function(input.object, mchoice = "actual", method = "BH", highes
   colnames(lambda_dif_from_aMNLFA_final)=myMeasInvar
   rownames(lambda_dif_from_aMNLFA_final)=myindicators
   #VC replacing "homedir" with the working directory specified by the user
-  write.csv(lambda_dif_from_aMNLFA_final, paste0(wd, "/lambda_dif_from_aMNLFA_final.csv")) #saves out lambda DIF
+  write.csv(lambda_dif_from_aMNLFA_final, paste0(dir, "/lambda_dif_from_aMNLFA_final.csv")) #saves out lambda DIF
   
   intercept_dif_from_aMNLFA_final=the.intdif
   colnames(intercept_dif_from_aMNLFA_final)=myMeasInvar
   rownames(intercept_dif_from_aMNLFA_final)=myindicators
-  write.csv(intercept_dif_from_aMNLFA_final, paste0(wd, "/intercept_dif_from_aMNLFA_final.csv")) #saves out lambda DIF
+  write.csv(intercept_dif_from_aMNLFA_final, paste0(dir, "/intercept_dif_from_aMNLFA_final.csv")) #saves out lambda DIF
   
   
   
