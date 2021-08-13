@@ -76,13 +76,13 @@ aMNLFA.prune<-function(input.object){
   ##Read in mean impact script and test for impact at p<.1
   meanimpact <- as.data.frame(round2estimates)
   meanimpact <- meanimpact[which(meanimpact$paramHeader=="ETA.ON"),]
+  meanimpact <- subset(meanimpact, meanimpact$pexact < .1) #VC added this on 8/13 to filter exclusively significant DIF
 
   varimpact <- as.data.frame(round2estimates)
   
   varimpact <- varimpact[which(varimpact$paramHeader=="New.Additional.Parameters" & varimpact$pval<.1),]  ######alpha <.1 to trim###########
   varimpact <- varimpact[grep("V", varimpact$param),] #Now subset it to just variance parameters -- i.e., eliminate lambdas
-  
-  
+
   #Added in the following to get covariates associated with variance impact
   #VC, 8/4/2021
   v.names <- varimpact$param

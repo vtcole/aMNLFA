@@ -279,7 +279,8 @@ aMNLFA.final <- function(input.object, mchoice = "actual", method = "BH", highes
   
   # keepmeanimpact <- unique(the.prune$`Summary of Effects`$`Mean Impact`$param)
   #keepmeanimpact <- unique(the.prune$summary$meanimpact$param) #IS changed to reflect the.prune data structure
-  keepmeanimpact <- unique(c(mean.prune$param, uniquelambda,uniqueint)) #IS changed again to pull only the mean impact for covariates that have sig mean impact OR sig lambda/int dif
+  #keepmeanimpact <- unique(c(mean.prune$param, uniquelambda,uniqueint)) #IS changed again to pull only the mean impact for covariates that have sig mean impact OR sig lambda/int dif
+  keepmeanimpact <- unique(c(mean.prune$param)) #VC changed just because lambda and intercept effects shouldn't be in there -- but you're right, we absolutely should be using mean.prune
   
   # keepvarimpact <- unique(the.prune$`Summary of Effects`$`Mean Impact`$param)
   #keepvarimpact <- unique(the.prune$summary$meanimpact$param) #IS changed to reflect the.prune data structure
