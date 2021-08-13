@@ -2,10 +2,9 @@
 % Please edit documentation in R/aMNLFA_initial.R
 \name{aMNLFA.initial}
 \alias{aMNLFA.initial}
-\alias{write.inp.file}
 \title{aMNLFA initial model fitting function}
 \usage{
-write.inp.file(df, outfile)
+aMNLFA.initial(input.object)
 }
 \arguments{
 \item{input.object}{The aMNLFA object (created using the aMNLFA.object function) which provides instructions for the function.}
@@ -30,6 +29,7 @@ This function generates the initial itemwise aMNLFA models.
  thresholds = FALSE)
  
  aMNLFA.initial(ob)
+ 
  
 }
 \keyword{MNLFA}
