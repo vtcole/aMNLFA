@@ -278,12 +278,14 @@ aMNLFA.final <- function(input.object, mchoice = "actual", method = "BH", highes
   
   
   # keepmeanimpact <- unique(the.prune$`Summary of Effects`$`Mean Impact`$param)
-  keepmeanimpact <- unique(the.prune$summary$meanimpact$param) #IS changed to reflect the.prune data structure
+  #keepmeanimpact <- unique(the.prune$summary$meanimpact$param) #IS changed to reflect the.prune data structure
+  keepmeanimpact <- unique(c(mean.prune$param, uniquelambda,uniqueint)) #IS changed again to pull only the mean impact for covariates that have sig mean impact OR sig lambda/int dif
   
   # keepvarimpact <- unique(the.prune$`Summary of Effects`$`Mean Impact`$param)
   #keepvarimpact <- unique(the.prune$summary$meanimpact$param) #IS changed to reflect the.prune data structure
- keepvarimpact <- unique(the.prune$summary$varimpact$covariate.name) #IS changed again to reflect the.prune data structure
-  
+ #keepvarimpact <- unique(the.prune$summary$varimpact$covariate.name) #IS changed again to reflect the.prune data structure
+ keepvarimpact <- unique(var.prune$param) #IS changed again to pull only var impact with p<0.05
+ 
   
   if (thresholds == FALSE) {
     usefinal <- utils::capture.output(cat(unique(c(myindicators, uniqueint, keepmeanimpact))))

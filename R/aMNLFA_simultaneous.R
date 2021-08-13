@@ -108,15 +108,22 @@ aMNLFA.simultaneous <- function(input.object){
   varimpact <- noquote(substr(varimpact$param,2,3))
   myVarImpact2 <- as.data.frame(myVarImpact)
   myVarImpact3 <- as.data.frame(NULL)
-  for (i in 1:length(varimpact)){
-    myVarImpact3[i,1] <- myVarImpact2[varimpact[i],]
-  }
+
+  if (!is.null(dim(varimpact))){ #added by IS to accommodate no var impact
+    for (i in 1:length(varimpact)){
+      myVarImpact3[i,1] <- myVarImpact2[varimpact[i],]
+    }
+  
   keepvarimpact <- noquote(t(myVarImpact3))
 
   for (j in 1:length(keepvarimpact)){
     if(length(grep("_",keepvarimpact[j]))>0) keepvarimpact <- append(keepvarimpact,substr(keepvarimpact[j],1,3))
     if(length(grep("_",keepvarimpact[j]))>0) keepvarimpact <- append(keepvarimpact,substr(keepvarimpact[j],5,7))
   }
+  }else { #added by IS to accommodate no var impact
+    keepvarimpact=NULL
+  }
+  
   keepvarimpact <- keepvarimpact[which(keepvarimpact!=2)]
   keepvarimpact <- unique(keepvarimpact)
   threeletterlist <-  stringr::str_sub(myVarImpact,1,3)

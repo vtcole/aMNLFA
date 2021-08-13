@@ -2,6 +2,7 @@
 
 export(aMNLFA.DIFplot)
 export(aMNLFA.final)
+export(aMNLFA.initial)
 export(aMNLFA.itemplots)
 export(aMNLFA.object)
 export(aMNLFA.prune)
@@ -9,4 +10,5 @@ export(aMNLFA.sample)
 export(aMNLFA.scoreplots)
 export(aMNLFA.scores)
 export(aMNLFA.simultaneous)
+export(fixPath)
 export(write.inp.file)

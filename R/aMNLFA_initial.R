@@ -1,6 +1,7 @@
 #' aMNLFA initial model fitting function
 #'
 #' This function generates the initial itemwise aMNLFA models.
+#' @name aMNLFA.initial
 #' @param input.object The aMNLFA object (created using the aMNLFA.object function) which provides instructions for the function.
 #' @keywords MNLFA
 #' @export
@@ -129,6 +130,9 @@ write.inp.file <- function(df, outfile) {
   
 }
 
+##' @rdname funs
+##' @export
+
 #Remove final slash to allow for better use of file.path down the line.
 fixPath<-function(somecharacter) {
   lastcharacter<-base::substring(somecharacter,nchar(somecharacter))
@@ -138,7 +142,8 @@ fixPath<-function(somecharacter) {
   outcharacter
 }
 
-
+##' @rdname funs
+##' @export
 
 aMNLFA.initial<-function(input.object){
   
