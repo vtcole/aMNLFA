@@ -2,6 +2,7 @@
 #'
 #' This function generates the simultaneous aMNLFA model from all the initial inputs.
 #' @param input.object The aMNLFA object (created using the aMNLFA.object function) which provides instructions for the function.
+#' @param keepmean Boolean. If intercept or loading DIF are present, should the corresponding mean impact effect be retained? Defaults to FALSE.
 #' @return No return value. Generates a file entitled "round3calibration.inp", to be run in \emph{Mplus}, in the directory specified in the aMNLFA.object. 
 #' @keywords MNLFA
 #' @export
@@ -25,7 +26,7 @@
 #'  aMNLFA.simultaneous(ob)
 
 
-aMNLFA.simultaneous <- function(input.object){
+aMNLFA.simultaneous <- function(input.object, keepmean = FALSE){
 
   dir = input.object$dir
   mrdata = input.object$mrdata
@@ -39,7 +40,8 @@ aMNLFA.simultaneous <- function(input.object){
   myauxiliary = input.object$auxiliary
   myID = input.object$ID
   thresholds = input.object$thresholds
-
+  #keepmean is a new argument as of 8/18 -- can keep mean impact if corresponding loading or intercept DIF is present
+  
   if (thresholds == TRUE) {
     stop("thresholds == TRUE is disabled in this version of aMNLFA. Reset thresholds to FALSE to run this function.")
   }
@@ -304,9 +306,17 @@ aMNLFA.simultaneous <- function(input.object){
     if ((myMeasInvar[q] %in% allinterceptdf[,q+1]) == TRUE) #If there was intercept DIF for covariate q, it will appear in the q+1 column
     {intdiflist <- c(intdiflist, myMeasInvar[q])}
   }
-  unlist(intdiflist)
+  intdiflist <- unlist(intdiflist) #VC changed this on 8/18
   
-  keepmeanimpact <- unique(append(keepmeanimpact,keepvarimpact))
+  #VC changed after email conversations, 8/15-18, about including mean impact if corresponding DIF effect is there
+  #Also, not sure why we were using "append" in here -- changed it to "c" because that can take multiple arguments
+  if (keepmean == TRUE) {
+    keepmeanimpact <- unique(c(keepmeanimpact, intdiflist, keeplambda, keepvarimpact))
+  } else {
+    keepmeanimpact <- unique(c(keepmeanimpact, keepvarimpact))
+  }
+  
+  
   
 
   

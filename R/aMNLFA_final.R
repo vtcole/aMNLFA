@@ -5,6 +5,7 @@
 #' @param mchoice String representing the method of determining the number of tests, denoted m. Options include "actual", which uses the number of effects actually tested in the round 2 model as m, and "ibc", which uses the maximum number of all possible tests -- i.e., the number of items times the number of covariates. Defaults to "actual".
 #' @param method String representing the method of adjusting for multiple comparisons. Options include "bh", which invokes Benjamini-Hochberg correction with m defined using the mchoice parameter, and "bonferroni", which invokes a Bonferroni correction with m defined using the mchoice parameter.  Defaults to "bh".
 #' @param highest.category Boolean. If threshold DIF is tested, should only the category with the highest value of the test statistic be used when adjusting p. values? Defaults to TRUE, which corresponds to the results from "threshold.highest" in the aMNLFA.prune() step. If FALSE, all threshold effects will be considered, even those below the maximum value for a given item, which corresponds to the "thresholds.all" option in the aMNLFA.prune() step.
+#' @param keepmean Boolean. If intercept or loading DIF are present, should the corresponding mean impact effect be retained? Defaults to FALSE.
 #' @return No return value. Generates a file entitled "round3calibration.inp", to be run in \emph{Mplus}, in the directory specified in the aMNLFA.object. 
 #' @keywords MNLFA
 #' @export
@@ -28,7 +29,7 @@
 #'  aMNLFA.simultaneous(ob)
 
 
-aMNLFA.final <- function(input.object, mchoice = "actual", method = "BH", highest.category = TRUE){
+aMNLFA.final <- function(input.object, mchoice = "actual", method = "BH", highest.category = TRUE, keepmean = FALSE){
 
   dir = input.object$dir
   mrdata = input.object$mrdata
@@ -42,6 +43,8 @@ aMNLFA.final <- function(input.object, mchoice = "actual", method = "BH", highes
   myauxiliary = input.object$auxiliary
   myID = input.object$ID
   thresholds = input.object$thresholds
+  #keepmean is a new argument as of 8/18 -- can keep mean impact if corresponding loading or intercept DIF is present
+
   
   if (thresholds == TRUE) {
     stop("thresholds == TRUE is disabled in this version of aMNLFA. Reset thresholds to FALSE to run this function.")
@@ -280,8 +283,13 @@ aMNLFA.final <- function(input.object, mchoice = "actual", method = "BH", highes
   # keepmeanimpact <- unique(the.prune$`Summary of Effects`$`Mean Impact`$param)
   #keepmeanimpact <- unique(the.prune$summary$meanimpact$param) #IS changed to reflect the.prune data structure
   #keepmeanimpact <- unique(c(mean.prune$param, uniquelambda,uniqueint)) #IS changed again to pull only the mean impact for covariates that have sig mean impact OR sig lambda/int dif
-  keepmeanimpact <- unique(c(mean.prune$param)) #VC changed just because lambda and intercept effects shouldn't be in there -- but you're right, we absolutely should be using mean.prune
   
+  #VC changed after email conversations, 8/15-18, about including mean impact if corresponding DIF effect is there
+  if (keepmean == TRUE) {
+    keepmeanimpact <- unique(c(mean.prune$param, uniquelambda,uniqueint)) 
+  } else {
+    keepmeanimpact <- unique(c(mean.prune$param)) 
+    }
   # keepvarimpact <- unique(the.prune$`Summary of Effects`$`Mean Impact`$param)
   #keepvarimpact <- unique(the.prune$summary$meanimpact$param) #IS changed to reflect the.prune data structure
  #keepvarimpact <- unique(the.prune$summary$varimpact$covariate.name) #IS changed again to reflect the.prune data structure

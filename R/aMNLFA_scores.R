@@ -123,7 +123,8 @@ aMNLFA.scores<-function(input.object){
   lambdaconstraints<-constraints[which(substr(constraints$param,1,1)=="L"),]
   lambdaconstraints$itemnum<-substr(lambdaconstraints$param,2,2)
   lambdaconstraints$item<-myindicators[as.numeric(lambdaconstraints$itemnum)]
-  lambdaconstraints$predictornum<-substr(lambdaconstraints$param,3,4)
+  #lambdaconstraints$predictornum<-substr(lambdaconstraints$param,3,4)
+  lambdaconstraints$predictornum<-stringi::stri_extract_last_regex(lambdaconstraints$param, "\\d{1}") #IS changed to index last digit (to accommodate different char lengths)
   
   #IS edited this section below to unscramble covariate assignment to lambda DIF
   # lambdaconstraints$predictor<-ifelse(lambdaconstraints$predictornum=="_0","intercept",myMeasInvar[as.numeric(sub("_","",lambdaconstraints$predictornum))])

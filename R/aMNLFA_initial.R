@@ -204,9 +204,10 @@ aMNLFA.initial<-function(input.object){
   var.counter <- var.counter + 1
   varinput[var.counter,1]<-paste("veta=1*exp(")
   var.counter <- var.counter + 1
-  for (i in 1:v){ #This had been (i in 2:v-1) but it works now -- check why?
+  #OK, so this needs to be (i in 1:v-1) because the last line after this does the vth covariate
+  for (i in 1:(v-1)){ #This had been (i in 2:v-1) but it works now -- check why?
     varinput[var.counter,1]<-paste("v",i,"*",myVarImpact[i],"+",sep="")
-    var.counter + 1
+    var.counter <- var.counter + 1
   }
   varinput[var.counter,1]<-paste("v",v,"*",myVarImpact[v],");",sep="")
   } else {
