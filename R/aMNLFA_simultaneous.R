@@ -111,7 +111,8 @@ aMNLFA.simultaneous <- function(input.object, keepmean = FALSE){
   myVarImpact2 <- as.data.frame(myVarImpact)
   myVarImpact3 <- as.data.frame(NULL)
 
-  if (!is.null(dim(varimpact))){ #added by IS to accommodate no var impact
+  #if (!is.null(dim(varimpact))){ #added by IS to accommodate no var impact
+  if (length(varimpact) > 0) { #Changed by VC on 10/07 - because varimpact is a single number, not a dataframe, need to use length rather than dim
     for (i in 1:length(varimpact)){
       myVarImpact3[i,1] <- myVarImpact2[varimpact[i],]
     }

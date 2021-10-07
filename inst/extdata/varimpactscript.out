@@ -1,27 +1,27 @@
-Mplus VERSION 7.4
+Mplus VERSION 8.3
 MUTHEN & MUTHEN
-03/05/2018   6:40 PM
+10/04/2021   8:37 PM
 
 INPUT INSTRUCTIONS
 
   TITLE: Variance Impact Model
-  DATA: FILE = "Z:/Real U Study/Staff folders/Michael Giordano/2018
-   spring/amnlfa/calibration.dat";
+  DATA: FILE =
+   "C:/Users/colev/Dropbox/aMNLFA_12212017/UMNfix_082021/aMNLFA/inst/extdata/calibration.dat
   VARIABLE:
   NAMES = ID BIN_1 BIN_2 BIN_3 BIN_4 BIN_5 BIN_6 BIN_7 BIN_8 BIN_9 BIN_10 BIN_11
-       BIN_12 AGECENT GENEFF STUDYEFF;
+       BIN_12 AGE GENDER STUDY;
   MISSING=.;
   !
   !
   !
   USEVARIABLES= BIN_1 BIN_2 BIN_3 BIN_4 BIN_5 BIN_6 BIN_7 BIN_8 BIN_9 BIN_10 BIN_11 BIN_12
-   AGECENT GENEFF STUDYEFF ;
+   AGE GENDER STUDY ;
   AUXILIARY= ;
   CATEGORICAL= BIN_1 BIN_2 BIN_3 BIN_4 BIN_5 BIN_6 BIN_7 BIN_8 BIN_9 BIN_10 BIN_11 BIN_12 ;
   !
-  CONSTRAINT= AGECENT GENEFF STUDYEFF ;
+  CONSTRAINT= AGE GENDER STUDY ;
   ANALYSIS: ESTIMATOR=ML;ALGORITHM=INTEGRATION;INTEGRATION=MONTECARLO;PROCESSORS=4;
-  MODEL: ETA ON AGECENT GENEFF STUDYEFF ; ETA*(veta);
+  MODEL: ETA ON AGE GENDER STUDY ; ETA*(veta);
   ETA BY BIN_1*(l1);
   ETA BY BIN_2*(l2);
   ETA BY BIN_3*(l3);
@@ -40,14 +40,20 @@ INPUT INSTRUCTIONS
   v3*0
   );
   veta=1*exp(
-  v1*AGECENT+
-  v2*GENEFF+
-  v3*STUDYEFF);
+  v1*AGE+
+  v2*GENDER+
+  v3*STUDY);
   OUTPUT: tech1;
 
 
 
-INPUT READING TERMINATED NORMALLY
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+   "C:/Users/colev/Dropbox/aMNLFA_12212017/UMNfix_082021/aMNLFA/inst/extdata/calibration.dat"
+*** WARNING in DATA command
+  Statement not terminated by a semicolon:
+  FILE = "C:/Users/colev/Dropbox/aMNLFA_12212017/UMNfix_082021/aMNLFA/inst/extdata/calibration.dat"
+   2 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
 
 
 
@@ -69,7 +75,7 @@ Observed dependent variables
    BIN_7       BIN_8       BIN_9       BIN_10      BIN_11      BIN_12
 
 Observed independent variables
-   AGECENT     GENEFF      STUDYEFF
+   AGE         GENDER      STUDY
 
 Continuous latent variables
    ETA
@@ -114,7 +120,7 @@ Link                                                         LOGIT
 Cholesky                                                        ON
 
 Input data file(s)
-  Z:/Real U Study/Staff folders/Michael Giordano/2018spring/amnlfa/calibration.d
+  C:/Users/colev/Dropbox/aMNLFA_12212017/UMNfix_082021/aMNLFA/inst/extdata/calib
 Input data format  FREE
 
 
@@ -171,6 +177,22 @@ UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
 
 
 
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     AGE                  -0.302       0.223      -4.000    0.60%      -2.000     -1.000      0.000
+             500.000       2.183      -0.195       4.000    0.60%       0.000      1.000
+     GENDER                0.024      -0.048      -1.000   48.80%      -1.000     -1.000      1.000
+             500.000       0.999      -1.998       1.000   51.20%       1.000      1.000
+     STUDY                 0.000       0.000      -1.000   50.00%      -1.000     -1.000      0.000
+             500.000       1.000      -2.000       1.000   50.00%       1.000      1.000
+
+
 THE MODEL ESTIMATION TERMINATED NORMALLY
 
 
@@ -212,9 +234,9 @@ MODEL RESULTS
     BIN_12             2.163      0.297      7.289      0.000
 
  ETA        ON
-    AGECENT            0.439      0.055      8.024      0.000
-    GENEFF            -0.065      0.060     -1.083      0.279
-    STUDYEFF           0.842      0.075     11.243      0.000
+    AGE                0.439      0.055      8.024      0.000
+    GENDER            -0.065      0.060     -1.083      0.279
+    STUDY              0.842      0.075     11.243      0.000
 
  Thresholds
     BIN_1$1            0.574      0.112      5.108      0.000
@@ -254,41 +276,41 @@ TECHNICAL 1 OUTPUT
            TAU
               BIN_1$1       BIN_2$1       BIN_3$1       BIN_4$1       BIN_5$1
               ________      ________      ________      ________      ________
- 1                 17            18            19            20            21
+                   17            18            19            20            21
 
 
            TAU
               BIN_6$1       BIN_7$1       BIN_8$1       BIN_9$1       BIN_10$1
               ________      ________      ________      ________      ________
- 1                 22            23            24            25            26
+                   22            23            24            25            26
 
 
            TAU
               BIN_11$1      BIN_12$1
               ________      ________
- 1                 27            28
+                   27            28
 
 
            NU
               BIN_1         BIN_2         BIN_3         BIN_4         BIN_5
               ________      ________      ________      ________      ________
- 1                  0             0             0             0             0
+                    0             0             0             0             0
 
 
            NU
               BIN_6         BIN_7         BIN_8         BIN_9         BIN_10
               ________      ________      ________      ________      ________
- 1                  0             0             0             0             0
+                    0             0             0             0             0
 
 
            NU
-              BIN_11        BIN_12        AGECENT       GENEFF        STUDYEFF
+              BIN_11        BIN_12        AGE           GENDER        STUDY
               ________      ________      ________      ________      ________
- 1                  0             0             0             0             0
+                    0             0             0             0             0
 
 
            LAMBDA
-              ETA           AGECENT       GENEFF        STUDYEFF
+              ETA           AGE           GENDER        STUDY
               ________      ________      ________      ________
  BIN_1              1             0             0             0
  BIN_2              2             0             0             0
@@ -302,9 +324,9 @@ TECHNICAL 1 OUTPUT
  BIN_10            10             0             0             0
  BIN_11            11             0             0             0
  BIN_12            12             0             0             0
- AGECENT            0             0             0             0
- GENEFF             0             0             0             0
- STUDYEFF           0             0             0             0
+ AGE                0             0             0             0
+ GENDER             0             0             0             0
+ STUDY              0             0             0             0
 
 
            THETA
@@ -322,9 +344,9 @@ TECHNICAL 1 OUTPUT
  BIN_10             0             0             0             0             0
  BIN_11             0             0             0             0             0
  BIN_12             0             0             0             0             0
- AGECENT            0             0             0             0             0
- GENEFF             0             0             0             0             0
- STUDYEFF           0             0             0             0             0
+ AGE                0             0             0             0             0
+ GENDER             0             0             0             0             0
+ STUDY              0             0             0             0             0
 
 
            THETA
@@ -337,43 +359,43 @@ TECHNICAL 1 OUTPUT
  BIN_10             0             0             0             0             0
  BIN_11             0             0             0             0             0
  BIN_12             0             0             0             0             0
- AGECENT            0             0             0             0             0
- GENEFF             0             0             0             0             0
- STUDYEFF           0             0             0             0             0
+ AGE                0             0             0             0             0
+ GENDER             0             0             0             0             0
+ STUDY              0             0             0             0             0
 
 
            THETA
-              BIN_11        BIN_12        AGECENT       GENEFF        STUDYEFF
+              BIN_11        BIN_12        AGE           GENDER        STUDY
               ________      ________      ________      ________      ________
  BIN_11             0
  BIN_12             0             0
- AGECENT            0             0             0
- GENEFF             0             0             0             0
- STUDYEFF           0             0             0             0             0
+ AGE                0             0             0
+ GENDER             0             0             0             0
+ STUDY              0             0             0             0             0
 
 
            ALPHA
-              ETA           AGECENT       GENEFF        STUDYEFF
+              ETA           AGE           GENDER        STUDY
               ________      ________      ________      ________
- 1                  0             0             0             0
+                    0             0             0             0
 
 
            BETA
-              ETA           AGECENT       GENEFF        STUDYEFF
+              ETA           AGE           GENDER        STUDY
               ________      ________      ________      ________
  ETA                0            13            14            15
- AGECENT            0             0             0             0
- GENEFF             0             0             0             0
- STUDYEFF           0             0             0             0
+ AGE                0             0             0             0
+ GENDER             0             0             0             0
+ STUDY              0             0             0             0
 
 
            PSI
-              ETA           AGECENT       GENEFF        STUDYEFF
+              ETA           AGE           GENDER        STUDY
               ________      ________      ________      ________
  ETA               16
- AGECENT            0             0
- GENEFF             0             0             0
- STUDYEFF           0             0             0             0
+ AGE                0             0
+ GENDER             0             0             0
+ STUDY              0             0             0             0
 
 
      PARAMETER SPECIFICATION FOR THE ADDITIONAL PARAMETERS
@@ -382,7 +404,7 @@ TECHNICAL 1 OUTPUT
            NEW/ADDITIONAL PARAMETERS
               V1            V2            V3
               ________      ________      ________
- 1                 29            30            31
+                   29            30            31
 
 
      STARTING VALUES
@@ -391,41 +413,41 @@ TECHNICAL 1 OUTPUT
            TAU
               BIN_1$1       BIN_2$1       BIN_3$1       BIN_4$1       BIN_5$1
               ________      ________      ________      ________      ________
- 1              0.549         0.708         0.567         1.036         1.046
+                0.549         0.708         0.567         1.036         1.046
 
 
            TAU
               BIN_6$1       BIN_7$1       BIN_8$1       BIN_9$1       BIN_10$1
               ________      ________      ________      ________      ________
- 1              1.450         0.356         0.745         0.838         0.974
+                1.450         0.356         0.745         0.838         0.974
 
 
            TAU
               BIN_11$1      BIN_12$1
               ________      ________
- 1              1.142         1.325
+                1.142         1.325
 
 
            NU
               BIN_1         BIN_2         BIN_3         BIN_4         BIN_5
               ________      ________      ________      ________      ________
- 1              0.000         0.000         0.000         0.000         0.000
+                0.000         0.000         0.000         0.000         0.000
 
 
            NU
               BIN_6         BIN_7         BIN_8         BIN_9         BIN_10
               ________      ________      ________      ________      ________
- 1              0.000         0.000         0.000         0.000         0.000
+                0.000         0.000         0.000         0.000         0.000
 
 
            NU
-              BIN_11        BIN_12        AGECENT       GENEFF        STUDYEFF
+              BIN_11        BIN_12        AGE           GENDER        STUDY
               ________      ________      ________      ________      ________
- 1              0.000         0.000         0.000         0.000         0.000
+                0.000         0.000         0.000         0.000         0.000
 
 
            LAMBDA
-              ETA           AGECENT       GENEFF        STUDYEFF
+              ETA           AGE           GENDER        STUDY
               ________      ________      ________      ________
  BIN_1          1.000         0.000         0.000         0.000
  BIN_2          1.000         0.000         0.000         0.000
@@ -439,9 +461,9 @@ TECHNICAL 1 OUTPUT
  BIN_10         1.000         0.000         0.000         0.000
  BIN_11         1.000         0.000         0.000         0.000
  BIN_12         1.000         0.000         0.000         0.000
- AGECENT        0.000         1.000         0.000         0.000
- GENEFF         0.000         0.000         1.000         0.000
- STUDYEFF       0.000         0.000         0.000         1.000
+ AGE            0.000         1.000         0.000         0.000
+ GENDER         0.000         0.000         1.000         0.000
+ STUDY          0.000         0.000         0.000         1.000
 
 
            THETA
@@ -459,9 +481,9 @@ TECHNICAL 1 OUTPUT
  BIN_10         0.000         0.000         0.000         0.000         0.000
  BIN_11         0.000         0.000         0.000         0.000         0.000
  BIN_12         0.000         0.000         0.000         0.000         0.000
- AGECENT        0.000         0.000         0.000         0.000         0.000
- GENEFF         0.000         0.000         0.000         0.000         0.000
- STUDYEFF       0.000         0.000         0.000         0.000         0.000
+ AGE            0.000         0.000         0.000         0.000         0.000
+ GENDER         0.000         0.000         0.000         0.000         0.000
+ STUDY          0.000         0.000         0.000         0.000         0.000
 
 
            THETA
@@ -474,43 +496,43 @@ TECHNICAL 1 OUTPUT
  BIN_10         0.000         0.000         0.000         0.000         1.000
  BIN_11         0.000         0.000         0.000         0.000         0.000
  BIN_12         0.000         0.000         0.000         0.000         0.000
- AGECENT        0.000         0.000         0.000         0.000         0.000
- GENEFF         0.000         0.000         0.000         0.000         0.000
- STUDYEFF       0.000         0.000         0.000         0.000         0.000
+ AGE            0.000         0.000         0.000         0.000         0.000
+ GENDER         0.000         0.000         0.000         0.000         0.000
+ STUDY          0.000         0.000         0.000         0.000         0.000
 
 
            THETA
-              BIN_11        BIN_12        AGECENT       GENEFF        STUDYEFF
+              BIN_11        BIN_12        AGE           GENDER        STUDY
               ________      ________      ________      ________      ________
  BIN_11         1.000
  BIN_12         0.000         1.000
- AGECENT        0.000         0.000         0.000
- GENEFF         0.000         0.000         0.000         0.000
- STUDYEFF       0.000         0.000         0.000         0.000         0.000
+ AGE            0.000         0.000         0.000
+ GENDER         0.000         0.000         0.000         0.000
+ STUDY          0.000         0.000         0.000         0.000         0.000
 
 
            ALPHA
-              ETA           AGECENT       GENEFF        STUDYEFF
+              ETA           AGE           GENDER        STUDY
               ________      ________      ________      ________
- 1              0.000         0.000         0.000         0.000
+                0.000         0.000         0.000         0.000
 
 
            BETA
-              ETA           AGECENT       GENEFF        STUDYEFF
+              ETA           AGE           GENDER        STUDY
               ________      ________      ________      ________
  ETA            0.000         0.000         0.000         0.000
- AGECENT        0.000         0.000         0.000         0.000
- GENEFF         0.000         0.000         0.000         0.000
- STUDYEFF       0.000         0.000         0.000         0.000
+ AGE            0.000         0.000         0.000         0.000
+ GENDER         0.000         0.000         0.000         0.000
+ STUDY          0.000         0.000         0.000         0.000
 
 
            PSI
-              ETA           AGECENT       GENEFF        STUDYEFF
+              ETA           AGE           GENDER        STUDY
               ________      ________      ________      ________
  ETA            0.050
- AGECENT        0.000         1.091
- GENEFF         0.000         0.000         0.500
- STUDYEFF       0.000         0.000         0.000         0.500
+ AGE            0.000         1.091
+ GENDER         0.000         0.000         0.500
+ STUDY          0.000         0.000         0.000         0.500
 
 
      STARTING VALUES FOR THE ADDITIONAL PARAMETERS
@@ -519,12 +541,12 @@ TECHNICAL 1 OUTPUT
            NEW/ADDITIONAL PARAMETERS
               V1            V2            V3
               ________      ________      ________
- 1              0.000         0.000         0.000
+                0.000         0.000         0.000
 
 
-     Beginning Time:  18:40:13
-        Ending Time:  18:41:44
-       Elapsed Time:  00:01:31
+     Beginning Time:  20:37:16
+        Ending Time:  20:40:28
+       Elapsed Time:  00:03:12
 
 
 
@@ -537,4 +559,4 @@ Fax: (310) 391-8971
 Web: www.StatModel.com
 Support: Support@StatModel.com
 
-Copyright (c) 1998-2015 Muthen & Muthen
+Copyright (c) 1998-2019 Muthen & Muthen

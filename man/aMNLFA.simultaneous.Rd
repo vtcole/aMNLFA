@@ -4,10 +4,12 @@
 \alias{aMNLFA.simultaneous}
 \title{aMNLFA simultaneous model fitting function}
 \usage{
-aMNLFA.simultaneous(input.object)
+aMNLFA.simultaneous(input.object, keepmean = FALSE)
 }
 \arguments{
 \item{input.object}{The aMNLFA object (created using the aMNLFA.object function) which provides instructions for the function.}
+
+\item{keepmean}{Boolean. If intercept or loading DIF are present, should the corresponding mean impact effect be retained? Defaults to FALSE.}
 }
 \value{
 No return value. Generates a file entitled "round3calibration.inp", to be run in \emph{Mplus}, in the directory specified in the aMNLFA.object.

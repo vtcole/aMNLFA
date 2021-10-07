@@ -1,0 +1,117 @@
+---
+title: "README for aMNLFA"
+author: "Isa Stallworthy, Meriah DeJoseph, Veronica Cole"
+date: "10/7/2021"
+output: html_document
+---
+
+# Using the aMNLFA package
+
+The purpose of _aMNLFA_ is to help researchers generate Mplus input files which, when altered to suit each individual researcher's use case, instantiate the steps outlined by Gottfredson et al. (2019).  
+
+**Please note that the _aMNLFA_ package is provided as a convenient way to generate templates for pieces of code which should be edited, run, and interpreted manually in Mplus.** While you can use this package to facilitate the process, all model output must be inspected manually. There are a number of vital pieces of information which must be gleaned from actually looking at the output. For instance, the aMNLFA package does not read in warnings from Mplus about negative standard errors, untrustworthy parameter estimates, and the like. **The user must inspect their Mplus inputs and outputs themselves and alter them according to empirical judgment and substantive theory.** While we put this package into the scientific community with the aim of making it easier and more convenient for people to do high-quality measurement work, the reality is that the code it generates is not likely to be perfect. Each and every Mplus input file is meant to be checked, and potentially altered, by the user.
+
+See [Tweet announcement](https://twitter.com/VeronicaTCole/status/1419730781446950936) and [website](https://nishagottfredson.web.unc.edu/amnlfa/) updates from the aMNLFA developers about changes from previous versions.
+
+
+# Summary of bugs fixed in the most recent version
+
+_aMNLFA\_sample_
+
+- _Write.inp.file_ function worked only for short lists of indicator names (&lt; 90). This caused errors in steps downstream. 
+
+_aMNLFA\_initial_
+
+- Did not create correct _varimpactscript.inp_ or item input syntax when the user chooses not to estimate variance impact
+- Strings after a certain length were not confined to 90 characters to comply with MPlus input rules
+
+_aMNLFA\_simultaneous_
+
+- not all significant lambda DIF was being pulled in from the item-level _.out_ files into round2calibration for later pruning
+- Was not able to accommodate cases of no variance impact
+- Did not capture all intercept DIF from the items when there were more covariates than indicators
+- Likely still not capturing all DIF when THRESHOLDS=TRUE
+- Still does not automatically include main effect DIF when any significant interaction DIF is present
+
+_aMNLFA\_prune_
+
+- did not create the correct variable names for variance impact
+
+_aMNLFA\_final_
+
+- example instructed users to set _method=&quot;bh&quot;_ when the code is set up to read capitalized labels (&quot;_BH_&quot;) and defaults to another correction method if the label is not recognized.
+- _the.prune_ data structure was not referenced correctly throughout (wrong column names, etc.)
+- still will not work when THRESHOLDS=TRUE
+- intercept DIF was incorrectly assigned to data frame for lambda DIF
+- mean impact was incorrectly assigned to a data frame for variance impact
+- Still does not automatically include main effect DIF when any significant interaction DIF is present
+- Was bringing forward all mean and variance impact regardless of statistical significance
+- erroneously added &quot;V1&quot; to the CONSTRAINT section of round3calibration (likely because of issue in _aMNLFA\_prune_)
+
+
+_aMNLFA\_scores_
+
+- was not correctly reading in and assigning intercept DIF for _scoring.inp_
+- scrambled covariates assignments to lambda DIF in constraints section
+- was not correctly creating predictor numbers when there were double-digit lambda labels
+- did not run if there were no constraints (i.e., no variance impact or lambda DIF) in final model
+- Still does not automatically include main effect DIF when any significant interaction DIF is present
+
+
+# Re-running aMNLFA projects with the new version
+### Notes
+- Make sure to set THRESHOLDS=FALSE in your _ob_. This setting will still estimate intercept DIF but will not test to see if it differs by the level of any ordinal variables. In the future, setting thresholds = TRUE is only advised if the user has specific reason to believe the DIF would vary by threshold level.
+- The present version of the package can only accommodate indicator lists of 270 characters or fewer (most projects will not need more than that). 
+- The code also requires some manual steps if you are testing for any DIF by covariate interactions (e.g., Age\_sex)–at this point, only include covariate interactions if you are comfortable navigating and manipulating MPlus code (via the steps below).
+- As noted in the main warning above, this code is not designed to read in all error and warning messages from Mplus. **Look at each output file manually to determine whether any errors or warnings are given.**
+
+
+### Suggested order of operations
+
+1. Re-run _aMNLFA\_sample_.
+2. Re-run _aMNLFA\_initial_.
+
+  - Make sure you&#39;ve deleted all the previous item, varimpactscript, and meanimpactscript .inp and .out files from your folder
+
+3. Re-run _aMNLFA\_simultaneous_ and run the resulting _round2calibration.inp_ file. Some key things to note:
+  -. If you have covariates with interactions, open _round2calibration.inp_ before running it.
+    -. If there is any intercept DIF by covariate interactions being estimated (e.g., ITEM ON AGE\_SEX), make sure the lower order main effects are also being estimated (e.g., ITEM ON AGE; ITEM ON SEX). If not, add them manually before running _round2calibration.inp_.
+    -. If there is any lambda DIF by covariate interactions being estimated (check the lambda label that corresponds to the interaction term), make sure the lower order main effects are also being estimated (find the lambda labels that correspond to the lower order main effects). If not, add them manually before running _round2calibration.inp_.
+    
+4. Inspect the results from _aMNLFA\_simultaneous_. You can experiment with the new _aMNLFA\_prune_ and _aMNLFA\_DIFplot_ functions to examine any intercept and lambda DIF as a function of various corrections for multiple comparisons.
+
+5. Run _aMNLFA\_final_.
+  - This now outputs 2 .csv files into your home directory that will be used for manual checking in Step 8.
+    - _intercept\_dif\_from\_aMNLFA\_final.csv_ where 1s correspond to the intercept DIF estimated in round3calibration.inp
+    - _lambda\_dif\_from\_aMNLFA\_final.csv_ where 1s correspond to the lambda DIF estimated in round3calibration.inp
+  - Note: This is the code that generates the final scoring model. If you run _round3calibration.inp_ in MPlus Diagrammer, you will get an image of a path diagram of your final scoring model.
+
+6. If you have covariates with interactions, open _round3calibration.inp_ before running it.
+
+    - If there is any intercept DIF by covariate interactions being estimated (e.g., ITEM ON AGE\_SEX), make sure the lower order main effects are also being estimated (e.g., ITEM ON AGE; ITEM ON SEX). If not, add them manually before running _round3calibration.inp_.
+    
+    - If there is any lambda DIF by covariate interactions being estimated (check the lambda label that corresponds to the interaction term), make sure the lower order main effects are also being estimated (find the lambda labels that correspond to the lower order main effects). If not, add them manually before running _round3calibration.inp_.
+
+
+7. Run _aMNLFA\_scores_. Run the resulting _scoring.inp_ file.
+  - If you have covariates with interactions, open _scoring.inp_ before running it.
+    - If there is any intercept DIF by covariate interactions being estimated (e.g., ITEM ON AGE\_SEX), make sure the lower order main effects are also being estimated (e.g., ITEM ON AGE; ITEM ON SEX). If not, add them manually before running _scoring.inp_.
+    - If there is any lambda DIF by covariate interactions being estimated (check the lambda label that corresponds to the interaction term), make sure the lower order main effects are also being estimated (find the lambda labels that correspond to the lower order main effects). If not, add them manually before running _scoring.inp_.
+
+_Manual checking_
+
+8. Conduct the new [manual checking steps in Excel](https://docs.google.com/spreadsheets/d/1EeNNpgyUhIHC87SzVP6UkIEH-O_pJ1I3jrvmX2t-Sos/edit?usp=sharing) with the accompanying [instructional video](https://drive.google.com/file/d/1fKFkut7cRqyyd8X1npcSIaLKEtQNmq54/view?usp=sharing) to make sure the code is doing what it should be doing with your data
+ - Re-name a &quot;PROJECT X&quot; tab at the bottom of the Excel sheet linked above with your name/project to claim a checking template
+ - Watch the 18-minute video guide for completing this checking worksheet and reference the EXAMPLE tab in the Excel sheet
+ - Complete all 3 steps of checking to verify your project before using the factor scores in any way.
+ - NOTE: the checking sheet focuses on DIF but you are also welcome to check mean/variance impact
+
+9. Plot the distribution of the factor scores in R to check for outliers and distributional assumptions relating to your substantive models.
+
+_Final outputs and reporting_
+
+You will find factor scores for your entire sample as &quot;ETA&quot; in _scores.dat_ (with column headers at the bottom of _scoring.out)_ for use in your substantive models. 
+  - NOTE: there is no standard error for eta with continuous data (only if you have some ordinal data)
+
+**Be sure to control for any mean impact covariates in your substantive model.**
+

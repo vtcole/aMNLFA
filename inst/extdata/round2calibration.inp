@@ -1,5 +1,6 @@
 TITLE: Round 2 Calibration Model
-DATA: FILE = "c:/users/mgiordan/desktop/testing/calibration.dat";
+DATA: FILE = 
+ "C:/Users/colev/Dropbox/aMNLFA_12212017/UMNfix_082021/aMNLFA/inst/extdata/calibration.dat";
 VARIABLE: 
 NAMES = ID BIN_1 BIN_2 BIN_3 BIN_4 BIN_5 BIN_6 BIN_7 BIN_8 BIN_9 BIN_10 BIN_11
      BIN_12 AGE GENDER STUDY; 
@@ -7,12 +8,12 @@ MISSING=.;
 !
 !
 !
-USEVARIABLES= BIN_1 AGE STUDY BIN_2 GENDER BIN_3 BIN_4 BIN_5 BIN_6 BIN_7 BIN_8 BIN_9 
- BIN_10 BIN_11 BIN_12;
+USEVARIABLES= BIN_1 BIN_2 BIN_3 BIN_4 BIN_5 BIN_6 BIN_7 BIN_8 BIN_9 BIN_10 BIN_11 BIN_12 
+ AGE GENDER STUDY;
 ! ;
 CATEGORICAL= BIN_1 BIN_2 BIN_3 BIN_4 BIN_5 BIN_6 BIN_7 BIN_8 BIN_9 BIN_10 BIN_11 BIN_12 ;
 !
-CONSTRAINT= AGE ;
+CONSTRAINT= AGE STUDY ;
 ANALYSIS: ESTIMATOR=ML;ALGORITHM=INTEGRATION;INTEGRATION=MONTECARLO;PROCESSORS=4;
 MODEL: [ETA@0];ETA*(veta);
 ETA BY BIN_1*(l_1);
@@ -27,44 +28,112 @@ ETA BY BIN_9*(l_9);
 ETA BY BIN_10*(l_10);
 ETA BY BIN_11*(l_11);
 ETA BY BIN_12*(l_12);
-ETA ON AGE;
+ETA ON AGE; ETA ON STUDY;
 BIN_1 on AGE STUDY;
+
 BIN_2 on AGE GENDER STUDY;
+
+
 BIN_3 on GENDER STUDY;
+
+
+
 BIN_4 on AGE;
+
+
+
+
 BIN_5 on GENDER STUDY;
+
+
+
+
+
 !
+
+
+
+
+
+
 !
-BIN_8 on AGE GENDER;
+
+
+
+
+
+
+
+BIN_8 on GENDER STUDY;
+
+
+
+
+
+
+
+
 !
+
+
+
+
+
+
+
+
+
 !
+
+
+
+
+
+
+
+
+
+
 BIN_11 on AGE;
+
+
+
+
+
+
+
+
+
+
+
 !
 MODEL CONSTRAINT: new( v1*0
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
+! !
+! !
+! !
+! !
+! !
+! !
+! !
+l8_0*1   l8_3*0
+! !
+! !
+! !
+! !
 );
-!;
-!;
-!;
-!;
-!;
-!;
-!;
-!;
-!;
-!;
-!;
-!;
-veta=1*exp( v1*AGE+ 0);
+veta=1*exp(
+v1*AGE+
+0);
+! !;
+! !;
+! !;
+! !;
+! !;
+! !;
+! !;
+l_8=l8_0 +l8_3*STUDY;
+! !;
+! !;
+! !;
+! !;
 OUTPUT: tech1;

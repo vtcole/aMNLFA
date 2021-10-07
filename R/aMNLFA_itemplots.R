@@ -92,7 +92,8 @@ aMNLFA.itemplots<-function(input.object){
       ic<-indlongmod$Moderator=="."|is.na(indlongmod$Moderator)|indlongmod$Moderator=="NA"
       cc_long<-indlongmod[which(ic=="FALSE"),]
       title<-paste(myindicators[j],"Responses Distribution by ",myfactors[i],sep="")
-      p<-with(cc_long,ggplot2::ggplot(cc_long,ggplot2::aes(factor(Moderator),value))) + with(cc_long,ggplot2::geom_boxplot()) + with(cc_long,ggplot2::theme_bw()) + with(cc_long,ggplot2::labs(title=title)) + with(cc_long,ggplot2::theme(legend.position="bottom"))
+      #For some reason the following line was coded as a boxplot; VC changed it on 10/4/2021
+      p<-with(cc_long,ggplot2::ggplot(cc_long,ggplot2::aes(y = value, x = factor(Moderator)))) + with(cc_long,ggplot2::geom_bar(stat = "identity")) + with(cc_long,ggplot2::theme_bw()) + with(cc_long,ggplot2::labs(title=title)) + with(cc_long,ggplot2::theme(legend.position="bottom"))
       filename<-fixPath(file.path(dir,paste(myindicators[j]," plots",myfactors[i],".png",sep="")))
       grDevices::png(filename=filename,
           units="in",

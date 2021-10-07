@@ -31,6 +31,8 @@
 
 aMNLFA.final <- function(input.object, mchoice = "actual", method = "BH", highest.category = TRUE, keepmean = FALSE){
 
+  method <- base::toupper(method) #Put this in to accommodate people using lowercase "bh" on 10/7
+  
   dir = input.object$dir
   mrdata = input.object$mrdata
   myindicators = input.object$indicators
@@ -293,8 +295,8 @@ aMNLFA.final <- function(input.object, mchoice = "actual", method = "BH", highes
   # keepvarimpact <- unique(the.prune$`Summary of Effects`$`Mean Impact`$param)
   #keepvarimpact <- unique(the.prune$summary$meanimpact$param) #IS changed to reflect the.prune data structure
  #keepvarimpact <- unique(the.prune$summary$varimpact$covariate.name) #IS changed again to reflect the.prune data structure
- keepvarimpact <- unique(var.prune$param) #IS changed again to pull only var impact with p<0.05
- 
+ #keepvarimpact <- unique(var.prune$param) #IS changed again to pull only var impact with p<0.05
+  keepvarimpact <- unique(var.prune$covariate.name) #Changed on 10/7 by VTC; the thing we should be taking from var.prune is covariate.name, not param
   
   if (thresholds == FALSE) {
     usefinal <- utils::capture.output(cat(unique(c(myindicators, uniqueint, keepmeanimpact))))
