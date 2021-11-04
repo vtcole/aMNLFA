@@ -23,6 +23,7 @@ _aMNLFA\_sample_
 _aMNLFA\_initial_
 
 - Did not create correct _varimpactscript.inp_ or item input syntax when the user chooses not to estimate variance impact
+- Errors in _varimpactscript.inp_ also occurred when only one variance impact variable was included
 - Strings after a certain length were not confined to 90 characters to comply with MPlus input rules
 
 _aMNLFA\_simultaneous_
