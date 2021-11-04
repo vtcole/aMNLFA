@@ -205,10 +205,15 @@ aMNLFA.initial<-function(input.object){
   varinput[var.counter,1]<-paste("veta=1*exp(")
   var.counter <- var.counter + 1
   #OK, so this needs to be (i in 1:v-1) because the last line after this does the vth covariate
-  for (i in 1:(v-1)){ #This had been (i in 2:v-1) but it works now -- check why?
-    varinput[var.counter,1]<-paste("v",i,"*",myVarImpact[i],"+",sep="")
-    var.counter <- var.counter + 1
-  }
+  #for (i in 1:(v-1)){ #This had been (i in 2:v-1) but it works now -- check why?
+    #VTC, 11/2/2021 -- OK, so we know why now: because the first element of this yields v0
+    #but it was causing messed up output when you only had one variance variable
+    if (v > 1)  {
+        for (i in 1:(v-1))  {
+        varinput[var.counter,1]<-paste("v",i,"*",myVarImpact[i],"+",sep="")
+        var.counter <- var.counter + 1
+      }
+    }
   varinput[var.counter,1]<-paste("v",v,"*",myVarImpact[v],");",sep="")
   } else {
     varinput[var.counter, 1] <- "veta = 1;"
@@ -284,7 +289,7 @@ aMNLFA.initial<-function(input.object){
         # Define the # of thresholds
         # Print the thresholds
         #th <-length(unique( mrdata[stats::complete.cases(mrdata), myindicators[w]] ))-1 RDS commented out temporarily for meriah
-        th  = length( unique(na.omit(mrdata[, myindicators[w]])) )-1
+        th  = length( unique(stats::na.omit(mrdata[, myindicators[w]])) )-1
         
         for (i in seq(th)) {
           miinput[16 + l +i, 1] <- paste("[", myindicators[w], "$",i,
